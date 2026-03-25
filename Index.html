@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>区块链安全审计平台 - 全维度链上链下安全防护</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A', // 主色-深蓝（专业安全）
+            secondary: '#2563EB', // 辅助色-科技蓝
+            accent: '#10B981', // 强调色-安全绿
+            light: '#F8FAFC', // 浅色背景
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .card-hover { transition: all 0.3s; }
+      .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2); }
+      .gradient-bg { background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); }
+    }
+        /* 修复：合作伙伴无缝滚动 + 悬停减速 */
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-scroll {
+      animation: scroll 30s linear infinite;
+      width: max-content; /* 确保内容宽度足够 */
+    }
+    .group:hover .animate-scroll-slow {
+      animation: scroll 60s linear infinite;
+    }
+  </style>
+</head>
+<!-- 导航栏 -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <!-- 桌面端导航 -->
+    <nav class="hidden md:flex items-center gap-8">
+      <a href="#about" class="hover:text-secondary transition-colors">关于我们</a>
+      <a href="#ability" class="hover:text-secondary transition-colors">产品能力</a>
+      <a href="#certificate" class="hover:text-secondary transition-colors">资质认证</a>
+      <a href="#trust" class="hover:text-secondary transition-colors">客户信任</a>
+    </nav>
+    <!-- 行动按钮组：登录 + 免费安全初检 -->
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+      免费安全初检
+      </button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+
+    </div>
+  </div>
+</header>
+<body>
+
+<!-- 首屏 Hero 区（完美适配 + 无缝滚动 + 悬停减速） -->
+<section class="bg-white/80 backdrop-blur-md shadow-lg min-h-[calc(100vh-80px)] flex flex-col justify-between">
+  <!-- 核心内容区（适度上移，不挤压底部） -->
+  <div class="flex-grow flex items-center justify-center">
+    <div class="container mx-auto px-4 text-center mt-[-4rem]">
+      <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold leading-tight text-primary mb-4">
+        一站式智能合约安全审计与链上风险管控平台
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+        融合链上链下全栈安全工具，覆盖公链、DeFi、NFT、GameFi全场景智能合约漏洞检测与全生命周期安全防护
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="bg-secondary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all">
+          申请免费安全初检
+        </button>
+        <button class="bg-transparent border border-secondary text-secondary px-8 py-3 rounded-lg font-medium hover:bg-secondary/10 transition-all">
+          查看审计案例库
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 合作伙伴区（无缝滚动 + 悬停减速） -->
+  <div class="py-5 border-t border-gray-100">
+    <div class="container mx-auto px-4 mb-3">
+      <h2 class="text-xs font-medium text-center text-gray-500 uppercase tracking-wider">合作伙伴</h2>
+    </div>
+    <!-- 滚动容器（修复悬停减速） -->
+    <div class="overflow-hidden group">
+      <div class="flex gap-6 whitespace-nowrap animate-scroll group-hover:animate-scroll-slow">
+        <!-- 第一组公司 -->
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">以太坊基金会</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">币安</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Coinbase</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Polygon</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">ConsenSys</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Chainlink</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">OpenSea</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Uniswap</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Aave</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Compound</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Circle</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Tether</span>
+        <!-- 第二组重复（无缝滚动关键，必须和第一组完全一致） -->
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">以太坊基金会</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">币安</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Coinbase</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Polygon</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">ConsenSys</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Chainlink</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">OpenSea</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Uniswap</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Aave</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Compound</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Circle</span>
+        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Tether</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+ <!-- ===================== 板块二：产品能力（与第一板块同大小 + 顶部标题 + 中间预留图 + 底部能力层） ===================== -->
+<section id="ability" class="scroll-mt-20 min-h-[calc(100vh-80px)] flex flex-col justify-between py-12">
+  <!-- 顶部：标题区（偏靠近顶部） -->
+  <div class="text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">产品能力矩阵</h2>
+    <p class="text-gray-600 max-w-2xl mx-auto">一张图看懂全链路安全服务能力，覆盖合约全生命周期</p>
+  </div>
+
+  <!-- 中间：预留图片位置（灰色边框透明内部） -->
+  <div class="container mx-auto px-4 flex-grow flex items-center justify-center">
+    <div class="w-full h-64 md:h-80 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-transparent">
+      <span class="text-gray-400 text-lg">预留图片位置</span>
+    </div>
+  </div>
+
+  <!-- 底部：服务场景层及以下（贴近底部） -->
+  <div class="bg-white p-8 rounded-xl shadow-lg">
+
+    <div class="grid md:grid-cols-4 gap-6 mb-8">
+      <div class="p-6 bg-blue-50 rounded-xl card-hover">
+        <h3 class="font-bold mb-2 text-secondary">事前安全审计</h3>
+        <ul class="text-sm text-gray-600 space-y-2">
+          <li>• 自动化合约扫描</li>
+          <li>• 专家人工深度审计</li>
+          <li>• 模糊测试+形式化验证</li>
+        </ul>
+      </div>
+      <div class="p-6 bg-green-50 rounded-xl card-hover">
+        <h3 class="font-bold mb-2 text-accent">事中实时监控</h3>
+        <ul class="text-sm text-gray-600 space-y-2">
+          <li>• 7×24链上数据监控</li>
+          <li>• AI风险智能预警</li>
+          <li>• 0day漏洞补丁推送</li>
+        </ul>
+      </div>
+      <div class="p-6 bg-orange-50 rounded-xl card-hover">
+        <h3 class="font-bold mb-2 text-orange-600">事后应急响应</h3>
+        <ul class="text-sm text-gray-600 space-y-2">
+          <li>• 攻击溯源与资产追踪</li>
+          <li>• 漏洞紧急热修复</li>
+          <li>• 司法证据固化</li>
+        </ul>
+      </div>
+      <div class="p-6 bg-purple-50 rounded-xl card-hover">
+        <h3 class="font-bold mb-2 text-purple-600">链上链下工具集</h3>
+        <ul class="text-sm text-gray-600 space-y-2">
+          <li>• 代码合规检测</li>
+          <li>• 地址风险评级</li>
+          <li>• 安全合规咨询</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 底层：技术支撑 -->
+    <div class="text-center">
+      <h3 class="text-lg font-bold text-primary">技术支撑层</h3>
+      <p class="text-gray-600 mt-2">AI漏洞检测引擎 | 密码学安全实验室 | 链上大数据平台 | 全球安全威胁情报库</p>
+    </div>
+  </div>
+</section>
+
+
+<main class="container mx-auto px-4 py-16 space-y-24">
+  <!-- ===================== 板块一：品牌介绍 ===================== -->
+  <section id="about" class="scroll-mt-20">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">品牌介绍</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">我们是谁，我们为 Web3 生态提供怎样的安全保障</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- 我们是谁 -->
+      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
+        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-user-tie"></i></div>
+        <h3 class="text-xl font-bold mb-3">我们是谁</h3>
+        <p class="text-gray-600">国内领先的区块链安全技术服务商，核心团队来自顶尖安全实验室、头部Web3机构、高校密码学团队，拥有5年+实战审计经验。</p>
+      </div>
+      <!-- 我们的使命 -->
+      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
+        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-target"></i></div>
+        <h3 class="text-xl font-bold mb-3">我们的使命</h3>
+        <p class="text-gray-600">以技术为核心，为Web3生态提供全生命周期安全保障，降低区块链应用安全风险，推动行业合规化、可信化发展。</p>
+      </div>
+      <!-- 核心价值 -->
+      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
+        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-shield"></i></div>
+        <h3 class="text-xl font-bold mb-3">核心价值</h3>
+        <p class="text-gray-600">技术驱动、合规先行、全链覆盖、极致可靠，为B端客户提供最专业的智能合约安全解决方案。</p>
+      </div>
+    </div>
+
+    <!-- 核心痛点解决方案 -->
+    <div class="mt-12 bg-white p-8 rounded-xl shadow-md">
+      <h3 class="text-2xl font-bold mb-6 text-center">我们解决的核心问题</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">合约漏洞频发，资产被盗风险高</h4>
+            <p class="text-gray-600">自动化+人工双重审计，覆盖99%高危漏洞，提前规避资产损失</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">链上风险不可控，异常难监控</h4>
+            <p class="text-gray-600">7×24小时链上监控，毫秒级风险预警，实时拦截攻击行为</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">合规门槛高，资质不达标</h4>
+            <p class="text-gray-600">提供全球认可的权威审计报告，满足交易所上线、监管合规要求</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">应急响应慢，损失无法挽回</h4>
+            <p class="text-gray-600">专家1v1应急响应，攻击溯源、漏洞修复、资产追踪全流程支持</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- ===================== 板块三：证书技能（资质认证） ===================== -->
+  <section id="certificate" class="scroll-mt-20">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">资质与技术能力</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">证书 | 专利 | 论文 | 奖项</p>
+    <!-- 新增：证书墙预留框（可滚动区域，纯边框占位，调整大小用） -->
+      <!-- 边框展示框：宽度100%，高度240px，虚线边框，透明背景 -->
+      <div class="w-full h-[200px] border-2 border-dashed border-gray-400 rounded-xl flex items-center justify-center bg-white/50 overflow-hidden">
+        <span class="text-gray-500 text-lg">证书墙滚动区域（预留占位框）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 板块四：外部信任 ===================== -->
+  <section id="trust" class="scroll-mt-20">
+
+    <!-- 核心数据展示区（无框无图标+新排版+英美计数） -->
+    <div class="grid md:grid-cols-4 gap-8 mb-12">
+      <!-- 数据1：累计审计合约项目数 -->
+      <div class="text-center">
+        <h3 class="text-lg font-bold text-primary mb-3">累计审计合约项目数</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">1,200+</div>
+        <p class="text-gray-500 text-sm">覆盖DeFi/公链/Layer2/NFT全场景</p>
+      </div>
+        <!-- 数据3：累计发现高危漏洞数 -->
+      <div class="text-center">
+        <h3 class="text-lg font-bold text-primary mb-3">累计发现高危漏洞数</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">3,600+</div>
+        <p class="text-gray-500 text-sm">覆盖重入、权限控制、逻辑漏洞等全类型</p>
+      </div>
+      <!-- 数据2：累计为客户规避潜在资产损失 -->
+      <div class="text-center">
+        <h3 class="text-lg font-bold text-primary mb-3">累计为客户规避潜在资产损失</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">$10.7B+</div>
+        <p class="text-gray-500 text-sm">高危漏洞提前拦截、攻击风险实时预警</p>
+      </div>
+
+      <!-- 数据4：客户整体满意度 -->
+      <div class="text-center">
+        <h3 class="text-lg font-bold text-primary mb-3">客户整体满意度</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">98.6%</div>
+        <p class="text-gray-500 text-sm">来自项目方服务结束匿名调研</p>
+      </div>
+    </div>
+
+    <!-- 标杆案例 + 合作机构 + 保障承诺 -->
+    <div class="bg-white p-8 rounded-xl shadow-md mb-8">
+      <h3 class="text-xl font-bold mb-6 text-center">标杆客户案例</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="border-l-4 border-secondary pl-4">
+          <h4 class="font-bold">头部DeFi协议审计</h4>
+          <p class="text-gray-600 text-sm">提前发现3个高危漏洞，避免亿美元级资产损失</p>
+        </div>
+        <div class="border-l-4 border-secondary pl-4">
+          <h4 class="font-bold">Layer2公链审计</h4>
+          <p class="text-gray-600 text-sm">全链路检测，主网上线零安全事故</p>
+        </div>
+        <div class="border-l-4 border-secondary pl-4">
+          <h4 class="font-bold">NFT平台防护</h4>
+          <p class="text-gray-600 text-sm">7×24监控，成功拦截3次大规模攻击</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>>
+<!-- 页脚 -->
+<footer class="bg-primary text-white py-12">
+  <div class="container mx-auto px-4 text-center">
+    <div class="flex items-center justify-center gap-2 mb-4">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAuditPro</span>
+    </div>
+    <p class="text-gray-400 mb-6">全维度链上链下安全审计，筑牢Web3可信底座</p>
+    <div class="flex justify-center gap-6 mb-8">
+      <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+      <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-github"></i></a>
+      <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+    <p class="text-gray-500 text-sm">© 2026 ChainAuditPro 区块链审计平台. 保留所有权利</p>
+  </div>
+</footer>
+</body>
+</html>

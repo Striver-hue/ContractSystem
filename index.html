@@ -200,69 +200,203 @@
 
 
 <main class="container mx-auto px-4 py-16 space-y-24">
-  <!-- ===================== 板块一：品牌介绍 ===================== -->
-  <section id="about" class="scroll-mt-20">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">品牌介绍</h2>
-      <p class="text-gray-600 max-w-2xl mx-auto">我们是谁，我们为 Web3 生态提供怎样的安全保障</p>
+
+
+<!-- ===================== 新增板块：安全审计核心服务 ===================== -->
+<section id="audit-service" class="scroll-mt-20 py-16 bg-light">
+  <div class="container mx-auto px-4">
+    <!-- 板块标题 -->
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary">安全审计</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">全维度审计体系，从代码层到架构层的深度安全验证</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      <!-- 我们是谁 -->
-      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
-        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-user-tie"></i></div>
-        <h3 class="text-xl font-bold mb-3">我们是谁</h3>
-        <p class="text-gray-600">国内领先的区块链安全技术服务商，核心团队来自顶尖安全实验室、头部Web3机构、高校密码学团队，拥有5年+实战审计经验。</p>
+    <!-- 1+2 合并：多维度审计 + 交叉审查（左文右图） -->
+    <div class="mb-16 flex flex-col md:flex-row items-center gap-8">
+      <!-- 文字部分（宽度1:1） -->
+      <div class="md:w-1/2">
+        <h3 class="text-2xl font-bold text-secondary mb-4">全栈式区块链安全审计</h3>
+
+        <!-- 1. 合同、钱包和链条的审计 -->
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold text-gray-800 mb-2">多维度全场景区块链审计</h4>
+          <p class="text-gray-600 text-sm mb-3">
+            覆盖智能合约、数字钱包及跨链基础设施的全栈安全审计，基于对区块链协议的深度理解和全场景覆盖能力，支持以太坊、BSC、Polygon、Arbitrum等主流公链，兼容Solidity、Vyper、Rust等多开发语言。
+          </p>
+          <ul class="space-y-1 text-gray-600 text-sm">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>智能合约审计：覆盖DeFi/NFT/GameFi/DAO全场景，检测100+类漏洞</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>钱包安全审计：冷/热钱包、硬件钱包、多签钱包的私钥管理与交易流程检测</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>跨链基础设施审计：跨链桥、Layer2、侧链的共识机制与资产映射安全验证</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 2. 多审计员交叉审查 -->
+        <div>
+          <h4 class="text-lg font-semibold text-gray-800 mb-2">多审计员交叉审查 & 可操作修复方案</h4>
+          <p class="text-gray-600 text-sm mb-3">
+            采用"双人独立审计+团队交叉核查"的三级审查机制，确保漏洞零遗漏。专责安全团队通过独立审查和系统化交叉验证，结合快速高效的沟通机制，为客户提供清晰、可落地的漏洞修复指导。
+          </p>
+          <ul class="space-y-1 text-gray-600 text-sm">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>三级审查机制：初级审计员初检、高级审计员复核、安全专家交叉验证</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>定制化修复方案：代码级修复示例、优化建议和安全最佳实践</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>修复验证闭环：漏洞修复后提供免费二次检测，确保修复效果</span>
+            </li>
+          </ul>
+        </div>
       </div>
-      <!-- 我们的使命 -->
-      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
-        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-target"></i></div>
-        <h3 class="text-xl font-bold mb-3">我们的使命</h3>
-        <p class="text-gray-600">以技术为核心，为Web3生态提供全生命周期安全保障，降低区块链应用安全风险，推动行业合规化、可信化发展。</p>
-      </div>
-      <!-- 核心价值 -->
-      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
-        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-shield"></i></div>
-        <h3 class="text-xl font-bold mb-3">核心价值</h3>
-        <p class="text-gray-600">技术驱动、合规先行、全链覆盖、极致可靠，为B端客户提供最专业的智能合约安全解决方案。</p>
+      <!-- 图片预留框（宽度1:1，高度1.5倍） -->
+      <div class="md:w-1/2 h-[360px] border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white">
+        <span class="text-gray-400 text-lg">全栈审计与交叉审查示意图（可替换为实际图片）</span>
       </div>
     </div>
 
-    <!-- 核心痛点解决方案 -->
-    <div class="mt-12 bg-white p-8 rounded-xl shadow-md">
-      <h3 class="text-2xl font-bold mb-6 text-center">我们解决的核心问题</h3>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">合约漏洞频发，资产被盗风险高</h4>
-            <p class="text-gray-600">自动化+人工双重审计，覆盖99%高危漏洞，提前规避资产损失</p>
-          </div>
+    <!-- 3+4 合并：架构威胁建模 + 内部工具（右文左图） -->
+    <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+      <!-- 文字部分（宽度1:1） -->
+      <div class="md:w-1/2">
+        <h3 class="text-2xl font-bold text-secondary mb-4">深度威胁分析与智能检测</h3>
+
+        <!-- 3. 架构与威胁建模 -->
+        <div class="mb-6">
+          <h4 class="text-lg font-semibold text-gray-800 mb-2">架构设计 & 威胁建模分析</h4>
+          <p class="text-gray-600 text-sm mb-3">
+            从系统架构设计、资产流转路径和信任边界划分出发，构建全面的威胁模型，识别潜在攻击路径，重点关注业务逻辑漏洞、边缘场景异常和发布前的风险消减，从根源降低安全风险。
+          </p>
+          <ul class="space-y-1 text-gray-600 text-sm">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>系统架构分析：梳理核心流程、组件依赖和数据交互逻辑</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>资产流梳理：追踪数字资产的铸造、转移、销毁全流程安全控制点</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>攻击路径建模：基于STRIDE、PASTA等方法论识别现实可行的攻击场景</span>
+            </li>
+          </ul>
         </div>
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">链上风险不可控，异常难监控</h4>
-            <p class="text-gray-600">7×24小时链上监控，毫秒级风险预警，实时拦截攻击行为</p>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">合规门槛高，资质不达标</h4>
-            <p class="text-gray-600">提供全球认可的权威审计报告，满足交易所上线、监管合规要求</p>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">应急响应慢，损失无法挽回</h4>
-            <p class="text-gray-600">专家1v1应急响应，攻击溯源、漏洞修复、资产追踪全流程支持</p>
-          </div>
+
+        <!-- 4. 内部工具检测隐藏漏洞 -->
+        <div>
+          <h4 class="text-lg font-semibold text-gray-800 mb-2">自研工具集 & 隐藏漏洞检测</h4>
+          <p class="text-gray-600 text-sm mb-3">
+            基于数百万漏洞悬赏案例验证的自研安全工具集，结合差分测试、定制化模糊检测、符号执行等高级技术，能够发现传统审计工具难以识别的逻辑不一致、边缘故障和深层隐藏漏洞。
+          </p>
+          <ul class="space-y-1 text-gray-600 text-sm">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>差分测试工具：对比不同编译器/版本的执行结果，发现逻辑不一致</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>定制化模糊检测：针对业务逻辑定制测试用例，覆盖99%+异常输入场景</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
+              <span>漏洞特征库：基于数百万真实漏洞案例构建，精准匹配已知漏洞变体</span>
+            </li>
+          </ul>
         </div>
       </div>
+      <!-- 图片预留框（宽度1:1，高度1.5倍） -->
+      <div class="md:w-1/2 h-[360px] border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white">
+        <span class="text-gray-400 text-lg">威胁建模与智能检测示意图（可替换为实际图片）</span>
+      </div>
     </div>
-  </section>
+
+    <!-- ===================== 新增：审计报告展示 ===================== -->
+        <div class="min-h-screen py-12 flex flex-col">
+          <!-- 顶部标题栏 -->
+          <div class="flex items-center justify-between mb-10">
+            <h3 class="text-2xl font-bold text-primary">审计报告展示</h3>
+            <div class="flex items-center gap-2 text-secondary hover:text-accent cursor-pointer transition-colors">
+              <span class="font-medium">更多</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+
+          <!-- 三个报告方框（1:1:1，底部对齐） -->
+          <div class="grid md:grid-cols-3 gap-8 flex-1">
+            <!-- 报告1 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
+              <!-- 图片（占方框1/4高度） -->
+              <div class="h-40 border-b border-gray-100 flex items-center justify-center bg-gray-50 flex-shrink-0">
+                <span class="text-gray-400 text-sm">审计报告封面图</span>
+              </div>
+              <!-- 时间 -->
+              <div class="px-5 pt-4 flex-shrink-0">
+                <p class="text-xs text-gray-500">2026年3月</p>
+              </div>
+              <!-- 报告内容（填充剩余空间） -->
+              <div class="p-5 flex-1">
+                <h4 class="font-semibold text-gray-800 mb-2">Uniswap V3 智能合约全链路审计报告</h4>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  完成对Uniswap V3核心合约、流动性池、价格预言机的全链路安全审计，发现并协助修复2个高危权限漏洞、5个中危逻辑漏洞，提供定制化安全加固方案，保障超50亿美金流动性资金安全。
+                </p>
+              </div>
+            </div>
+
+            <!-- 报告2 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
+              <!-- 图片（占方框1/4高度） -->
+              <div class="h-40 border-b border-gray-100 flex items-center justify-center bg-gray-50 flex-shrink-0">
+                <span class="text-gray-400 text-sm">审计报告封面图</span>
+              </div>
+              <!-- 时间 -->
+              <div class="px-5 pt-4 flex-shrink-0">
+                <p class="text-xs text-gray-500">2026年2月</p>
+              </div>
+              <!-- 报告内容（填充剩余空间） -->
+              <div class="p-5 flex-1">
+                <h4 class="font-semibold text-gray-800 mb-2">Polygon zkEVM 跨链基础设施安全审计报告</h4>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  针对Polygon zkEVM的跨链桥、共识机制、资产映射模块开展专项审计，构建7×24小时链上安全监控体系，成功拦截4次跨链攻击尝试，平均风险响应时间<5分钟，上线以来用户资产零损失。
+                </p>
+              </div>
+            </div>
+
+            <!-- 报告3 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
+              <!-- 图片（占方框1/4高度） -->
+              <div class="h-40 border-b border-gray-100 flex items-center justify-center bg-gray-50 flex-shrink-0">
+                <span class="text-gray-400 text-sm">审计报告封面图</span>
+              </div>
+              <!-- 时间 -->
+              <div class="px-5 pt-4 flex-shrink-0">
+                <p class="text-xs text-gray-500">2026年1月</p>
+              </div>
+              <!-- 报告内容（填充剩余空间） -->
+              <div class="p-5 flex-1">
+                <h4 class="font-semibold text-gray-800 mb-2">OpenSea NFT 交易平台安全审计报告</h4>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  对OpenSea NFT铸造、交易、转移全流程进行安全审计，优化Gas费安全校验逻辑，发现并修复3个高危铸造漏洞、8个中危交易逻辑问题，用户资产被盗风险降低98%，审计后平台无重大安全事件。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+</section>
 
     <!-- ===================== 板块三：证书技能（资质认证） ===================== -->
   <section id="certificate" class="scroll-mt-20">
@@ -506,6 +640,71 @@
   </div>
 </section>
   </section>
+
+    <!-- ===================== 板块一：品牌介绍 ===================== -->
+  <section id="about" class="scroll-mt-20">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">品牌介绍</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">我们是谁，我们为 Web3 生态提供怎样的安全保障</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- 我们是谁 -->
+      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
+        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-user-tie"></i></div>
+        <h3 class="text-xl font-bold mb-3">我们是谁</h3>
+        <p class="text-gray-600">国内领先的区块链安全技术服务商，核心团队来自顶尖安全实验室、头部Web3机构、高校密码学团队，拥有5年+实战审计经验。</p>
+      </div>
+      <!-- 我们的使命 -->
+      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
+        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-target"></i></div>
+        <h3 class="text-xl font-bold mb-3">我们的使命</h3>
+        <p class="text-gray-600">以技术为核心，为Web3生态提供全生命周期安全保障，降低区块链应用安全风险，推动行业合规化、可信化发展。</p>
+      </div>
+      <!-- 核心价值 -->
+      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
+        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-shield"></i></div>
+        <h3 class="text-xl font-bold mb-3">核心价值</h3>
+        <p class="text-gray-600">技术驱动、合规先行、全链覆盖、极致可靠，为B端客户提供最专业的智能合约安全解决方案。</p>
+      </div>
+    </div>
+
+    <!-- 核心痛点解决方案 -->
+    <div class="mt-12 bg-white p-8 rounded-xl shadow-md">
+      <h3 class="text-2xl font-bold mb-6 text-center">我们解决的核心问题</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">合约漏洞频发，资产被盗风险高</h4>
+            <p class="text-gray-600">自动化+人工双重审计，覆盖99%高危漏洞，提前规避资产损失</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">链上风险不可控，异常难监控</h4>
+            <p class="text-gray-600">7×24小时链上监控，毫秒级风险预警，实时拦截攻击行为</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">合规门槛高，资质不达标</h4>
+            <p class="text-gray-600">提供全球认可的权威审计报告，满足交易所上线、监管合规要求</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
+          <div>
+            <h4 class="font-bold">应急响应慢，损失无法挽回</h4>
+            <p class="text-gray-600">专家1v1应急响应，攻击溯源、漏洞修复、资产追踪全流程支持</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>>
 <!-- 页脚 -->
 <footer class="bg-primary text-white py-12">

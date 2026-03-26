@@ -80,20 +80,54 @@
 <section class="bg-white/80 backdrop-blur-md shadow-lg min-h-[calc(100vh-80px)] flex flex-col justify-between">
   <!-- 核心内容区（适度上移，不挤压底部） -->
   <div class="flex-grow flex items-center justify-center">
-    <div class="container mx-auto px-4 text-center mt-[-4rem]">
-      <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold leading-tight text-primary mb-4">
-        一站式智能合约安全审计与链上风险管控平台
-      </h1>
-      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-        融合链上链下全栈安全工具，覆盖公链、DeFi、NFT、GameFi全场景智能合约漏洞检测与全生命周期安全防护
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button class="bg-secondary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all">
-          申请免费安全初检
-        </button>
-        <button class="bg-transparent border border-secondary text-secondary px-8 py-3 rounded-lg font-medium hover:bg-secondary/10 transition-all">
-          查看审计案例库
-        </button>
+    <div class="container mx-auto px-4 flex items-center h-full mt-[-4rem] max-w-[calc(100%-16rem)]">
+      <!-- 左侧文字按钮区域 -->
+      <div class="w-2/3 text-left pr-8">
+        <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold leading-tight text-primary mb-4 ">
+          一站式智能合约安全审计与链上风险管控平台
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mb-8">
+          融合链上链下全栈安全工具，覆盖公链、DeFi、NFT、GameFi全场景智能合约漏洞检测与全生命周期安全防护
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-[calc(100%-10rem)]">
+          <button class="bg-secondary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all">
+            申请免费安全初检
+          </button>
+          <button class="bg-transparent border border-secondary text-secondary px-8 py-3 rounded-lg font-medium hover:bg-secondary/10 transition-all">
+            查看审计案例库
+          </button>
+        </div>
+      </div>
+
+      <!-- 右侧竖向核心数据展示区 -->
+      <div class="w-[340px] h-[500px] flex flex-col justify-around ml-auto mr-[-1rem]">
+  <!-- 累计审计合约项目数 -->
+        <div class="text-center">
+
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">1,200+</div>
+           <h3 class="text-lg font-bold text-primary mb-2 text-right">审计合约项目数</h3>
+        </div>
+
+        <!-- 累计发现高危漏洞数 -->
+        <div class="text-center">
+
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">3,600+</div>
+          <h3 class="text-lg font-bold text-primary mb-2 text-right">审计发现高危漏洞数</h3>
+       </div>
+
+        <!-- 累计为客户规避潜在资产损失 -->
+        <div class="text-center">
+
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">2.7亿+</div>
+          <h3 class="text-lg font-bold text-primary mb-2 text-right">为客户规避潜在资产损失</h3>
+        </div>
+
+        <!-- 客户整体满意度 -->
+        <div class="text-center">
+
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">10.7亿+</div>
+          <h3 class="text-lg font-bold text-primary mb-2 text-right">链上交易金额总计</h3>
+        </div>
       </div>
     </div>
   </div>
@@ -415,32 +449,28 @@
   <section id="trust" class="scroll-mt-20">
 
     <!-- 核心数据展示区（无框无图标+新排版+英美计数） -->
-    <div class="grid md:grid-cols-4 gap-8 mb-12">
-      <!-- 数据1：累计审计合约项目数 -->
-      <div class="text-center">
-        <h3 class="text-lg font-bold text-primary mb-3">累计审计合约项目数</h3>
-        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">1,200+</div>
-        <p class="text-gray-500 text-sm">覆盖DeFi/公链/Layer2/NFT全场景</p>
+    <div class="grid md:grid-cols-3 gap-8 mb-12">
+    <!-- 客户数 -->
+      <div class="text-center p-6 bg-white rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">平台累计客户数</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">85,000+</div>
+        <p class="text-gray-500 text-sm">覆盖全球120+国家/地区</p>
       </div>
-        <!-- 数据3：累计发现高危漏洞数 -->
-      <div class="text-center">
-        <h3 class="text-lg font-bold text-primary mb-3">累计发现高危漏洞数</h3>
-        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">3,600+</div>
-        <p class="text-gray-500 text-sm">覆盖重入、权限控制、逻辑漏洞等全类型</p>
+      <!-- 数据集 -->
+      <div class="text-center p-6 bg-white rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">安全审计数据集</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">1.2M+</div>
+        <p class="text-gray-500 text-sm">含10万+真实漏洞样本</p>
       </div>
-      <!-- 数据2：累计为客户规避潜在资产损失 -->
-      <div class="text-center">
-        <h3 class="text-lg font-bold text-primary mb-3">累计为客户规避潜在资产损失</h3>
-        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">$10.7B+</div>
-        <p class="text-gray-500 text-sm">高危漏洞提前拦截、攻击风险实时预警</p>
+      <!-- 引用量 -->
+      <div class="text-center p-6 bg-white rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">行业报告引用量</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">48,700+</div>
+        <p class="text-gray-500 text-sm">被全球顶尖机构/高校引用</p>
       </div>
 
-      <!-- 数据4：客户整体满意度 -->
-      <div class="text-center">
-        <h3 class="text-lg font-bold text-primary mb-3">客户整体满意度</h3>
-        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">98.6%</div>
-        <p class="text-gray-500 text-sm">来自项目方服务结束匿名调研</p>
-      </div>
+
+
     </div>
 
 <!-- 标杆案例 + 合作机构 + 保障承诺 -->
@@ -468,27 +498,7 @@
     <!-- ===================== 板块五：数据统计与排行榜 ===================== -->
 <section id="data-ranking" class="scroll-mt-20 py-16 bg-light">
   <div class="container mx-auto px-4">
-    <!-- 第一部分：核心数据指标 - 数字颜色与《累计发现高危漏洞数》主色统一 -->
-    <div class="grid md:grid-cols-3 gap-8 mb-12">
-      <!-- 客户数 -->
-      <div class="text-center p-6 bg-white rounded-xl shadow-md">
-        <h3 class="text-lg font-semibold text-gray-700 mb-2">平台累计客户数</h3>
-        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">85,000+</div>
-        <p class="text-gray-500 text-sm">覆盖全球120+国家/地区</p>
-      </div>
-      <!-- 数据集 -->
-      <div class="text-center p-6 bg-white rounded-xl shadow-md">
-        <h3 class="text-lg font-semibold text-gray-700 mb-2">安全审计数据集</h3>
-        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">1.2M+</div>
-        <p class="text-gray-500 text-sm">含10万+真实漏洞样本</p>
-      </div>
-      <!-- 引用量 -->
-      <div class="text-center p-6 bg-white rounded-xl shadow-md">
-        <h3 class="text-lg font-semibold text-gray-700 mb-2">行业报告引用量</h3>
-        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">48,700+</div>
-        <p class="text-gray-500 text-sm">被全球顶尖机构/高校引用</p>
-      </div>
-    </div>
+
 
     <!-- 第二部分：排行榜区域 -->
     <div class="bg-white rounded-xl shadow-lg p-8">

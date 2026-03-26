@@ -141,7 +141,7 @@
 <section id="ability" class="scroll-mt-20 min-h-[calc(100vh-80px)] flex flex-col justify-between py-12">
   <!-- 顶部：标题区（偏靠近顶部） -->
   <div class="text-center">
-    <h2 class="text-3xl md:text-4xl font-bold mb-4">产品能力矩阵</h2>
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">产品能力</h2>
     <p class="text-gray-600 max-w-2xl mx-auto">一张图看懂全链路安全服务能力，覆盖合约全生命周期</p>
   </div>
 
@@ -309,25 +309,202 @@
       </div>
     </div>
 
-    <!-- 标杆案例 + 合作机构 + 保障承诺 -->
-    <div class="bg-white p-8 rounded-xl shadow-md mb-8">
-      <h3 class="text-xl font-bold mb-6 text-center">标杆客户案例</h3>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="border-l-4 border-secondary pl-4">
-          <h4 class="font-bold">头部DeFi协议审计</h4>
-          <p class="text-gray-600 text-sm">提前发现3个高危漏洞，避免亿美元级资产损失</p>
-        </div>
-        <div class="border-l-4 border-secondary pl-4">
-          <h4 class="font-bold">Layer2公链审计</h4>
-          <p class="text-gray-600 text-sm">全链路检测，主网上线零安全事故</p>
-        </div>
-        <div class="border-l-4 border-secondary pl-4">
-          <h4 class="font-bold">NFT平台防护</h4>
-          <p class="text-gray-600 text-sm">7×24监控，成功拦截3次大规模攻击</p>
-        </div>
+<!-- 标杆案例 + 合作机构 + 保障承诺 -->
+<div class="bg-white p-8 rounded-xl shadow-md mb-8">
+  <h3 class="text-xl font-bold mb-6 text-center">标杆客户案例</h3>
+  <div class="grid md:grid-cols-3 gap-6">
+    <!-- 案例1 -->
+    <div class="bg-gray-50 rounded-lg p-6 h-[120px] flex flex-col justify-center">
+      <h4 class="font-bold text-black text-center mb-2">Uniswap Labs</h4>
+      <p class="text-gray-600 text-sm text-center">完成V3版本智能合约全链路审计，发现2个高危权限漏洞，提供定制化安全加固方案，保障数十亿美金交易安全</p>
+    </div>
+    <!-- 案例2 -->
+    <div class="bg-gray-50 rounded-lg p-6 h-[120px] flex flex-col justify-center">
+      <h4 class="font-bold text-black text-center mb-2">Polygon 基金会</h4>
+      <p class="text-gray-600 text-sm text-center">为Polygon zkEVM链上合约提供持续安全监控服务，7×24小时风险预警，成功拦截4次跨链攻击行为</p>
+    </div>
+    <!-- 案例3 -->
+    <div class="bg-gray-50 rounded-lg p-6 h-[120px] flex flex-col justify-center">
+      <h4 class="font-bold text-black text-center mb-2">OpenSea</h4>
+      <p class="text-gray-600 text-sm text-center">针对NFT合约铸造与交易环节开展专项审计，优化Gas费安全校验逻辑，降低用户资产被盗风险98%</p>
+    </div>
+  </div>
+</div>
+
+    <!-- ===================== 板块五：数据统计与排行榜 ===================== -->
+<section id="data-ranking" class="scroll-mt-20 py-16 bg-light">
+  <div class="container mx-auto px-4">
+    <!-- 第一部分：核心数据指标 - 数字颜色与《累计发现高危漏洞数》主色统一 -->
+    <div class="grid md:grid-cols-3 gap-8 mb-12">
+      <!-- 客户数 -->
+      <div class="text-center p-6 bg-white rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">平台累计客户数</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">85,000+</div>
+        <p class="text-gray-500 text-sm">覆盖全球120+国家/地区</p>
+      </div>
+      <!-- 数据集 -->
+      <div class="text-center p-6 bg-white rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">安全审计数据集</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">1.2M+</div>
+        <p class="text-gray-500 text-sm">含10万+真实漏洞样本</p>
+      </div>
+      <!-- 引用量 -->
+      <div class="text-center p-6 bg-white rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">行业报告引用量</h3>
+        <div class="text-5xl md:text-6xl font-extrabold text-orange-500 mb-3">48,700+</div>
+        <p class="text-gray-500 text-sm">被全球顶尖机构/高校引用</p>
       </div>
     </div>
 
+    <!-- 第二部分：排行榜区域 -->
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <h3 class="text-xl font-bold text-primary mb-6 text-center">平台排行榜</h3>
+      <!-- 排行榜布局：前两个等宽，第三个宽度减半，三框等高 -->
+      <div class="grid grid-cols-5 gap-6">
+        <!-- 热门数据集 (占2列) -->
+        <div class="col-span-2 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+          <h4 class="font-bold text-lg text-black mb-4 text-center">热门数据集</h4>
+          <ul class="space-y-3">
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">1. DeFi合约漏洞全集</span>
+              <span class="text-sm text-gray-500">128,450次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">2. NFT合约安全样本</span>
+              <span class="text-sm text-gray-500">98,720次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">3. GameFi攻击案例库</span>
+              <span class="text-sm text-gray-500">85,340次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">4. 公链智能合约模板</span>
+              <span class="text-sm text-gray-500">76,890次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">5. Layer2安全审计集</span>
+              <span class="text-sm text-gray-500">68,230次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">6. 跨链桥漏洞数据集</span>
+              <span class="text-sm text-gray-500">59,670次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">7. 稳定币合约审计库</span>
+              <span class="text-sm text-gray-500">52,180次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">8. DAO治理合约样本</span>
+              <span class="text-sm text-gray-500">45,920次下载</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">9. 链上攻击溯源数据集</span>
+              <span class="text-sm text-gray-500">38,760次下载</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="font-medium text-gray-800">10. 智能合约形式化验证集</span>
+              <span class="text-sm text-gray-500">32,450次下载</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 热门文献 (占2列) -->
+        <div class="col-span-2 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+          <h4 class="font-bold text-lg text-black mb-4 text-center">热门文献</h4>
+          <ul class="space-y-3">
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">1. 2025区块链安全白皮书</span>
+              <span class="text-sm text-gray-500">15,680次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">2. 智能合约漏洞检测技术</span>
+              <span class="text-sm text-gray-500">12,450次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">3. DeFi协议安全防护指南</span>
+              <span class="text-sm text-gray-500">10,890次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">4. 链上攻击行为分析报告</span>
+              <span class="text-sm text-gray-500">9,760次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">5. NFT平台安全审计规范</span>
+              <span class="text-sm text-gray-500">8,540次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">6. 密码学在Web3中的应用</span>
+              <span class="text-sm text-gray-500">7,820次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">7. 智能合约形式化验证实践</span>
+              <span class="text-sm text-gray-500">6,950次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">8. 跨链安全风险评估报告</span>
+              <span class="text-sm text-gray-500">6,230次阅读</span>
+            </li>
+            <li class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <span class="font-medium text-gray-800">9. Web3安全合规白皮书</span>
+              <span class="text-sm text-gray-500">5,780次阅读</span>
+            </li>
+            <li class="flex items-center justify-between">
+              <span class="font-medium text-gray-800">10. 区块链审计工具对比分析</span>
+              <span class="text-sm text-gray-500">5,120次阅读</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 月活跃用户 (占1列) -->
+        <div class="col-span-1 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+          <h4 class="font-bold text-lg text-black mb-4 text-center">月活跃用户</h4>
+          <ul class="space-y-4">
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user1/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">1. 0x892...f789</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user2/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">2. 0x456...b345</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user3/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">3. 0x123...a123</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user4/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">4. 0x789...d789</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user5/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">5. 0x345...e345</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user6/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">6. 0x678...c678</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user7/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">7. 0x901...b901</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user8/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">8. 0x234...a234</span>
+            </li>
+            <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
+              <img src="https://picsum.photos/seed/user9/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">9. 0x567...f567</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <img src="https://picsum.photos/seed/user10/40/40" alt="用户头像" class="w-8 h-8 rounded-full">
+              <span class="text-sm text-gray-800">10. 0x012...d012</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
   </section>
 </main>>
 <!-- 页脚 -->

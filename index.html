@@ -81,15 +81,15 @@
   <!-- 核心内容区（适度上移，不挤压底部） -->
   <div class="flex-grow flex items-center justify-center">
     <div class="container mx-auto px-4 flex items-center h-full mt-[-4rem] max-w-[calc(100%-16rem)]">
-      <!-- 左侧文字按钮区域 -->
-      <div class="w-2/3 text-left pr-8">
-        <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold leading-tight text-primary mb-4 ">
+      <!-- 左侧文字按钮区域（增加内边距，缩小整体占比） -->
+      <div class="w-2/3 text-left pr-4 px-4">
+        <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold leading-tight text-primary mb-4 ml-8">
           一站式智能合约安全审计与链上风险管控平台
         </h1>
-        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mb-8">
+        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mb-8 ml-10 ">
           融合链上链下全栈安全工具，覆盖公链、DeFi、NFT、GameFi全场景智能合约漏洞检测与全生命周期安全防护
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-[calc(100%-10rem)]">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-[calc(100%-10rem)] ml-8">
           <button class="bg-secondary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all">
             申请免费安全初检
           </button>
@@ -99,8 +99,8 @@
         </div>
       </div>
 
-      <!-- 右侧竖向核心数据展示区 -->
-      <div class="w-[340px] h-[500px] flex flex-col justify-around ml-auto mr-[-1rem]">
+      <!-- 右侧竖向核心数据展示区（内缩左右间距） -->
+      <div class="w-[340px] h-[500px] flex flex-col justify-around mx-10">
   <!-- 累计审计合约项目数 -->
         <div class="text-center">
 
@@ -170,7 +170,6 @@
     </div>
   </div>
 </section>
-
  <!-- ===================== 板块二：产品能力（与第一板块同大小 + 顶部标题 + 中间预留图 + 底部能力层） ===================== -->
 <section id="ability" class="scroll-mt-20 min-h-[calc(100vh-80px)] flex flex-col justify-between py-12">
   <!-- 顶部：标题区（偏靠近顶部） -->
@@ -237,7 +236,7 @@
 
 
 <!-- ===================== 新增板块：安全审计核心服务 ===================== -->
-<section id="audit-service" class="scroll-mt-20 py-16 bg-light">
+<section id="audit-service" class="scroll-mt-20 py-16 bg-white">
   <div class="container mx-auto px-4">
     <!-- 板块标题 -->
     <div class="text-center mb-16">
@@ -575,7 +574,7 @@ document.querySelectorAll('button').forEach(btn => {
 </section>
 
     <!-- ===================== 板块：7×24小时链上实时安全监控 ===================== -->
-<section id="monitoring" class="scroll-mt-20 py-16 bg-light">
+<section id="monitoring" class="scroll-mt-20 py-16 bg-white">
   <div class="container mx-auto px-4">
     <!-- 标题区 -->
     <div class="mb-12 text-center">
@@ -923,7 +922,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
     <!-- ===================== 板块五：数据统计与排行榜 ===================== -->
-<section id="data-ranking" class="scroll-mt-20 py-16 bg-light">
+<section id="data-ranking" class="scroll-mt-20 py-16 bg-white">
   <div class="container mx-auto px-4">
 
 

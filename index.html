@@ -574,6 +574,291 @@ document.querySelectorAll('button').forEach(btn => {
 
 </section>
 
+    <!-- ===================== 板块：7×24小时链上实时安全监控 ===================== -->
+<section id="monitoring" class="scroll-mt-20 py-16 bg-light">
+  <div class="container mx-auto px-4">
+    <!-- 标题区 -->
+    <div class="mb-12 text-center">
+  <h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary">安全监控</h2>
+  <p class="text-gray-600 max-w-2xl mx-auto">全链风险实时感知、异常行为智能预警，覆盖合约、资产、协议全维度安全守护</p>
+</div>
+
+    <!-- 模块1：图片框 + 数据卡片 + 按钮 -->
+    <div class="flex flex-col md:flex-row gap-8 mb-12 items-center">
+      <!-- 左侧：图片框（50%宽度，4:3比例） -->
+      <div class="md:w-1/2 w-full">
+        <div class="w-full aspect-[4/3] bg-gray-100 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden">
+          <span class="text-gray-500 text-lg">安全监控可视化展示图</span>
+        </div>
+      </div>
+
+      <!-- 右侧：数据卡片 + 按钮（50%宽度） -->
+      <div class="md:w-1/2 w-full flex flex-col">
+        <!-- 6个数据卡片：2行3列，适配宽度 -->
+        <div class="grid grid-cols-3 gap-4 mb-8">
+          <!-- 数据1：覆盖公链数 -->
+          <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <h3 class="text-xs font-semibold text-gray-700 mb-1">覆盖公链数</h3>
+            <div class="text-2xl font-extrabold text-orange-500">28+</div>
+          </div>
+          <!-- 数据2：监控合约数 -->
+          <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <h3 class="text-xs font-semibold text-gray-700 mb-1">监控合约数</h3>
+            <div class="text-2xl font-extrabold text-orange-500">12,800+</div>
+          </div>
+          <!-- 数据3：今日高危告警 -->
+          <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <h3 class="text-xs font-semibold text-gray-700 mb-1">今日高危告警</h3>
+            <div class="text-2xl font-extrabold text-orange-500">12</div>
+          </div>
+          <!-- 数据4：累计拦截攻击 -->
+          <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <h3 class="text-xs font-semibold text-gray-700 mb-1">累计拦截攻击</h3>
+            <div class="text-2xl font-extrabold text-orange-500">480+</div>
+          </div>
+          <!-- 数据5：响应时长 -->
+          <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <h3 class="text-xs font-semibold text-gray-700 mb-1">响应时长</h3>
+            <div class="text-2xl font-extrabold text-orange-500">&lt;3分钟</div>
+          </div>
+          <!-- 数据6：黑名单地址 -->
+          <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <h3 class="text-xs font-semibold text-gray-700 mb-1">黑名单地址</h3>
+            <div class="text-2xl font-extrabold text-orange-500">200万+</div>
+          </div>
+        </div>
+
+        <!-- 两个按钮：适配宽度，比例协调 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button class="w-full bg-secondary text-white px-4 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all text-sm sm:text-base">
+            申请免费监控试用
+          </button>
+          <button class="w-full bg-transparent border border-secondary text-secondary px-4 py-3 rounded-lg font-medium hover:bg-secondary/10 transition-all text-sm sm:text-base">
+            定制专属监控方案
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块2：核心监控能力矩阵（4个内容互斥展开/收起 箭头完全修复） -->
+    <div class="grid md:grid-cols-4 gap-6 mb-12">
+      <!-- 能力1：智能合约异常行为监控 -->
+      <div class="monitor-item relative">
+        <div class="flex items-start">
+          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
+          <div class="w-full space-y-4">
+            <div>
+              <h4 class="text-xl font-bold text-gray-900 mb-3">智能合约异常行为监控</h4>
+              <p class="text-gray-600 text-base leading-relaxed">
+                覆盖合约全生命周期异常操作，精准识别已知攻击与0day风险特征
+              </p>
+            </div>
+            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+              <span>更多</span>
+              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+                <!-- 修复：初始箭头为向右，正确SVG路径 -->
+                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+            </button>
+            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
+              <ul class="space-y-2 text-gray-700 text-sm">
+                <li>• 合约权限变更监控</li>
+                <li>• 管理员私钥异常操作</li>
+                <li>• 函数非法调用检测</li>
+                <li>• 重入攻击尝试识别</li>
+                <li>• 闪电贷攻击特征分析</li>
+                <li>• 合约代码升级/自毁操作</li>
+                <li>• 恶意后门检测</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 能力2：链上资产流转风险监控 -->
+      <div class="monitor-item relative">
+        <div class="flex items-start">
+          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
+          <div class="w-full space-y-4">
+            <div>
+              <h4 class="text-xl font-bold text-gray-900 mb-3">链上资产流转风险监控</h4>
+              <p class="text-gray-600 text-base leading-relaxed">
+                实时追踪资产流向，提前识别盗币、洗钱、rug pull等资产风险
+              </p>
+            </div>
+            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+              <span>更多</span>
+              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+            </button>
+            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
+              <ul class="space-y-2 text-gray-700 text-sm">
+                <li>• 大额异常转账监控</li>
+                <li>• 黑名单地址交互预警</li>
+                <li>• 洗钱路径追踪</li>
+                <li>• 项目方rug pull特征识别</li>
+                <li>• 团队地址解锁异常</li>
+                <li>• 钓鱼合约交互预警</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 能力3：协议健康度实时监控 -->
+      <div class="monitor-item relative">
+        <div class="flex items-start">
+          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
+          <div class="w-full space-y-4">
+            <div>
+              <h4 class="text-xl font-bold text-gray-900 mb-3">协议健康度实时监控</h4>
+              <p class="text-gray-600 text-base leading-relaxed">
+                针对DeFi协议的全维度健康巡检，提前发现系统性风险
+              </p>
+            </div>
+            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+              <span>更多</span>
+              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+            </button>
+            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
+              <ul class="space-y-2 text-gray-700 text-sm">
+                <li>• TVL异常波动监控</li>
+                <li>• 预言机价格偏离预警</li>
+                <li>• 清算阈值异常检测</li>
+                <li>• 套利攻击特征识别</li>
+                <li>• 池资金异常流出</li>
+                <li>• 治理投票异常监控</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 能力4：底层基础设施安全监控 -->
+      <div class="monitor-item relative">
+        <div class="flex items-start">
+          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
+          <div class="w-full space-y-4">
+            <div>
+              <h4 class="text-xl font-bold text-gray-900 mb-3">底层基础设施安全监控</h4>
+              <p class="text-gray-600 text-base leading-relaxed">
+                针对公链节点、跨链桥、Layer2的底层风险监控
+              </p>
+            </div>
+            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+              <span>更多</span>
+              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+            </button>
+            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
+              <ul class="space-y-2 text-gray-700 text-sm">
+                <li>• 节点出块异常监控</li>
+                <li>• 跨链桥资产映射校验</li>
+                <li>• 共识机制风险检测</li>
+                <li>• 区块重组预警</li>
+                <li>• RPC节点安全防护</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模块3：告警事件处置案例 -->
+    <div class="bg-white p-8 rounded-xl shadow-md">
+      <h3 class="text-xl font-bold mb-6 text-center">告警事件处置案例</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- 案例1 -->
+        <div class="bg-gray-50 rounded-lg p-6 h-[280px] flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-bold">高危攻击拦截</span>
+              <p class="text-xs text-gray-500">2026年3月</p>
+            </div>
+            <h4 class="font-bold text-black mb-2">某头部DeFi借贷协议</h4>
+            <p class="text-gray-600 text-sm">
+              平台实时监控到协议管理员地址发起异常权限变更操作，疑似私钥被盗，第一时间触发高危告警。
+            </p>
+          </div>
+          <p class="text-sm font-bold text-orange-500">规避潜在资产损失：$1.2亿美金</p>
+        </div>
+        <!-- 案例2 -->
+        <div class="bg-gray-50 rounded-lg p-6 h-[280px] flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full font-bold">中危风险预警</span>
+              <p class="text-xs text-gray-500">2026年2月</p>
+            </div>
+            <h4 class="font-bold text-black mb-2">某NFT交易平台</h4>
+            <p class="text-gray-600 text-sm">
+              监控系统检测到平台NFT铸造合约存在异常调用，发现逻辑漏洞后立即通知项目方修复。
+            </p>
+          </div>
+          <p class="text-sm font-bold text-orange-500">避免用户资产被盗风险</p>
+        </div>
+        <!-- 案例3 -->
+        <div class="bg-gray-50 rounded-lg p-6 h-[280px] flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-bold">高危攻击拦截</span>
+              <p class="text-xs text-gray-500">2026年1月</p>
+            </div>
+            <h4 class="font-bold text-black mb-2">某跨链桥协议</h4>
+            <p class="text-gray-600 text-sm">
+              实时监控发现跨链桥资产映射模块存在异常验证请求，成功拦截闪电贷攻击尝试。
+            </p>
+          </div>
+          <p class="text-sm font-bold text-orange-500">规避潜在资产损失：$8,500万美金</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// 完全重写的互斥展开/收起逻辑，箭头100%正常
+document.addEventListener('DOMContentLoaded', () => {
+  // 精准获取所有监控项的按钮、内容、箭头
+  const allItems = document.querySelectorAll('.monitor-item');
+  const allBtns = document.querySelectorAll('.monitor-btn');
+
+  allBtns.forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+      const currentItem = allItems[index];
+      const currentContent = currentItem.querySelector('.monitor-content');
+      const currentArrow = currentItem.querySelector('.monitor-arrow');
+      const isCurrentExpanded = !currentContent.classList.contains('hidden');
+
+      // 第一步：先收起所有项，重置所有箭头
+      allItems.forEach(item => {
+        const content = item.querySelector('.monitor-content');
+        const arrow = item.querySelector('.monitor-arrow');
+        content.classList.add('hidden');
+        arrow.classList.remove('rotate-180');
+      });
+
+      // 第二步：如果当前项之前是收起的，就展开；如果之前是展开的，就保持收起（实现再次点击收回）
+      if (!isCurrentExpanded) {
+        currentContent.classList.remove('hidden');
+        currentArrow.classList.add('rotate-180');
+      }
+    });
+  });
+});
+</script>
+
     <!-- ===================== 板块三：证书技能（资质认证） ===================== -->
   <section id="certificate" class="scroll-mt-20">
     <div class="text-center mb-12">
@@ -793,86 +1078,103 @@ document.querySelectorAll('button').forEach(btn => {
 </section>
   </section>
 
-    <!-- ===================== 板块一：品牌介绍 ===================== -->
-  <section id="about" class="scroll-mt-20">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">品牌介绍</h2>
-      <p class="text-gray-600 max-w-2xl mx-auto">我们是谁，我们为 Web3 生态提供怎样的安全保障</p>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-8">
-      <!-- 我们是谁 -->
-      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
-        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-user-tie"></i></div>
-        <h3 class="text-xl font-bold mb-3">我们是谁</h3>
-        <p class="text-gray-600">国内领先的区块链安全技术服务商，核心团队来自顶尖安全实验室、头部Web3机构、高校密码学团队，拥有5年+实战审计经验。</p>
-      </div>
-      <!-- 我们的使命 -->
-      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
-        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-target"></i></div>
-        <h3 class="text-xl font-bold mb-3">我们的使命</h3>
-        <p class="text-gray-600">以技术为核心，为Web3生态提供全生命周期安全保障，降低区块链应用安全风险，推动行业合规化、可信化发展。</p>
-      </div>
-      <!-- 核心价值 -->
-      <div class="bg-white p-8 rounded-xl shadow-md card-hover">
-        <div class="text-secondary text-3xl mb-4"><i class="fa-solid fa-shield"></i></div>
-        <h3 class="text-xl font-bold mb-3">核心价值</h3>
-        <p class="text-gray-600">技术驱动、合规先行、全链覆盖、极致可靠，为B端客户提供最专业的智能合约安全解决方案。</p>
-      </div>
-    </div>
-
-    <!-- 核心痛点解决方案 -->
-    <div class="mt-12 bg-white p-8 rounded-xl shadow-md">
-      <h3 class="text-2xl font-bold mb-6 text-center">我们解决的核心问题</h3>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">合约漏洞频发，资产被盗风险高</h4>
-            <p class="text-gray-600">自动化+人工双重审计，覆盖99%高危漏洞，提前规避资产损失</p>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">链上风险不可控，异常难监控</h4>
-            <p class="text-gray-600">7×24小时链上监控，毫秒级风险预警，实时拦截攻击行为</p>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">合规门槛高，资质不达标</h4>
-            <p class="text-gray-600">提供全球认可的权威审计报告，满足交易所上线、监管合规要求</p>
-          </div>
-        </div>
-        <div class="flex gap-3">
-          <i class="fa-solid fa-circle-exclamation text-red-500 mt-1"></i>
-          <div>
-            <h4 class="font-bold">应急响应慢，损失无法挽回</h4>
-            <p class="text-gray-600">专家1v1应急响应，攻击溯源、漏洞修复、资产追踪全流程支持</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
 </main>>
-<!-- 页脚 -->
-<footer class="bg-primary text-white py-12">
-  <div class="container mx-auto px-4 text-center">
-    <div class="flex items-center justify-center gap-2 mb-4">
-      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
-      <span class="text-xl font-bold">ChainAuditPro</span>
+
+<!-- 页脚区域 - 浅色系淡灰色 -->
+<footer class="bg-gray-50 text-gray-800 pt-16 pb-8 border-t border-gray-200">
+  <div class="container mx-auto px-4">
+    <!-- 页脚主体内容 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <!-- 品牌介绍（核心板块） -->
+      <div class="md:col-span-1">
+        <div class="flex items-center gap-2 mb-6">
+          <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+          <span class="text-xl font-bold text-primary">ChainAudit<span class="text-secondary">Pro</span></span>
+        </div>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          ChainAuditPro 是一站式智能合约安全审计与链上风险管控平台，融合链上链下全栈安全工具，覆盖公链、DeFi、NFT、GameFi全场景智能合约漏洞检测与全生命周期安全防护，致力于为区块链生态提供专业、全面、高效的安全解决方案。
+        </p>
+        <div class="flex gap-4">
+          <a href="#" class="text-gray-500 hover:text-secondary transition-colors">
+            <i class="fa-brands fa-twitter text-lg"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-secondary transition-colors">
+            <i class="fa-brands fa-github text-lg"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-secondary transition-colors">
+            <i class="fa-brands fa-linkedin text-lg"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-secondary transition-colors">
+            <i class="fa-brands fa-telegram text-lg"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 快速链接 -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 text-primary">快速链接</h4>
+        <ul class="space-y-3 text-gray-600">
+          <li><a href="#about" class="hover:text-secondary transition-colors">关于我们</a></li>
+          <li><a href="#ability" class="hover:text-secondary transition-colors">产品能力</a></li>
+          <li><a href="#certificate" class="hover:text-secondary transition-colors">资质认证</a></li>
+          <li><a href="#trust" class="hover:text-secondary transition-colors">客户信任</a></li>
+          <li><a href="#audit-service" class="hover:text-secondary transition-colors">安全审计服务</a></li>
+          <li><a href="#monitoring" class="hover:text-secondary transition-colors">安全监控</a></li>
+        </ul>
+      </div>
+
+      <!-- 服务范围 -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 text-primary">服务范围</h4>
+        <ul class="space-y-3 text-gray-600">
+          <li><a href="#" class="hover:text-secondary transition-colors">智能合约审计</a></li>
+          <li><a href="#" class="hover:text-secondary transition-colors">链上安全监控</a></li>
+          <li><a href="#" class="hover:text-secondary transition-colors">应急响应服务</a></li>
+          <li><a href="#" class="hover:text-secondary transition-colors">安全合规咨询</a></li>
+          <li><a href="#" class="hover:text-secondary transition-colors">定制化安全方案</a></li>
+        </ul>
+      </div>
+
+      <!-- 联系我们 -->
+      <div>
+        <h4 class="text-lg font-bold mb-6 text-primary">联系我们</h4>
+        <ul class="space-y-3 text-gray-600">
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-map-marker-alt mt-1 text-secondary"></i>
+            <span>北京市朝阳区国贸CBD环球金融中心28层</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="fa-solid fa-phone text-secondary"></i>
+            <span>400-888-9999</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <i class="fa-solid fa-envelope text-secondary"></i>
+            <span>security@chainauditpro.com</span>
+          </li>
+        </ul>
+        <button class="mt-6 w-full bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+          在线咨询
+        </button>
+      </div>
     </div>
-    <p class="text-gray-400 mb-6">全维度链上链下安全审计，筑牢Web3可信底座</p>
-    <div class="flex justify-center gap-6 mb-8">
-      <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
-      <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-github"></i></a>
-      <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fa-brands fa-telegram"></i></a>
+
+    <!-- 分隔线 -->
+    <div class="border-t border-gray-200 pt-8">
+      <!-- 版权信息 -->
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-500 text-sm mb-4 md:mb-0">
+          © 2026 ChainAuditPro. 保留所有权利 | 京ICP备12345678号-1
+        </p>
+        <div class="flex gap-6 text-sm text-gray-500">
+          <a href="#" class="hover:text-secondary transition-colors">隐私政策</a>
+          <a href="#" class="hover:text-secondary transition-colors">服务条款</a>
+          <a href="#" class="hover:text-secondary transition-colors">法律声明</a>
+        </div>
+      </div>
     </div>
-    <p class="text-gray-500 text-sm">© 2026 ChainAuditPro 区块链审计平台. 保留所有权利</p>
   </div>
 </footer>
+
 </body>
 </html>

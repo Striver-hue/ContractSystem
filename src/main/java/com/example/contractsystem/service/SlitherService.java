@@ -10,6 +10,7 @@ public class SlitherService {
 
     private static final String HOST_DIR = "D:\\Shi\\dockerData\\Slither\\input";   // 服务器目录
     private static final String CONTAINER_NAME = "slither-container";
+    private static final String HOST_DIR_OUT = "D:\\Shi\\dockerData\\Slither\\output";   // 服务器目录
 
     public static String runSlither(MultipartFile file) throws Exception {
 
@@ -41,13 +42,11 @@ public class SlitherService {
         while ((line = reader.readLine()) != null) {
             logs.append(line).append("\n");
         }
-
         int exitCode = process.waitFor();
 
         // 5️⃣ 读取 JSON 结果
-        Path outputPath = Paths.get(HOST_DIR, outputFile);
+        Path outputPath = Paths.get(HOST_DIR_OUT, outputFile);
         String jsonResult = Files.readString(outputPath);
-
-        return "{ \"exitCode\": " + exitCode + ", \"result\": " + jsonResult + " }";
+        return "{ \"exitCode\": " + exitCode + ",\"outputPath\": " + outputPath + ", \"result\": " + jsonResult + " }";
     }
 }

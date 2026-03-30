@@ -15,6 +15,7 @@ public class SmartAuditService {
 
     private static final String HOST_DIR = "D:\\Shi\\dockerData\\SmartAudit\\input";
     private static final String CONTAINER_NAME = "smartaudit-container";
+    private static final String HOST_DIR_OUT = "D:\\Shi\\dockerData\\SmartAudit\\output";   // 服务器目录
 
     public static String runSmartAudit(MultipartFile file) throws Exception {
 

@@ -27,7 +27,6 @@ public class SmartAuditService {
         // 2️⃣ 读取 .sol 文件内容（替代 $(cat xxx.sol)）
         String fileContent = Files.readString(filePath);
 
-        // ⚠️ 避免命令行参数爆炸（推荐压缩或限制大小）
         // 简单处理换行（否则容易炸）
         fileContent = fileContent.replace("\"", "\\\"");
 

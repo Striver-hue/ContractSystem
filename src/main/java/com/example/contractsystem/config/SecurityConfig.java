@@ -51,24 +51,24 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) // 如果不需要 CSRF
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/bac/register").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/slither/**").permitAll()
-                        .requestMatchers("/smartaudit/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginProcessingUrl("/bac/login")
-                        .successHandler((request, response, authentication) -> {
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write("{\"success\":true,\"code\":200,\"msg\":\"登录成功\"}");
-                        })
-                        .failureHandler((request, response, exception) -> {
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write("{\"success\":false,\"code\":401,\"msg\":\"登录失败\"}");
-                        })
-                )
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/bac/register").permitAll()
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .requestMatchers("/slither/**").permitAll()
+//                        .requestMatchers("/smartaudit/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin(form -> form
+//                        .loginProcessingUrl("/bac/login")
+//                        .successHandler((request, response, authentication) -> {
+//                            response.setContentType("application/json;charset=UTF-8");
+//                            response.getWriter().write("{\"success\":true,\"code\":200,\"msg\":\"登录成功\"}");
+//                        })
+//                        .failureHandler((request, response, exception) -> {
+//                            response.setContentType("application/json;charset=UTF-8");
+//                            response.getWriter().write("{\"success\":false,\"code\":401,\"msg\":\"登录失败\"}");
+//                        })
+//                )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();  // build() 是 HttpSecurity 的方法

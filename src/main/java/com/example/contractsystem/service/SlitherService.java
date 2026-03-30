@@ -36,7 +36,6 @@ public class SlitherService {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(process.getInputStream())
         );
-
         StringBuilder logs = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
@@ -47,6 +46,6 @@ public class SlitherService {
         // 5️⃣ 读取 JSON 结果
         Path outputPath = Paths.get(HOST_DIR_OUT, outputFile);
         String jsonResult = Files.readString(outputPath);
-        return "{ \"exitCode\": " + exitCode + ",\"outputPath\": " + outputPath + ", \"result\": " + jsonResult + " }";
+        return jsonResult;
     }
 }

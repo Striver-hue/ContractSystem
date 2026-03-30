@@ -54,6 +54,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/bac/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/slither/**").permitAll()
+                        .requestMatchers("/smartaudit/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

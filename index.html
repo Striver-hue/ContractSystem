@@ -45,10 +45,50 @@
       filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.18));
       transform: scale(1.03);
     }
+    /* 在 <style> 中添加以下内容 */
+:root {
+    --bg-color: #DDE1E7; /* 背景基础色 [cite: 52] */
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed; /* 固定定位，贯穿全屏 [cite: 57] */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 关键：确保它在所有内容层之下 */
+    overflow: hidden;
+    filter: blur(120px); /* 柔和模糊效果 [cite: 58] */
+    background-color: var(--bg-color);
+}
+
+/* 动态气泡效果 [cite: 60, 61, 67] */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120px, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+
   </style>
 </head>
 <!-- 导航栏 -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
   <div class="container mx-auto px-4 py-4 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
@@ -118,7 +158,11 @@
   </div>
 </header>
 <body>
-
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
 <!-- 首屏 Hero 区（适配虚化背景+文字颜色调整+按钮统一无高亮版） -->
 <section class="relative shadow-lg min-h-[calc(100vh-80px)] flex flex-col justify-between">
   <!-- 背景图片层（方案一原有虚化效果完全保留） -->
@@ -218,7 +262,7 @@
   </div>
 
   <!-- 底部：服务场景层及以下（贴近底部） -->
-  <div class="bg-white p-8 rounded-xl shadow-lg">
+  <div class=" p-8 rounded-xl shadow-lg">
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8 mb-8 max-w-6xl mx-auto">
       <div class="p-7 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
@@ -257,7 +301,7 @@
 
 
 <!-- ===================== 新增板块：安全审计核心服务 ===================== -->
-<section id="audit-service" class="scroll-mt-20 py-16 bg-white">
+<section id="audit-service" class="scroll-mt-20 py-16">
   <div class="container mx-auto px-4">
     <!-- 板块标题 -->
     <div class="text-center mb-16">
@@ -623,7 +667,7 @@ document.querySelectorAll('button').forEach(btn => {
 </section>
 
     <!-- ===================== 板块：7×24小时链上实时安全监控 ===================== -->
-<section id="monitoring" class="scroll-mt-20 py-16 bg-white">
+<section id="monitoring" class="scroll-mt-20 py-16 ">
   <div class="container mx-auto px-4">
     <!-- 标题区 -->
     <div class="mb-12 text-center">
@@ -825,7 +869,7 @@ document.querySelectorAll('button').forEach(btn => {
     </div>
 
     <!-- 模块3：告警事件处置案例 -->
-    <div class="bg-white p-8 rounded-xl shadow-md">
+    <div class=" p-8 rounded-xl shadow-md">
       <h3 class="text-xl font-bold mb-6 text-center">告警事件处置案例</h3>
       <div class="grid md:grid-cols-3 gap-6">
         <!-- 案例1 -->
@@ -949,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 
 <!-- 标杆案例 + 合作机构 + 保障承诺 -->
-<div class="bg-white p-8 rounded-xl shadow-md mb-8">
+<div class="p-8 rounded-xl shadow-md mb-8">
   <h3 class="text-xl font-bold mb-6 text-center">标杆客户案例</h3>
   <div class="grid md:grid-cols-3 gap-6">
     <!-- 案例1 -->
@@ -971,17 +1015,17 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
     <!-- ===================== 板块五：数据统计与排行榜 ===================== -->
-<section id="data-ranking" class="scroll-mt-20 py-16 bg-white">
+<section id="data-ranking" class="scroll-mt-20 py-16">
   <div class="container mx-auto px-4">
 
 
     <!-- 第二部分：排行榜区域 -->
-    <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class=" rounded-xl shadow-lg p-8">
       <h3 class="text-xl font-bold text-primary mb-6 text-center">平台排行榜</h3>
       <!-- 排行榜布局：前两个等宽，第三个宽度减半，三框等高 -->
       <div class="grid grid-cols-5 gap-6">
         <!-- 热门数据集 (占2列) -->
-        <div class="col-span-2 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+        <div class="col-span-2  rounded-lg p-4 h-[400px] overflow-y-auto">
           <h4 class="font-bold text-lg text-black mb-4 text-center">热门数据集</h4>
           <ul class="space-y-3">
             <li class="flex items-center justify-between border-b border-gray-200 pb-2">
@@ -1028,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- 热门文献 (占2列) -->
-        <div class="col-span-2 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+        <div class="col-span-2  rounded-lg p-4 h-[400px] overflow-y-auto">
           <h4 class="font-bold text-lg text-black mb-4 text-center">热门文献</h4>
           <ul class="space-y-3">
             <li class="flex items-center justify-between border-b border-gray-200 pb-2">
@@ -1075,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- 月活跃用户 (占1列) -->
-        <div class="col-span-1 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+        <div class="col-span-1  rounded-lg p-4 h-[400px] overflow-y-auto">
           <h4 class="font-bold text-lg text-black mb-4 text-center">月活跃用户</h4>
           <ul class="space-y-4">
             <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
@@ -1127,10 +1171,10 @@ document.addEventListener('DOMContentLoaded', () => {
   </section>
 
 
-</main>>
+</main>
 
 <!-- 页脚区域 - 浅色系淡灰色 -->
-<footer class="bg-gray-50 text-gray-800 pt-16 pb-8 border-t border-gray-200">
+<footer class="bg-[#DDE1E7]/80 backdrop-blur-md border-t border-gray-300/50 py-16">
   <div class="container mx-auto px-4">
     <!-- 页脚主体内容 -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">

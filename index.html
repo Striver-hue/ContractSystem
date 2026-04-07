@@ -34,33 +34,116 @@
       .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2); }
       .gradient-bg { background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); }
     }
-        /* 修复：合作伙伴无缝滚动 + 悬停减速 */
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+
+    .pie-slice {
+      transition: transform 0.25s ease, filter 0.25s ease;
+      transform-origin: 120px 120px;
+      cursor: pointer;
     }
-    .animate-scroll {
-      animation: scroll 30s linear infinite;
-      width: max-content; /* 确保内容宽度足够 */
+
+    .pie-slice:hover {
+      filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.18));
+      transform: scale(1.03);
     }
-    .group:hover .animate-scroll-slow {
-      animation: scroll 60s linear infinite;
-    }
+    /* 在 <style> 中添加以下内容 */
+:root {
+    --bg-color: #DDE1E7; /* 背景基础色 [cite: 52] */
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed; /* 固定定位，贯穿全屏 [cite: 57] */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 关键：确保它在所有内容层之下 */
+    overflow: hidden;
+    filter: blur(120px); /* 柔和模糊效果 [cite: 58] */
+    background-color: var(--bg-color);
+}
+
+/* 动态气泡效果 [cite: 60, 61, 67] */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120px, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+
   </style>
 </head>
 <!-- 导航栏 -->
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
   <div class="container mx-auto px-4 py-4 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
       <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
     </div>
     <!-- 桌面端导航 -->
-    <nav class="hidden md:flex items-center gap-8">
-      <a href="#about" class="hover:text-secondary transition-colors">关于我们</a>
-      <a href="#ability" class="hover:text-secondary transition-colors">产品能力</a>
-      <a href="#certificate" class="hover:text-secondary transition-colors">资质认证</a>
-      <a href="#trust" class="hover:text-secondary transition-colors">客户信任</a>
+    <nav class="hidden md:flex items-center gap-6">
+      <div class="group relative">
+        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
     </nav>
     <!-- 行动按钮组：登录 + 免费安全初检 -->
     <div class="flex items-center gap-3">
@@ -75,97 +158,90 @@
   </div>
 </header>
 <body>
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+<!-- 首屏 Hero 区（适配虚化背景+文字颜色调整+按钮统一无高亮版） -->
+<section class="relative shadow-lg min-h-[calc(100vh-80px)] flex flex-col justify-between">
+  <!-- 背景图片层（方案一原有虚化效果完全保留） -->
+  <div class="absolute inset-0 z-0 overflow-hidden">
+    <img src="pictures/首屏.png" alt="区块链安全审计平台首屏背景"
+         class="w-full h-full object-cover object-center scale-105 blur-sm">
+    <div class="absolute inset-0 bg-primary/25"></div>
+  </div>
 
-<!-- 首屏 Hero 区（完美适配 + 无缝滚动 + 悬停减速） -->
-<section class="bg-white/80 backdrop-blur-md shadow-lg min-h-[calc(100vh-80px)] flex flex-col justify-between">
-  <!-- 核心内容区（适度上移，不挤压底部） -->
-  <div class="flex-grow flex items-center justify-center">
+  <!-- 核心内容区（文字颜色全量调整） -->
+  <div class="relative z-10 flex-grow flex items-center justify-center">
     <div class="container mx-auto px-4 flex items-center h-full mt-[-4rem] max-w-[calc(100%-16rem)]">
-      <!-- 左侧文字按钮区域（增加内边距，缩小整体占比） -->
+      <!-- 左侧文字按钮区域 -->
       <div class="w-2/3 text-left pr-4 px-4">
-        <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold leading-tight text-primary mb-4 ml-8">
+        <h1 class="text-[clamp(2rem,5vw,4rem)] font-bold leading-tight mb-4 ml-8 text-black-200 text-shadow">
           一站式智能合约安全审计与链上风险管控平台
         </h1>
-        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mb-8 ml-10 ">
-          融合链上链下全栈安全工具，覆盖公链、DeFi、NFT、GameFi全场景智能合约漏洞检测与全生命周期安全防护
+        <p class="text-lg md:text-xl text-black-200 max-w-3xl mb-8 ml-10">
+          融合链上（风险监控）链下（代码审计）全栈安全工具，覆盖公链、DeFi、NFT、GameFi、RWA全场景智能合约漏洞检测与全生命周期安全防护
         </p>
+        <!-- 两个按钮完全统一样式，无高亮区分 -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-[calc(100%-10rem)] ml-8">
-          <button class="bg-secondary text-white px-8 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all">
+          <button class="bg-primary/30 backdrop-blur-sm border border-primary/40 text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/40 transition-all shadow-lg">
             申请免费安全初检
           </button>
-          <button class="bg-transparent border border-secondary text-secondary px-8 py-3 rounded-lg font-medium hover:bg-secondary/10 transition-all">
+          <button class="bg-primary/30 backdrop-blur-sm border border-primary/40 text-white px-8 py-3 rounded-lg font-medium hover:bg-primary/40 transition-all shadow-lg">
             查看审计案例库
           </button>
         </div>
       </div>
 
-      <!-- 右侧竖向核心数据展示区（内缩左右间距） -->
+      <!-- 右侧竖向核心数据展示区（文字颜色同步适配） -->
       <div class="w-[340px] h-[500px] flex flex-col justify-around mx-10">
-  <!-- 累计审计合约项目数 -->
         <div class="text-center">
-
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">1,200+</div>
-           <h3 class="text-lg font-bold text-primary mb-2 text-right">审计合约项目数</h3>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">1,200+</div>
+          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">审计合约项目数</h3>
         </div>
-
-        <!-- 累计发现高危漏洞数 -->
         <div class="text-center">
-
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">3,600+</div>
-          <h3 class="text-lg font-bold text-primary mb-2 text-right">审计发现高危漏洞数</h3>
-       </div>
-
-        <!-- 累计为客户规避潜在资产损失 -->
-        <div class="text-center">
-
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">2.7亿+</div>
-          <h3 class="text-lg font-bold text-primary mb-2 text-right">为客户规避潜在资产损失</h3>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">3,600+</div>
+          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">审计发现高危漏洞数</h3>
         </div>
-
-        <!-- 客户整体满意度 -->
         <div class="text-center">
-
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-500 mb-2 text-right">10.7亿+</div>
-          <h3 class="text-lg font-bold text-primary mb-2 text-right">链上交易金额总计</h3>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">2.7亿+</div>
+          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">为客户规避潜在资产损失</h3>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">10.7亿+</div>
+          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">链上交易金额总计</h3>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 合作伙伴区（无缝滚动 + 悬停减速） -->
-  <div class="py-5 border-t border-gray-100">
+  <!-- 合作伙伴区（文字颜色同步适配） -->
+  <div class="relative z-10 py-5 border-t border-gray-200/30 bg-white/20 backdrop-blur-sm">
     <div class="container mx-auto px-4 mb-3">
-      <h2 class="text-xs font-medium text-center text-gray-500 uppercase tracking-wider">合作伙伴</h2>
+      <h2 class="text-xs font-medium text-center text-black-200 uppercase tracking-wider">合作伙伴</h2>
     </div>
-    <!-- 滚动容器（修复悬停减速） -->
-    <div class="overflow-hidden group">
-      <div class="flex gap-6 whitespace-nowrap animate-scroll group-hover:animate-scroll-slow">
+        <div class="overflow-hidden"> <!-- 移除 group 类 -->
+      <div class="flex gap-6 flex-wrap justify-center"> <!-- 核心修改：
+                                                         1. 移除 whitespace-nowrap（取消强制不换行）
+                                                         2. 移除 animate-scroll（删除滚动动画）
+                                                         3. 移除 group-hover:animate-scroll-slow（删除悬停减速）
+                                                         4. 新增 flex-wrap（让内容自动换行，适配屏幕）
+                                                         5. 新增 justify-center（内容居中，视觉更优）
+                                                      -->
         <!-- 第一组公司 -->
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">以太坊基金会</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">币安</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Coinbase</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Polygon</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">ConsenSys</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Chainlink</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">OpenSea</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Uniswap</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Aave</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Compound</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Circle</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Tether</span>
-        <!-- 第二组重复（无缝滚动关键，必须和第一组完全一致） -->
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">以太坊基金会</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">币安</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Coinbase</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Polygon</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">ConsenSys</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Chainlink</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">OpenSea</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Uniswap</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Aave</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Compound</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Circle</span>
-        <span class="text-gray-400 hover:text-primary transition-colors cursor-default text-sm">Tether</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">以太坊基金会</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">币安</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Coinbase</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Polygon</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">ConsenSys</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Chainlink</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">OpenSea</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Uniswap</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Aave</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Compound</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Circle</span>
+        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Tether</span>
       </div>
     </div>
   </div>
@@ -174,52 +250,41 @@
 <section id="ability" class="scroll-mt-20 min-h-[calc(100vh-80px)] flex flex-col justify-between py-12">
   <!-- 顶部：标题区（偏靠近顶部） -->
   <div class="text-center">
-    <h2 class="text-3xl md:text-4xl font-bold mb-4">产品能力</h2>
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">产品架构</h2>
     <p class="text-gray-600 max-w-2xl mx-auto">一张图看懂全链路安全服务能力，覆盖合约全生命周期</p>
   </div>
 
   <!-- 中间：预留图片位置（灰色边框透明内部） -->
   <div class="container mx-auto px-4 flex-grow flex items-center justify-center">
-    <div class="w-full h-64 md:h-80 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-transparent">
-      <span class="text-gray-400 text-lg">预留图片位置</span>
+    <div class="w-full aspect-[16/9] md:aspect-[2/1] rounded-xl overflow-hidden bg-transparent">
+      <img src="pictures/framework.png" alt="产品能力框架图" class="w-full h-full object-contain">
     </div>
   </div>
 
   <!-- 底部：服务场景层及以下（贴近底部） -->
-  <div class="bg-white p-8 rounded-xl shadow-lg">
+  <div class=" p-8 rounded-xl shadow-lg">
 
-    <div class="grid md:grid-cols-4 gap-6 mb-8">
-      <div class="p-6 bg-blue-50 rounded-xl card-hover">
-        <h3 class="font-bold mb-2 text-secondary">事前安全审计</h3>
-        <ul class="text-sm text-gray-600 space-y-2">
-          <li>• 自动化合约扫描</li>
-          <li>• 专家人工深度审计</li>
-          <li>• 模糊测试+形式化验证</li>
-        </ul>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8 mb-8 max-w-6xl mx-auto">
+      <div class="p-7 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+        <h3 class="font-bold text-xl md:text-2xl mb-3 text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-link text-gray-700 text-lg"></i>
+          适配多种区块链合约
+        </h3>
+        <p class="text-base text-gray-700 leading-relaxed">平台可兼容多链与多语言合约环境，支持主流公链生态下的统一审计流程，帮助项目在不同技术栈中保持一致的安全验证标准。</p>
       </div>
-      <div class="p-6 bg-green-50 rounded-xl card-hover">
-        <h3 class="font-bold mb-2 text-accent">事中实时监控</h3>
-        <ul class="text-sm text-gray-600 space-y-2">
-          <li>• 7×24链上数据监控</li>
-          <li>• AI风险智能预警</li>
-          <li>• 0day漏洞补丁推送</li>
-        </ul>
+      <div class="p-7 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-shadow">
+        <h3 class="font-bold text-xl md:text-2xl mb-3 text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-gray-700 text-lg"></i>
+          覆盖多种漏洞类型
+        </h3>
+        <p class="text-base text-gray-700 leading-relaxed">针对权限控制、重入攻击、预言机操纵与业务逻辑缺陷等高频风险构建统一检测模型，结合规则与样本库提升已知漏洞和变种问题的识别能力。</p>
       </div>
-      <div class="p-6 bg-orange-50 rounded-xl card-hover">
-        <h3 class="font-bold mb-2 text-orange-600">事后应急响应</h3>
-        <ul class="text-sm text-gray-600 space-y-2">
-          <li>• 攻击溯源与资产追踪</li>
-          <li>• 漏洞紧急热修复</li>
-          <li>• 司法证据固化</li>
-        </ul>
-      </div>
-      <div class="p-6 bg-purple-50 rounded-xl card-hover">
-        <h3 class="font-bold mb-2 text-purple-600">链上链下工具集</h3>
-        <ul class="text-sm text-gray-600 space-y-2">
-          <li>• 代码合规检测</li>
-          <li>• 地址风险评级</li>
-          <li>• 安全合规咨询</li>
-        </ul>
+      <div class="p-7 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+        <h3 class="font-bold text-xl md:text-2xl mb-3 text-gray-900 flex items-center gap-2">
+          <i class="fa-solid fa-diagram-project text-gray-700 text-lg"></i>
+          严格的检测架构
+        </h3>
+        <p class="text-base text-gray-700 leading-relaxed">采用自动化扫描、人工复核与交叉验证的分层机制，对代码与链上行为进行全流程校验，确保审计结果稳定、可追溯并可复现。</p>
       </div>
     </div>
 
@@ -236,7 +301,7 @@
 
 
 <!-- ===================== 新增板块：安全审计核心服务 ===================== -->
-<section id="audit-service" class="scroll-mt-20 py-16 bg-white">
+<section id="audit-service" class="scroll-mt-20 py-16">
   <div class="container mx-auto px-4">
     <!-- 板块标题 -->
     <div class="text-center mb-16">
@@ -294,9 +359,37 @@
           </ul>
         </div>
       </div>
-      <!-- 图片预留框（宽度1:1，高度1.5倍） -->
-      <div class="md:w-1/2 h-[360px] border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white">
-        <span class="text-gray-400 text-lg">全栈审计与交叉审查示意图（可替换为实际图片）</span>
+      <!-- 饼图示例：合约扫描风险分布 -->
+      <div class="md:w-1/2 w-full h-[360px] border border-gray-200 rounded-xl bg-white p-6 flex flex-col md:flex-row items-center justify-center gap-6">
+        <svg width="240" height="240" viewBox="0 0 240 240" role="img" aria-label="合约扫描风险分布饼图" class="shrink-0">
+          <circle cx="120" cy="120" r="78" fill="#E5E7EB"></circle>
+
+          <path class="pie-slice" d="M120 42 A78 78 0 1 1 74.15 56.90 L91.79 81.17 A48 48 0 1 0 120 72 Z" fill="#0F172A">
+            <title>安全合约：90,000（90%）</title>
+          </path>
+          <path class="pie-slice" d="M74.15 56.90 A78 78 0 0 1 105.12 43.44 L110.84 72.88 A48 48 0 0 0 91.79 81.17 Z" fill="#94A3B8">
+            <title>其他风险：7,000（7%）</title>
+          </path>
+          <path class="pie-slice" d="M105.12 43.44 A78 78 0 0 1 115.10 42.16 L116.99 72.10 A48 48 0 0 0 110.84 72.88 Z" fill="#F59E0B">
+            <title>访问控制风险：2,000（2%）</title>
+          </path>
+          <path class="pie-slice" d="M115.10 42.16 A78 78 0 0 1 120 42 L120 72 A48 48 0 0 0 116.99 72.10 Z" fill="#EF4444">
+            <title>重入风险：1,000（1%）</title>
+          </path>
+
+          <circle cx="120" cy="120" r="48" fill="white"></circle>
+          <text x="120" y="114" text-anchor="middle" class="fill-gray-900 font-bold" style="font-size: 15px;">总扫描量</text>
+          <text x="120" y="136" text-anchor="middle" class="fill-gray-900 font-bold" style="font-size: 22px;">100,000</text>
+        </svg>
+
+        <div class="text-sm text-gray-700 space-y-2 w-full max-w-[260px]">
+          <p class="text-base font-bold text-gray-900 mb-3">扫描结果示例</p>
+          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#EF4444]"></span>重入风险：1,000（1%）</p>
+          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#F59E0B]"></span>访问控制风险：2,000（2%）</p>
+          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#94A3B8]"></span>其他风险：7,000（7%）</p>
+          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#0F172A]"></span>安全合约：90,000（90%）</p>
+          <p class="text-xs text-gray-500 pt-2">悬浮在扇区上可查看高亮与提示。</p>
+        </div>
       </div>
     </div>
 
@@ -574,7 +667,7 @@ document.querySelectorAll('button').forEach(btn => {
 </section>
 
     <!-- ===================== 板块：7×24小时链上实时安全监控 ===================== -->
-<section id="monitoring" class="scroll-mt-20 py-16 bg-white">
+<section id="monitoring" class="scroll-mt-20 py-16 ">
   <div class="container mx-auto px-4">
     <!-- 标题区 -->
     <div class="mb-12 text-center">
@@ -776,7 +869,7 @@ document.querySelectorAll('button').forEach(btn => {
     </div>
 
     <!-- 模块3：告警事件处置案例 -->
-    <div class="bg-white p-8 rounded-xl shadow-md">
+    <div class=" p-8 rounded-xl shadow-md">
       <h3 class="text-xl font-bold mb-6 text-center">告警事件处置案例</h3>
       <div class="grid md:grid-cols-3 gap-6">
         <!-- 案例1 -->
@@ -900,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 
 <!-- 标杆案例 + 合作机构 + 保障承诺 -->
-<div class="bg-white p-8 rounded-xl shadow-md mb-8">
+<div class="p-8 rounded-xl shadow-md mb-8">
   <h3 class="text-xl font-bold mb-6 text-center">标杆客户案例</h3>
   <div class="grid md:grid-cols-3 gap-6">
     <!-- 案例1 -->
@@ -922,17 +1015,17 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
     <!-- ===================== 板块五：数据统计与排行榜 ===================== -->
-<section id="data-ranking" class="scroll-mt-20 py-16 bg-white">
+<section id="data-ranking" class="scroll-mt-20 py-16">
   <div class="container mx-auto px-4">
 
 
     <!-- 第二部分：排行榜区域 -->
-    <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class=" rounded-xl shadow-lg p-8">
       <h3 class="text-xl font-bold text-primary mb-6 text-center">平台排行榜</h3>
       <!-- 排行榜布局：前两个等宽，第三个宽度减半，三框等高 -->
       <div class="grid grid-cols-5 gap-6">
         <!-- 热门数据集 (占2列) -->
-        <div class="col-span-2 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+        <div class="col-span-2  rounded-lg p-4 h-[400px] overflow-y-auto">
           <h4 class="font-bold text-lg text-black mb-4 text-center">热门数据集</h4>
           <ul class="space-y-3">
             <li class="flex items-center justify-between border-b border-gray-200 pb-2">
@@ -979,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- 热门文献 (占2列) -->
-        <div class="col-span-2 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+        <div class="col-span-2  rounded-lg p-4 h-[400px] overflow-y-auto">
           <h4 class="font-bold text-lg text-black mb-4 text-center">热门文献</h4>
           <ul class="space-y-3">
             <li class="flex items-center justify-between border-b border-gray-200 pb-2">
@@ -1026,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- 月活跃用户 (占1列) -->
-        <div class="col-span-1 bg-gray-50 rounded-lg p-4 h-[400px] overflow-y-auto">
+        <div class="col-span-1  rounded-lg p-4 h-[400px] overflow-y-auto">
           <h4 class="font-bold text-lg text-black mb-4 text-center">月活跃用户</h4>
           <ul class="space-y-4">
             <li class="flex items-center gap-2 border-b border-gray-200 pb-2">
@@ -1078,10 +1171,10 @@ document.addEventListener('DOMContentLoaded', () => {
   </section>
 
 
-</main>>
+</main>
 
 <!-- 页脚区域 - 浅色系淡灰色 -->
-<footer class="bg-gray-50 text-gray-800 pt-16 pb-8 border-t border-gray-200">
+<footer class="bg-[#DDE1E7]/80 backdrop-blur-md border-t border-gray-300/50 py-16">
   <div class="container mx-auto px-4">
     <!-- 页脚主体内容 -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">

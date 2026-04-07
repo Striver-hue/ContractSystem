@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slither 合约安全检测</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 统一你的项目配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A', // 主色-深蓝（专业安全）
+            secondary: '#2563EB', // 辅助色-科技蓝
+            accent: '#10B981', // 强调色-安全绿
+            light: '#F8FAFC', // 浅色背景
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+      /* 在 <style> 中添加以下内容 */
+:root {
+    --bg-color: #DDE1E7; /* 背景基础色 [cite: 52] */
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed; /* 固定定位，贯穿全屏 [cite: 57] */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 关键：确保它在所有内容层之下 */
+    overflow: hidden;
+    filter: blur(120px); /* 柔和模糊效果 [cite: 58] */
+    background-color: var(--bg-color);
+}
+
+/* 动态气泡效果 [cite: 60, 61, 67] */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120px, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+
+  </style>
+</head>
+<!-- 导航栏 -->
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <!-- 桌面端导航 -->
+    <nav class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
+
+      <div class="group relative">
+        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <!-- 行动按钮组：登录 + 免费安全初检 -->
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+      免费安全初检
+      </button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<body>
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<!-- 报告展示 -->
+
+<!-- 报告展示核心区域（换行彻底修复版） -->
+<div class="bg-gray-50 rounded-xl shadow-sm border border-gray-200 w-full max-w-5xl mx-auto overflow-hidden">
+  <!-- 顶部：BA/TA 选项卡 + 下载按钮 -->
+  <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+    <div class="flex gap-2">
+      <button id="tab_ba" class="px-5 py-2 rounded-lg font-medium transition-all bg-primary text-white">BA</button>
+      <button id="tab_ta" class="px-5 py-2 rounded-lg font-medium transition-all bg-white text-gray-600 hover:bg-gray-100">TA</button>
+    </div>
+    <button class="px-5 py-2 rounded-lg bg-secondary text-white flex items-center gap-1">
+      <i class="fa-solid fa-download"></i> 下载完整报告
+    </button>
+  </div>
+
+  <!-- 主体：双下拉框 + 报告详情 -->
+  <div class="p-6 bg-white min-h-[600px]">
+    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+      <div class="w-full sm:w-1/2">
+        <label class="block text-sm font-medium text-gray-700 mb-2">选择漏洞类型</label>
+        <select id="select_key" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+          <option value="">请选择漏洞类型</option>
+        </select>
+      </div>
+      <div class="w-full sm:w-1/2">
+        <label class="block text-sm font-medium text-gray-700 mb-2">选择检测文件</label>
+        <select id="select_file" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+          <option value="">请先选择漏洞类型</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 报告展示区域 -->
+    <div id="report_content" class="p-5 bg-white rounded-lg border border-gray-100 min-h-[450px] text-gray-700 break-words">
+      请通过下拉框选择检测文件，查看对应报告详情
+    </div>
+  </div>
+</div>
+
+<script>
+// ======================
+// 核心配置
+// ======================
+const CONFIG = {
+  API_BASE: "http://localhost:8080/smartaudit"
+};
+
+// 全局数据
+let dataMap = {};
+let currentType = "BA";
+
+// ======================
+// 接口请求
+// ======================
+const fetchUtil = {
+  async getList() {
+    const url = currentType === "BA" ? `${CONFIG.API_BASE}/getBAList` : `${CONFIG.API_BASE}/getTAList`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    });
+    return await res.json();
+  },
+  async getReport(filename) {
+    const url = currentType === "BA" ? `${CONFIG.API_BASE}/getBAExample` : `${CONFIG.API_BASE}/getTAExample`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `filename=${encodeURIComponent(filename)}`
+    });
+    return await res.text();
+  }
+};
+
+// ======================
+// 初始化
+// ======================
+window.addEventListener("load", async () => {
+  await loadData();
+  bindEvents();
+});
+
+// 加载漏洞类型下拉框
+async function loadData() {
+  try {
+    dataMap = await fetchUtil.getList();
+    const keySelect = document.getElementById("select_key");
+    keySelect.innerHTML = "<option value=''>请选择漏洞类型</option>";
+
+    Object.keys(dataMap).forEach(key => {
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.innerText = key;
+      keySelect.appendChild(opt);
+    });
+
+    document.getElementById("select_file").innerHTML = "<option value=''>请先选择漏洞类型</option>";
+    document.getElementById("report_content").innerHTML = "请通过下拉框选择检测文件，查看对应报告详情";
+  } catch (e) {
+    document.getElementById("report_content").innerHTML = "数据加载失败：" + e.message;
+  }
+}
+
+// 联动文件下拉框
+function loadFileSelect(key) {
+  const fileSelect = document.getElementById("select_file");
+  if (!key) {
+    fileSelect.innerHTML = "<option value=''>请先选择漏洞类型</option>";
+    return;
+  }
+  const fileList = dataMap[key] || [];
+  fileSelect.innerHTML = "<option value=''>请选择检测文件</option>";
+
+  fileList.forEach(file => {
+    const opt = document.createElement("option");
+    opt.value = file;
+    opt.innerText = file;
+    fileSelect.appendChild(opt);
+  });
+}
+
+// ======================
+// 绑定事件
+// ======================
+function bindEvents() {
+  // BA切换
+  document.getElementById("tab_ba").onclick = async () => {
+    currentType = "BA";
+    document.getElementById("tab_ba").className = "px-5 py-2 rounded-lg font-medium transition-all bg-primary text-white";
+    document.getElementById("tab_ta").className = "px-5 py-2 rounded-lg font-medium transition-all bg-white text-gray-600 hover:bg-gray-100";
+    await loadData();
+  };
+
+  // TA切换
+  document.getElementById("tab_ta").onclick = async () => {
+    currentType = "TA";
+    document.getElementById("tab_ta").className = "px-5 py-2 rounded-lg font-medium transition-all bg-primary text-white";
+    document.getElementById("tab_ba").className = "px-5 py-2 rounded-lg font-medium transition-all bg-white text-gray-600 hover:bg-gray-100";
+    await loadData();
+  };
+
+  // 漏洞类型联动
+  document.getElementById("select_key").onchange = (e) => {
+    loadFileSelect(e.target.value);
+  };
+
+  // 选择文件加载报告（🔥核心：替换\n为<br>实现强制换行）
+  document.getElementById("select_file").onchange = async (e) => {
+    const filename = e.target.value;
+    if (!filename) return;
+
+    const reportDom = document.getElementById("report_content");
+    reportDom.innerHTML = "报告详情加载中...";
+
+    try {
+      const content = await fetchUtil.getReport(filename);
+      // ✅ 关键修复：把所有 \n 替换成 HTML 换行标签 <br>
+      const formattedContent = content.replace(/\\n/g, "<br>").replace(/\n/g, "<br>");
+      reportDom.innerHTML = formattedContent;
+    } catch (err) {
+      reportDom.innerHTML = "报告加载失败：" + err.message;
+    }
+  };
+}
+</script>
+
+
+</body>
+</html>

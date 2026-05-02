@@ -8,6 +8,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- 引入Font Awesome图标 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
   <!-- 自定义配置 -->
   <script>
     tailwind.config = {
@@ -102,6 +106,7 @@
           <i class="fa-solid fa-chevron-down text-[10px]"></i>
         </a>
         <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="漏洞检测工具.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞检测工具</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
@@ -128,6 +133,7 @@
         <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
           <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
           <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="攻击事件展示.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">攻击事件展示</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
         </div>
@@ -197,7 +203,7 @@
       <!-- 右侧竖向核心数据展示区（文字颜色同步适配） -->
       <div class="w-[340px] h-[500px] flex flex-col justify-around mx-10">
         <div class="text-center">
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">2,900+</div>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">2,200+</div>
           <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">审计合约项目数</h3>
         </div>
         <div class="text-center">
@@ -216,35 +222,7 @@
     </div>
   </div>
 
-  <!-- 合作伙伴区（文字颜色同步适配） -->
-  <div class="relative z-10 py-5 border-t border-gray-200/30 bg-white/20 backdrop-blur-sm">
-    <div class="container mx-auto px-4 mb-3">
-      <h2 class="text-xs font-medium text-center text-black-200 uppercase tracking-wider">合作伙伴</h2>
-    </div>
-        <div class="overflow-hidden"> <!-- 移除 group 类 -->
-      <div class="flex gap-6 flex-wrap justify-center"> <!-- 核心修改：
-                                                         1. 移除 whitespace-nowrap（取消强制不换行）
-                                                         2. 移除 animate-scroll（删除滚动动画）
-                                                         3. 移除 group-hover:animate-scroll-slow（删除悬停减速）
-                                                         4. 新增 flex-wrap（让内容自动换行，适配屏幕）
-                                                         5. 新增 justify-center（内容居中，视觉更优）
-                                                      -->
-        <!-- 第一组公司 -->
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">以太坊基金会</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">币安</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Coinbase</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Polygon</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">ConsenSys</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Chainlink</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">OpenSea</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Uniswap</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Aave</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Compound</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Circle</span>
-        <span class="text-black-300 hover:text-white transition-colors cursor-default text-sm">Tether</span>
-      </div>
-    </div>
-  </div>
+  
 </section>
  <!-- ===================== 板块二：产品能力（与第一板块同大小 + 顶部标题 + 中间预留图 + 底部能力层） ===================== -->
 <section id="ability" class="scroll-mt-20 min-h-[calc(100vh-80px)] flex flex-col justify-between py-12">
@@ -392,6 +370,7 @@
 
 
 <!-- ===================== 新增板块：安全审计核心服务 ===================== -->
+
 <section id="audit-service" class="scroll-mt-20 py-16">
   <div class="container mx-auto px-4">
     <!-- 板块标题 -->
@@ -400,12 +379,39 @@
       <p class="text-gray-600 max-w-2xl mx-auto">全维度审计体系，从代码层到架构层的深度安全验证</p>
     </div>
 
-    <!-- 1+2 合并：多维度审计 + 交叉审查（左文右图） -->
-    <div class="mb-16 flex flex-col md:flex-row items-center gap-8">
-      <!-- 文字部分（宽度1:1） -->
-      <div class="md:w-1/2">
-        <h3 class="text-2xl font-bold text-secondary mb-4">全栈式区块链安全审计</h3>
+<div class="max-w-6xl mx-auto px-4 py-16 flex flex-col items-center">
+  <!-- 饼图区域 -->
+  <div class="w-full max-w-2xl h-[450px] bg-transparent flex justify-center items-center relative">
+    <canvas id="attack_pie"></canvas>
+  </div>
 
+  <!-- 自定义图例容器 -->
+  <div id="custom_legend" class="w-full flex flex-row flex-nowrap items-center justify-start md:justify-center gap-8 mt-10 overflow-x-auto no-scrollbar py-4">
+    <!-- JS 注入 -->
+  </div>
+</div>
+
+<style>
+  /* 隐藏滚动条但保留滑动功能 */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<style>
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<style>
+/* 隐藏滚动条但保留滚动功能，保证移动端体验 */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+    <!-- 双内容并排布局 -->
+    <div class="flex flex-col md:flex-row gap-8">
+      <!-- 左侧：全栈式区块链安全审计 -->
+      <div class="md:w-1/2">
         <!-- 1. 合同、钱包和链条的审计 -->
         <div class="mb-6">
           <h4 class="text-lg font-semibold text-gray-800 mb-2">多维度全场景区块链审计</h4>
@@ -450,46 +456,9 @@
           </ul>
         </div>
       </div>
-      <!-- 饼图示例：合约扫描风险分布 -->
-      <div class="md:w-1/2 w-full h-[360px] border border-gray-200 rounded-xl bg-white p-6 flex flex-col md:flex-row items-center justify-center gap-6">
-        <svg width="240" height="240" viewBox="0 0 240 240" role="img" aria-label="合约扫描风险分布饼图" class="shrink-0">
-          <circle cx="120" cy="120" r="78" fill="#E5E7EB"></circle>
 
-          <path class="pie-slice" d="M120 42 A78 78 0 1 1 74.15 56.90 L91.79 81.17 A48 48 0 1 0 120 72 Z" fill="#0F172A">
-            <title>安全合约：90,000（90%）</title>
-          </path>
-          <path class="pie-slice" d="M74.15 56.90 A78 78 0 0 1 105.12 43.44 L110.84 72.88 A48 48 0 0 0 91.79 81.17 Z" fill="#94A3B8">
-            <title>其他风险：7,000（7%）</title>
-          </path>
-          <path class="pie-slice" d="M105.12 43.44 A78 78 0 0 1 115.10 42.16 L116.99 72.10 A48 48 0 0 0 110.84 72.88 Z" fill="#F59E0B">
-            <title>访问控制风险：2,000（2%）</title>
-          </path>
-          <path class="pie-slice" d="M115.10 42.16 A78 78 0 0 1 120 42 L120 72 A48 48 0 0 0 116.99 72.10 Z" fill="#EF4444">
-            <title>重入风险：1,000（1%）</title>
-          </path>
-
-          <circle cx="120" cy="120" r="48" fill="white"></circle>
-          <text x="120" y="114" text-anchor="middle" class="fill-gray-900 font-bold" style="font-size: 15px;">总扫描量</text>
-          <text x="120" y="136" text-anchor="middle" class="fill-gray-900 font-bold" style="font-size: 22px;">100,000</text>
-        </svg>
-
-        <div class="text-sm text-gray-700 space-y-2 w-full max-w-[260px]">
-          <p class="text-base font-bold text-gray-900 mb-3">扫描结果示例</p>
-          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#EF4444]"></span>重入风险：1,000（1%）</p>
-          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#F59E0B]"></span>访问控制风险：2,000（2%）</p>
-          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#94A3B8]"></span>其他风险：7,000（7%）</p>
-          <p class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#0F172A]"></span>安全合约：90,000（90%）</p>
-          <p class="text-xs text-gray-500 pt-2">悬浮在扇区上可查看高亮与提示。</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3+4 合并：架构威胁建模 + 内部工具（右文左图） -->
-    <div class="flex flex-col md:flex-row-reverse items-center gap-8">
-      <!-- 文字部分（宽度1:1） -->
+      <!-- 右侧：深度威胁分析与智能检测 -->
       <div class="md:w-1/2">
-        <h3 class="text-2xl font-bold text-secondary mb-4">深度威胁分析与智能检测</h3>
-
         <!-- 3. 架构与威胁建模 -->
         <div class="mb-6">
           <h4 class="text-lg font-semibold text-gray-800 mb-2">架构设计 & 威胁建模分析</h4>
@@ -534,227 +503,249 @@
           </ul>
         </div>
       </div>
-      <!-- 图片预留框（宽度1:1，高度1.5倍） -->
-      <div class="md:w-1/2 h-[360px] border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white">
-        <span class="text-gray-400 text-lg">威胁建模与智能检测示意图（可替换为实际图片）</span>
-      </div>
     </div>
 
     <!-- 不同区块链语言及工具 -->
-<div class="w-full py-14">
-  <!-- 标题 + 右侧更多 -->
-  <div class="flex items-center justify-between mb-10">
-    <h3 class="text-2xl font-bold text-gray-900">不同区块链语言及工具</h3>
-    <div class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-      <span>更多</span>
-      <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
-        </svg>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-    <!-- Solidity -->
-    <div>
-      <div class="flex items-start">
-        <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
-        <div class="w-full space-y-4">
-          <div>
-            <h4 class="text-xl font-bold text-gray-900 mb-3">Solidity</h4>
-            <p class="text-gray-600 text-base leading-relaxed">
-              Solidity 是以太坊生态最主流的智能合约高级编程语言，语法类 JavaScript，专为 EVM 设计。支持复杂合约逻辑、库与继承，是 DeFi、NFT、GameFi 等应用的标准开发语言。
-            </p>
+    <div class="w-full py-14">
+      <div class="flex items-center justify-between mb-10">
+        <h3 class="text-2xl font-bold text-gray-900">不同区块链语言及工具</h3>
+        <div class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+          <span>更多</span>
+          <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
+            </svg>
           </div>
+        </div>
+      </div>
 
-          <button class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-            <span>更多</span>
-            <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-              <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
-              </svg>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Solidity -->
+        <div>
+          <div class="flex items-start">
+            <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
+            <div class="w-full space-y-4">
+              <div>
+                <h4 class="text-xl font-bold text-gray-900 mb-3">Solidity</h4>
+                <p class="text-gray-600 text-base leading-relaxed">
+                  Solidity 是以太坊生态最主流的智能合约高级编程语言，语法类 JavaScript，专为 EVM 设计。支持复杂合约逻辑、库与继承，是 DeFi、NFT、GameFi 等应用的标准开发语言。
+                </p>
+              </div>
+              <button class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+                <span>更多</span>
+                <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+                  <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
+                  </svg>
+                </div>
+              </button>
+              <div class="hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
+                <ol class="space-y-2 list-decimal pl-5 mb-4">
+                  <li class="text-orange-500 font-medium">Remix IDE</li>
+                  <li class="text-orange-500 font-medium">Hardhat</li>
+                  <li class="text-orange-500 font-medium">Truffle</li>
+                  <li class="text-orange-500 font-medium">Foundry</li>
+                  <li class="text-orange-500 font-medium">Slither</li>
+                </ol>
+                <div class="text-right text-sm font-bold text-gray-800">更多工具</div>
+              </div>
             </div>
-          </button>
+          </div>
+        </div>
 
-          <div class="hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
-            <ol class="space-y-2 list-decimal pl-5 mb-4">
-              <li class="text-orange-500 font-medium">Remix IDE</li>
-              <li class="text-orange-500 font-medium">Hardhat</li>
-              <li class="text-orange-500 font-medium">Truffle</li>
-              <li class="text-orange-500 font-medium">Foundry</li>
-              <li class="text-orange-500 font-medium">Slither</li>
-            </ol>
-            <div class="text-right text-sm font-bold text-gray-800">更多工具</div>
+        <!-- Rust -->
+        <div>
+          <div class="flex items-start">
+            <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
+            <div class="w-full space-y-4">
+              <div>
+                <h4 class="text-xl font-bold text-gray-900 mb-3">Rust</h4>
+                <p class="text-gray-600 text-base leading-relaxed">
+                  Rust 是高性能公链首选的系统级编程语言，以内存安全、无运行时开销著称。Solana、Near 等高性能公链均使用 Rust 开发智能合约，具备极高执行效率与强安全特性。
+                </p>
+              </div>
+              <button class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+                <span>更多</span>
+                <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+                  <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
+                  </svg>
+                </div>
+              </button>
+              <div class="hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
+                <ol class="space-y-2 list-decimal pl-5 mb-4">
+                  <li class="text-orange-500 font-medium">Anchor</li>
+                  <li class="text-orange-500 font-medium">Solana CLI</li>
+                  <li class="text-orange-500 font-medium">Near CLI</li>
+                  <li class="text-orange-500 font-medium">Cargo</li>
+                  <li class="text-orange-500 font-medium">Clang</li>
+                </ol>
+                <div class="text-right text-sm font-bold text-gray-800">更多工具</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Move -->
+        <div>
+          <div class="flex items-start">
+            <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
+            <div class="w-full space-y-4">
+              <div>
+                <h4 class="text-xl font-bold text-gray-900 mb-3">Move</h4>
+                <p class="text-gray-600 text-base leading-relaxed">
+                  Move 是专为数字资产安全设计的静态类型编程语言，源自 Libra 项目，现用于 Aptos、Sui 等新一代公链。以资源为核心、所有权可控、内置资产安全模型。
+                </p>
+              </div>
+              <button class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
+                <span>更多</span>
+                <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
+                  <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
+                  </svg>
+                </div>
+              </button>
+              <div class="hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
+                <ol class="space-y-2 list-decimal pl-5 mb-4">
+                  <li class="text-orange-500 font-medium">Move CLI</li>
+                  <li class="text-orange-500 font-medium">Aptos CLI</li>
+                  <li class="text-orange-500 font-medium">Sui CLI</li>
+                  <li class="text-orange-500 font-medium">Move Prover</li>
+                  <li class="text-orange-500 font-medium">Move Analyzer</li>
+                </ol>
+                <div class="text-right text-sm font-bold text-gray-800">更多工具</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Rust (Solana/Near) -->
-    <div>
-      <div class="flex items-start">
-        <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
-        <div class="w-full space-y-4">
-          <div>
-            <h4 class="text-xl font-bold text-gray-900 mb-3">Rust</h4>
-            <p class="text-gray-600 text-base leading-relaxed">
-              Rust 是高性能公链首选的系统级编程语言，以内存安全、无运行时开销著称。Solana、Near 等高性能公链均使用 Rust 开发智能合约，具备极高执行效率与强安全特性。
-            </p>
-          </div>
+    <script>
+      // 展开/收起逻辑
+      document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const content = btn.closest('div').querySelector('.mt-4');
+          const arrow = btn.querySelector('svg');
+          content.classList.toggle('hidden');
+          arrow.classList.toggle('rotate-180');
+        });
+      });
 
-          <button class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-            <span>更多</span>
-            <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-              <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
-              </svg>
-            </div>
-          </button>
+      // 全局数据配置
+      let dataList = [];
+      let totalCount = 0;
+      let totalMoney = 0;
 
-          <div class="hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
-            <ol class="space-y-2 list-decimal pl-5 mb-4">
-              <li class="text-orange-500 font-medium">Anchor</li>
-              <li class="text-orange-500 font-medium">Solana CLI</li>
-              <li class="text-orange-500 font-medium">Near CLI</li>
-              <li class="text-orange-500 font-medium">Cargo</li>
-              <li class="text-orange-500 font-medium">Clang</li>
-            </ol>
-            <div class="text-right text-sm font-bold text-gray-800">更多工具</div>
-          </div>
-        </div>
-      </div>
-    </div>
+      // 1. 页面加载主逻辑
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const response = await fetch('./excel/merged_v1.xlsx');
+    const buffer = await response.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: 'array' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-    <!-- Move (Aptos/Sui) -->
-    <div>
-      <div class="flex items-start">
-        <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
-        <div class="w-full space-y-4">
-          <div>
-            <h4 class="text-xl font-bold text-gray-900 mb-3">Move</h4>
-            <p class="text-gray-600 text-base leading-relaxed">
-              Move 是专为数字资产安全设计的静态类型编程语言，源自 Libra 项目，现用于 Aptos、Sui 等新一代公链。以资源为核心、所有权可控、内置资产安全模型。
-            </p>
-          </div>
+    // 处理数据
+    dataList = rows.slice(1).filter(row => row && row.length > 0);
 
-          <button class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-            <span>更多</span>
-            <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-              <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
-              </svg>
-            </div>
-          </button>
-
-          <div class="hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
-            <ol class="space-y-2 list-decimal pl-5 mb-4">
-              <li class="text-orange-500 font-medium">Move CLI</li>
-              <li class="text-orange-500 font-medium">Aptos CLI</li>
-              <li class="text-orange-500 font-medium">Sui CLI</li>
-              <li class="text-orange-500 font-medium">Move Prover</li>
-              <li class="text-orange-500 font-medium">Move Analyzer</li>
-            </ol>
-            <div class="text-right text-sm font-bold text-gray-800">更多工具</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script>
-// 独立展开/收起逻辑 + 箭头切换 + 面板互不干扰
-document.querySelectorAll('button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const content = btn.closest('div').querySelector('.mt-4');
-    const arrow = btn.querySelector('svg');
-
-    content.classList.toggle('hidden');
-    arrow.classList.toggle('rotate-180');
-  });
+    // 【关键】只调用现有的渲染函数，删除了对不存在 DOM 的操作
+    renderPieChart(); 
+  } catch (error) {
+    console.error('数据加载或渲染失败：', error);
+  }
 });
-</script>
 
-    <!-- ===================== 新增：审计报告展示 ===================== -->
-        <div class="min-h-screen py-12 flex flex-col">
-          <!-- 顶部标题栏 -->
-          <div class="flex items-center justify-between mb-10">
-            <h3 class="text-2xl font-bold text-primary">审计报告展示</h3>
-            <div class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-      <span>更多</span>
-      <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path>
-        </svg>
+function renderPieChart() {
+  Chart.register(ChartDataLabels);
+  const typeData = {};
+  
+  // 1. 数据统计
+  dataList.forEach(row => {
+    const type = row[4] || '未知攻击';
+    typeData[type] = (typeData[type] || 0) + 1;
+  });
+
+  const sorted = Object.entries(typeData).sort((a, b) => b[1] - a[1]);
+  const top8 = sorted.slice(0, 8);
+  const rest = sorted.slice(8);
+  const otherCount = rest.reduce((sum, item) => sum + item[1], 0);
+
+  const labels = [];
+  const values = [];
+  top8.forEach(([k, v]) => { labels.push(k); values.push(v); });
+  if (otherCount > 0) { labels.push('其他'); values.push(otherCount); }
+
+  const total = values.reduce((acc, val) => acc + val, 0);
+  const colors = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#06B6D4','#F43F5E','#84CC16','#475569'];
+
+  // *** 核心新增：中心文字插件 ***
+  const centerTextPlugin = {
+    id: 'centerText',
+    beforeDraw: (chart) => {
+      const { ctx, width, height } = chart;
+      ctx.save();
+      const fontSize = (height / 300).toFixed(2);
+      ctx.font = `bold ${fontSize}em sans-serif`;
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#374151'; // 灰黑色文字
+      
+      const text = "攻击事件展示";
+      const textX = width / 2;
+      const textY = height / 2;
+      
+      ctx.fillText(text, textX, textY);
+      ctx.restore();
+    }
+  };
+
+  if (window.attackChartInstance) window.attackChartInstance.destroy();
+
+  const ctx = document.getElementById('attack_pie').getContext('2d');
+  window.attackChartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: { 
+      labels, 
+      datasets: [{ 
+        data: values, 
+        backgroundColor: colors, 
+        borderWidth: 0,
+        hoverOffset: 15
+      }] 
+    },
+    plugins: [centerTextPlugin], // *** 注册中心文字插件 ***
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '72%', // 稍微增加中心圆空隙，让文字更透气
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          color: '#fff',
+          font: { weight: 'bold', size: 11 },
+          formatter: (val) => {
+            const percentage = ((val/total)*100).toFixed(1);
+            return percentage > 4 ? percentage + '%' : null;
+          }
+        }
+      }
+    }
+  });
+  
+  // 5. 动态渲染自定义并排图例
+  const legendContainer = document.getElementById('custom_legend');
+  if (legendContainer) {
+    legendContainer.innerHTML = labels.map((label, i) => `
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <span class="w-3 h-3 rounded-full" style="background-color: ${colors[i]}"></span>
+        <span class="text-sm text-gray-600 font-medium whitespace-nowrap">${label}</span>
       </div>
-    </div>
-          </div>
-
-          <!-- 三个报告方框（1:1:1，底部对齐） -->
-          <div class="grid md:grid-cols-3 gap-8 flex-1">
-            <!-- 报告1 -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
-              <!-- 图片（占方框1/4高度） -->
-              <div class="h-40 border-b border-gray-100 flex items-center justify-center bg-gray-50 flex-shrink-0">
-                <span class="text-gray-400 text-sm">审计报告封面图</span>
-              </div>
-              <!-- 时间 -->
-              <div class="px-5 pt-4 flex-shrink-0">
-                <p class="text-xs text-gray-500">2026年3月</p>
-              </div>
-              <!-- 报告内容（填充剩余空间） -->
-              <div class="p-5 flex-1">
-                <h4 class="font-semibold text-gray-800 mb-2">Uniswap V3 智能合约全链路审计报告</h4>
-                <p class="text-sm text-gray-600 leading-relaxed">
-                  完成对Uniswap V3核心合约、流动性池、价格预言机的全链路安全审计，发现并协助修复2个高危权限漏洞、5个中危逻辑漏洞，提供定制化安全加固方案，保障超50亿美金流动性资金安全。
-                </p>
-              </div>
-            </div>
-
-            <!-- 报告2 -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
-              <!-- 图片（占方框1/4高度） -->
-              <div class="h-40 border-b border-gray-100 flex items-center justify-center bg-gray-50 flex-shrink-0">
-                <span class="text-gray-400 text-sm">审计报告封面图</span>
-              </div>
-              <!-- 时间 -->
-              <div class="px-5 pt-4 flex-shrink-0">
-                <p class="text-xs text-gray-500">2026年2月</p>
-              </div>
-              <!-- 报告内容（填充剩余空间） -->
-              <div class="p-5 flex-1">
-                <h4 class="font-semibold text-gray-800 mb-2">Polygon zkEVM 跨链基础设施安全审计报告</h4>
-                <p class="text-sm text-gray-600 leading-relaxed">
-                  针对Polygon zkEVM的跨链桥、共识机制、资产映射模块开展专项审计，构建7×24小时链上安全监控体系，成功拦截4次跨链攻击尝试，平均风险响应时间<5分钟，上线以来用户资产零损失。
-                </p>
-              </div>
-            </div>
-
-            <!-- 报告3 -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col">
-              <!-- 图片（占方框1/4高度） -->
-              <div class="h-40 border-b border-gray-100 flex items-center justify-center bg-gray-50 flex-shrink-0">
-                <span class="text-gray-400 text-sm">审计报告封面图</span>
-              </div>
-              <!-- 时间 -->
-              <div class="px-5 pt-4 flex-shrink-0">
-                <p class="text-xs text-gray-500">2026年1月</p>
-              </div>
-              <!-- 报告内容（填充剩余空间） -->
-              <div class="p-5 flex-1">
-                <h4 class="font-semibold text-gray-800 mb-2">OpenSea NFT 交易平台安全审计报告</h4>
-                <p class="text-sm text-gray-600 leading-relaxed">
-                  对OpenSea NFT铸造、交易、转移全流程进行安全审计，优化Gas费安全校验逻辑，发现并修复3个高危铸造漏洞、8个中危交易逻辑问题，用户资产被盗风险降低98%，审计后平台无重大安全事件。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+    `).join('');
+  }
+}
+    </script>
   </div>
-
 </section>
 
     <!-- ===================== 板块：7×24小时链上实时安全监控 ===================== -->

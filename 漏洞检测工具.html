@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartAudit合约安全检测</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 统一你的项目配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A',
+            secondary: '#2563EB',
+            accent: '#10B981',
+            light: '#F8FAFC',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+:root {
+    --bg-color: #DDE1E7;
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    filter: blur(120px);
+    background-color: var(--bg-color);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+  </style>
+</head>
+
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <nav class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
+      <div class="group relative">
+        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测 <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="漏洞检测工具.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞检测工具</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+      <div class="group relative">
+        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          交易分析 <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+      <div class="group relative">
+        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源 <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="攻击事件展示.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">攻击事件展示</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+      <div class="group relative">
+        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们 <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">免费安全初检</button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+    </div>
+  </div>
+</header>
+
+<body>
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<div class="w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-8 items-start px-4 pt-12 pb-12">
+  
+<!-- 检测选项 模块 -->
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-5 relative z-50">
+  <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+    <i class="fa-solid fa-flask-vial text-secondary"></i> 检测选项
+  </h3>
+
+  <div class="relative z-50">
+    <label class="block text-xs font-semibold text-slate-700 mb-2">检测工具</label>
+    <select id="select_tool" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all relative z-50">
+      <option value="slither">Slither</option>
+      <option value="SmartAudit_report">SmartAudit_report</option>
+    </select>
+  </div>
+
+  <div class="relative">
+    <label class="block text-xs font-semibold text-slate-700 mb-2">合约代码 / 上传文件</label>
+    <textarea 
+      id="contract_code" 
+      class="w-full h-36 px-3 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm resize-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all font-mono"
+      placeholder="粘贴智能合约代码 或 点击右侧上传 reentrance.sol 文件…"></textarea>
+    <label for="upload_file" class="absolute right-3 bottom-3 cursor-pointer">
+      <div class="w-9 h-9 bg-secondary/10 hover:bg-secondary/20 text-secondary rounded-lg flex items-center justify-center transition-all">
+        <i class="fa-solid fa-file-import"></i>
+      </div>
+    </label>
+    <input id="upload_file" type="file" class="hidden" accept=".sol,.txt">
+  </div>
+
+  <div class="pt-2">
+    <button id="start_detect" class="w-full py-3 rounded-lg bg-secondary text-white text-sm font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20">
+      <i class="fa-solid fa-play"></i> 开始安全检测
+    </button>
+  </div>
+</div>
+
+<!-- 右侧报告区域 -->
+<div class="flex-1 w-full min-h-[800px] bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl shadow-gray-200/50 flex flex-col overflow-hidden relative">
+  <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-[80px] -z-0"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-[80px] -z-0"></div>
+
+  <div class="flex items-center justify-between px-8 py-5 border-b border-gray-50 bg-white/50 backdrop-blur-md relative z-10">
+    <div class="flex items-center gap-4">
+      <div class="w-10 h-10 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary">
+        <i class="fa-solid fa-terminal text-sm"></i>
+      </div>
+      <div>
+        <h2 class="text-sm font-bold text-gray-800">审计报告详情</h2>
+        <p id="file_name_display" class="text-[10px] text-gray-400 font-mono">等待检测任务...</p>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button id="tab_code" disabled class="px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed">源代码</button>
+      <button id="tab_report" disabled class="px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed">审计结果</button>
+    </div>
+  </div>
+
+  <div id="report_content" class="flex-1 p-8 font-mono text-[13px] leading-loose text-gray-600 overflow-y-auto relative z-10">
+    <div class="flex flex-col items-center justify-center h-full space-y-4 opacity-40">
+      <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center border border-gray-100 shadow-inner">
+        <i class="fa-solid fa-inbox text-xl text-gray-300"></i>
+      </div>
+      <p class="text-sm font-medium">请上传 reentrance.sol 文件并开始检测</p>
+    </div>
+  </div>
+
+  <div class="px-8 py-4 bg-gray-50/50 border-t border-gray-50 flex justify-between items-center text-[10px] font-bold text-gray-300 tracking-widest uppercase">
+    <span>UTF-8 Standard</span>
+  </div>
+</div>
+
+</div>
+
+<style>
+#report_content::-webkit-scrollbar { width: 6px; }
+#report_content::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+#report_content .audit-line { @apply py-1 px-3 rounded-lg hover:bg-blue-50/50 transition-colors; }
+.text-high { color: #EF4444; font-weight: 700; }
+.text-medium { color: #F59E0B; font-weight: 700; }
+.text-low { color: #3B82F6; font-weight: 700; }
+.tab-active { @apply bg-secondary text-white !important; }
+pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
+</style>
+
+<script>
+// ======================
+// 本地文件路径配置
+// ======================
+const FILE_PATH = {
+  sol: "/text/reentrance.sol",
+  json: "/text/reentrance.json"
+};
+
+// ======================
+// DOM元素
+// ======================
+const startBtn = document.getElementById("start_detect");
+const fileInput = document.getElementById("upload_file");
+const codeTextarea = document.getElementById("contract_code");
+const reportContent = document.getElementById("report_content");
+const fileNameDisplay = document.getElementById("file_name_display");
+const tabCode = document.getElementById("tab_code");
+const tabReport = document.getElementById("tab_report");
+const toolSelect = document.getElementById("select_tool");
+
+
+let isDetecting = false;
+let detectTimeout = null;
+let currentFileName = "";
+
+// ======================
+// 初始化
+// ======================
+window.addEventListener("load", () => {
+  bindEvents();
+});
+
+// 绑定事件
+function bindEvents() {
+  startBtn.addEventListener("click", startDetect);
+  fileInput.addEventListener("change", function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  currentFileName = file.name;
+  fileNameDisplay.textContent = `已选择文件：${currentFileName}`;
+  // 新增这一行 → 代码框显示文件名
+  codeTextarea.value = `已选择文件：${currentFileName}`;
+  resetStatus();
+});
+  tabCode.addEventListener("click", () => showContent("code"));
+  tabReport.addEventListener("click", () => showContent("report"));
+}
+
+// 重置状态
+function resetStatus() {
+  isDetecting = false;
+  clearTimeout(detectTimeout);
+
+  startBtn.disabled = false;
+  startBtn.innerHTML = '<i class="fa-solid fa-play"></i> 开始安全检测';
+  startBtn.className = "w-full py-3 rounded-lg bg-secondary text-white text-sm font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20";
+
+  tabCode.disabled = true;
+  tabReport.disabled = true;
+  tabCode.className = "px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed";
+  tabReport.className = "px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed";
+}
+
+// 开始检测
+function startDetect() {
+  if(!currentFileName){
+    reportContent.innerHTML = '<span class="text-red-500">请先上传文件！</span>';
+    return;
+  }
+  if(currentFileName !== "reentrance.sol"){
+    reportContent.innerHTML = '<span class="text-red-500">当前仅支持 reentrance.sol 检测</span>';
+    return;
+  }
+  if(isDetecting) return;
+
+  isDetecting = true;
+  const tool = toolSelect.value;
+
+  startBtn.disabled = true;
+  startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 检测中...';
+  startBtn.className = "w-full py-3 rounded-lg bg-gray-400 text-white text-sm font-medium flex items-center justify-center gap-2 cursor-not-allowed";
+
+  tabCode.disabled = false;
+  tabReport.disabled = true;
+  tabCode.className = "px-3 py-1 rounded text-xs font-medium tab-active";
+  tabReport.className = "px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed";
+
+  fileNameDisplay.textContent = `检测中：${currentFileName} | ${tool}`;
+  showContent("code");
+
+  // 10秒模拟检测
+  detectTimeout = setTimeout(() => {
+    detectComplete(tool);
+  }, 10000);
+}
+
+// 检测完成
+function detectComplete(tool) {
+  isDetecting = false;
+  startBtn.innerHTML = '<i class="fa-solid fa-check"></i> 检测完成';
+  startBtn.className = "w-full py-3 rounded-lg bg-gray-600 text-white text-sm font-medium flex items-center justify-center gap-2 cursor-not-allowed";
+
+  tabCode.disabled = false;
+  tabReport.disabled = false;
+  tabCode.className = "px-3 py-1 rounded text-xs font-medium";
+  tabReport.className = "px-3 py-1 rounded text-xs font-medium";
+  tabCode.classList.add("tab-active");
+
+  fileNameDisplay.textContent = `检测完成：reentrance.sol | ${tool}`;
+}
+// ======================
+// Fetch 读取本地文件
+// ======================
+async function loadSourceCode() {
+  try {
+    const res = await fetch(FILE_PATH.sol);
+    return await res.text();
+  } catch (err) {
+    return "加载源代码失败：请检查 text 文件夹是否存在文件";
+  }
+}
+
+// 【精准匹配你的审计报告JSON】
+async function loadReport() {
+  try {
+    const res = await fetch(FILE_PATH.json);
+    const jsonData = await res.text();
+    return JSON.parse(jsonData);
+  } catch (err) {
+    console.error("解析失败：", err);
+    return { 
+      success: false,
+      error: "审计报告加载/解析失败",
+      results: { detectors: [] }
+    };
+  }
+}
+
+// 【核心：审计报告可视化渲染】
+async function showContent(type) {
+  tabCode.classList.remove("tab-active");
+  tabReport.classList.remove("tab-active");
+
+  if (type === "code") {
+    tabCode.classList.add("tab-active");
+    reportContent.innerHTML = "加载源代码中...";
+    const code = await loadSourceCode();
+    reportContent.innerHTML = `<pre class="whitespace-pre-wrap text-sm">${code}</pre>`;
+  } else {
+    tabReport.classList.add("tab-active");
+    reportContent.innerHTML = "加载审计报告中...";
+    const data = await loadReport();
+
+    // 渲染完整审计报告
+    reportContent.innerHTML = `
+    <div class="space-y-6 w-full">
+      <!-- 报告顶部状态 -->
+      // 找到这段代码（报告顶部状态）
+<div class="p-4 rounded-lg border ${data.success ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}">
+  <h3 class="text-lg font-bold flex items-center gap-2">
+    ${data.success ? '✅ 审计完成' : '❌ 审计失败'}
+  </h3>
+  ${data.error ? `<p class="text-sm text-red-600 mt-1">${data.error}</p>` : ''}
+  <p class="text-xs text-gray-500 mt-1">检测时间：${new Date().toLocaleString()}</p>
+  
+  <!-- 👇 新增：下载审计报告按钮（仅审计成功显示） -->
+  ${data.success ? `
+  <button onclick="downloadReport()" class="mt-3 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1">
+    <i class="fa-solid fa-download"></i> 下载审计报告
+  </button>
+  ` : ''}
+</div>
+
+      <!-- 漏洞/警告列表 -->
+      <div class="space-y-4">
+        <h4 class="font-semibold text-gray-800 text-md">🔍 检测结果（共 ${data.results?.detectors?.length || 0} 项）</h4>
+        
+        ${data.results?.detectors?.map((item, idx) => `
+        <!-- 单个检测卡片 -->
+        <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
+          <!-- 卡片头部：风险等级 + 检测类型 -->
+          <div class="px-4 py-3 flex justify-between items-center border-b
+            ${item.impact === 'High' ? 'bg-red-50 border-red-100' : 'bg-slate-50 border-slate-100'}">
+            <div class="font-medium">
+              ${item.check === 'reentrancy-eth' ? '重入漏洞' : 
+                item.check === 'solc-version' ? '编译器版本' : 
+                item.check === 'low-level-calls' ? '底层调用风险' : 
+                item.check === 'naming-convention' ? '命名规范' : 
+                item.check === 'redundant-statements' ? '冗余代码' : item.check}
+            </div>
+            <div class="flex gap-2">
+              <span class="text-xs px-2 py-0.5 rounded-full font-medium border
+                ${item.impact === 'High' ? 'bg-red-100 text-red-700 border-red-200' : 'bg-slate-100 text-slate-700 border-slate-200'}">
+                ${item.impact}
+              </span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                ${item.confidence}
+              </span>
+            </div>
+          </div>
+
+          <!-- 核心描述 -->
+          <div class="p-4 text-sm text-gray-700 whitespace-pre-line">
+            ${item.description}
+          </div>
+
+          <!-- 代码位置 -->
+          <div class="px-4 pb-2 text-xs text-gray-500">
+            定位：${item.first_markdown_element || '全局'}
+          </div>
+
+          <!-- 关联代码元素（折叠面板） -->
+          ${item.elements.length > 0 ? `
+          <div class="px-4 pb-3">
+            <button onclick="togglePanel(this)" class="text-xs text-blue-600 flex items-center gap-1">
+              <i class="fa-solid fa-chevron-down text-xs"></i> 查看关联代码元素
+            </button>
+            <div class="hidden mt-2 p-3 bg-slate-50 rounded text-xs space-y-2">
+              ${item.elements.map((el, i) => `
+              <div class="border-b border-slate-200 pb-2 last:border-0 last:pb-0">
+                <div><span class="text-gray-500">类型：</span>${el.type}</div>
+                <div><span class="text-gray-500">名称：</span>${el.name}</div>
+                <div><span class="text-gray-500">文件：</span>${el.source_mapping?.filename_short || '-'}</div>
+                <div><span class="text-gray-500">行号：</span>${el.source_mapping?.lines?.join(',') || '-'}</div>
+              </div>
+              `).join('')}
+            </div>
+          </div>
+          ` : ''}
+        </div>
+        `).join('')}
+      </div>
+    </div>
+    `;
+  }
+}
+
+// 折叠面板切换功能
+function togglePanel(el) {
+  const content = el.nextElementSibling;
+  const icon = el.querySelector('i');
+  content.classList.toggle('hidden');
+  icon.className = content.classList.contains('hidden') 
+    ? 'fa-solid fa-chevron-down text-xs' 
+    : 'fa-solid fa-chevron-up text-xs';
+  el.innerHTML = `${icon.outerHTML} ${content.classList.contains('hidden') ? '查看关联代码元素' : '收起代码元素'}`;
+}
+
+// 下载审计报告（JSON文件）
+async function downloadReport() {
+  try {
+    // 1. 获取JSON文件内容
+    const res = await fetch(FILE_PATH.json);
+    const jsonText = await res.text();
+    
+    // 2. 创建Blob对象（JSON格式）
+    const blob = new Blob([jsonText], { type: "application/json" });
+    
+    // 3. 创建下载链接
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "reentrance_audit_report.json"; // 下载文件名
+    document.body.appendChild(a);
+    
+    // 4. 触发下载并清理
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    alert("下载失败：" + err.message);
+  }
+}
+</script>
+</body>
+</html>

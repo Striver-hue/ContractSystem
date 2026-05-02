@@ -126,8 +126,8 @@
           <i class="fa-solid fa-chevron-down text-[10px]"></i>
         </a>
         <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
         </div>
@@ -197,20 +197,20 @@
       <!-- 右侧竖向核心数据展示区（文字颜色同步适配） -->
       <div class="w-[340px] h-[500px] flex flex-col justify-around mx-10">
         <div class="text-center">
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">1,200+</div>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">2,900+</div>
           <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">审计合约项目数</h3>
         </div>
         <div class="text-center">
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">3,600+</div>
-          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">审计发现高危漏洞数</h3>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">1,600+</div>
+          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">审计发现漏洞数</h3>
         </div>
         <div class="text-center">
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">2.7亿+</div>
-          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">为客户规避潜在资产损失</h3>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">14亿+美元</div>
+          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">漏洞涉及资产</h3>
         </div>
         <div class="text-center">
-          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">10.7亿+</div>
-          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">链上交易金额总计</h3>
+          <div class="text-4xl md:text-5xl font-extrabold text-orange-400 mb-2 text-right">20+</div>
+          <h3 class="text-lg font-bold mb-2 text-right text-black-100 text-shadow">覆盖漏洞类型</h3>
         </div>
       </div>
     </div>
@@ -257,7 +257,98 @@
   <!-- 中间：预留图片位置（灰色边框透明内部） -->
   <div class="container mx-auto px-4 flex-grow flex items-center justify-center">
     <div class="w-full aspect-[16/9] md:aspect-[2/1] rounded-xl overflow-hidden bg-transparent">
-      <img src="pictures/framework.png" alt="产品能力框架图" class="w-full h-full object-contain">
+      <svg viewBox="0 0 1200 620" class="w-full h-full" role="img" aria-label="产品能力流程图" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="flowLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.7"></stop>
+            <stop offset="50%" stop-color="#14b8a6" stop-opacity="0.95"></stop>
+            <stop offset="100%" stop-color="#34d399" stop-opacity="0.7"></stop>
+          </linearGradient>
+          <linearGradient id="cardFill" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.78"></stop>
+            <stop offset="100%" stop-color="#ecfeff" stop-opacity="0.54"></stop>
+          </linearGradient>
+          <linearGradient id="accentFill" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0ea5e9"></stop>
+            <stop offset="100%" stop-color="#10b981"></stop>
+          </linearGradient>
+          <filter id="flowGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
+            <feMerge>
+              <feMergeNode in="blur"></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <g opacity="0.35">
+          <circle cx="220" cy="95" r="72" fill="#67e8f9"></circle>
+          <circle cx="960" cy="500" r="86" fill="#6ee7b7"></circle>
+          <circle cx="610" cy="230" r="120" fill="#bae6fd"></circle>
+        </g>
+
+        <text x="56" y="64" fill="#0f172a" font-size="34" font-weight="700" font-family="Inter, system-ui, sans-serif">安全服务流程蓝图</text>
+        <text x="56" y="96" fill="#334155" font-size="18" font-family="Inter, system-ui, sans-serif">从需求确认到交付复核的一体化审计路径</text>
+
+        <g stroke="url(#flowLine)" stroke-width="4" fill="none" stroke-linecap="round" filter="url(#flowGlow)">
+          <path d="M210 206 C290 150, 360 150, 440 206"></path>
+          <path d="M490 260 C560 310, 640 310, 710 260"></path>
+          <path d="M760 206 C845 148, 925 148, 1010 206"></path>
+          <path d="M1010 260 C980 345, 910 398, 820 420"></path>
+        </g>
+
+        <g font-family="Inter, system-ui, sans-serif">
+          <g transform="translate(120 150)">
+            <rect width="180" height="110" rx="24" fill="url(#cardFill)" stroke="#a5f3fc" stroke-width="2"></rect>
+            <circle cx="24" cy="24" r="16" fill="url(#accentFill)"></circle>
+            <text x="24" y="30" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">01</text>
+            <text x="18" y="62" fill="#0f172a" font-size="19" font-weight="700">需求沟通</text>
+            <text x="18" y="86" fill="#334155" font-size="14">范围界定 / 服务等级</text>
+          </g>
+
+          <g transform="translate(380 150)">
+            <rect width="180" height="110" rx="24" fill="url(#cardFill)" stroke="#a5f3fc" stroke-width="2"></rect>
+            <circle cx="24" cy="24" r="16" fill="url(#accentFill)"></circle>
+            <text x="24" y="30" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">02</text>
+            <text x="18" y="62" fill="#0f172a" font-size="19" font-weight="700">方案评估</text>
+            <text x="18" y="86" fill="#334155" font-size="14">架构梳理 / 风险图谱</text>
+          </g>
+
+          <g transform="translate(640 150)">
+            <rect width="180" height="110" rx="24" fill="url(#cardFill)" stroke="#a5f3fc" stroke-width="2"></rect>
+            <circle cx="24" cy="24" r="16" fill="url(#accentFill)"></circle>
+            <text x="24" y="30" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">03</text>
+            <text x="18" y="62" fill="#0f172a" font-size="19" font-weight="700">威胁建模</text>
+            <text x="18" y="86" fill="#334155" font-size="14">攻击路径 / 信任边界</text>
+          </g>
+
+          <g transform="translate(900 150)">
+            <rect width="180" height="110" rx="24" fill="url(#cardFill)" stroke="#a5f3fc" stroke-width="2"></rect>
+            <circle cx="24" cy="24" r="16" fill="url(#accentFill)"></circle>
+            <text x="24" y="30" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">04</text>
+            <text x="18" y="62" fill="#0f172a" font-size="19" font-weight="700">审计执行</text>
+            <text x="18" y="86" fill="#334155" font-size="14">静态/动态测试+人工复核</text>
+          </g>
+        </g>
+
+        <g transform="translate(700 356)">
+          <rect width="370" height="182" rx="28" fill="url(#cardFill)" stroke="#99f6e4" stroke-width="2"></rect>
+          <circle cx="34" cy="34" r="17" fill="url(#accentFill)"></circle>
+          <text x="34" y="40" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700" font-family="Inter, system-ui, sans-serif">05</text>
+          <text x="62" y="42" fill="#0f172a" font-size="24" font-weight="700" font-family="Inter, system-ui, sans-serif">报告交付</text>
+          <text x="26" y="82" fill="#334155" font-size="15" font-family="Inter, system-ui, sans-serif">• 漏洞分级与修复建议</text>
+          <text x="26" y="112" fill="#334155" font-size="15" font-family="Inter, system-ui, sans-serif">• 复测闭环与上线检查</text>
+          <text x="26" y="142" fill="#334155" font-size="15" font-family="Inter, system-ui, sans-serif">• 可视化风险摘要与结论</text>
+        </g>
+
+        <g transform="translate(88 370)">
+          <rect width="550" height="168" rx="30" fill="url(#accentFill)" opacity="0.14"></rect>
+          <rect x="1" y="1" width="548" height="166" rx="29" fill="none" stroke="#67e8f9" stroke-opacity="0.45"></rect>
+          <text x="34" y="54" fill="#0f172a" font-size="26" font-weight="700" font-family="Inter, system-ui, sans-serif">核心能力引擎</text>
+          <text x="34" y="90" fill="#1e293b" font-size="17" font-family="Inter, system-ui, sans-serif">形式化验证 · 符号执行 · 模糊测试 · 链上行为建模</text>
+          <text x="34" y="124" fill="#1e293b" font-size="17" font-family="Inter, system-ui, sans-serif">专家复核 · 自动回归 · 威胁情报联动</text>
+        </g>
+      </svg>
     </div>
   </div>
 
@@ -268,21 +359,21 @@
       <div class="p-7 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
         <h3 class="font-bold text-xl md:text-2xl mb-3 text-gray-900 flex items-center gap-2">
           <i class="fa-solid fa-link text-gray-700 text-lg"></i>
-          适配多种区块链合约
+          适配10+区块链平台
         </h3>
-        <p class="text-base text-gray-700 leading-relaxed">平台可兼容多链与多语言合约环境，支持主流公链生态下的统一审计流程，帮助项目在不同技术栈中保持一致的安全验证标准。</p>
+        <p class="text-base text-gray-700 leading-relaxed">平台覆盖如以太坊、BSC、Polygon等主流公链合约，支持主流公链生态下的统一审计流程，帮助项目在不同技术栈中保持一致的安全验证标准。</p>
       </div>
       <div class="p-7 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-xl transition-shadow">
         <h3 class="font-bold text-xl md:text-2xl mb-3 text-gray-900 flex items-center gap-2">
           <i class="fa-solid fa-shield-halved text-gray-700 text-lg"></i>
-          覆盖多种漏洞类型
+          覆盖20多种漏洞类型
         </h3>
         <p class="text-base text-gray-700 leading-relaxed">针对权限控制、重入攻击、预言机操纵与业务逻辑缺陷等高频风险构建统一检测模型，结合规则与样本库提升已知漏洞和变种问题的识别能力。</p>
       </div>
       <div class="p-7 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
         <h3 class="font-bold text-xl md:text-2xl mb-3 text-gray-900 flex items-center gap-2">
           <i class="fa-solid fa-diagram-project text-gray-700 text-lg"></i>
-          严格的检测架构
+          严格的分层检测架构
         </h3>
         <p class="text-base text-gray-700 leading-relaxed">采用自动化扫描、人工复核与交叉验证的分层机制，对代码与链上行为进行全流程校验，确保审计结果稳定、可追溯并可复现。</p>
       </div>

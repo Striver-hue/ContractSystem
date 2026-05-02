@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>攻击事件展示</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+  <!-- 统一你的项目配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A', // 主色-深蓝（专业安全）
+            secondary: '#2563EB', // 辅助色-科技蓝
+            accent: '#10B981', // 强调色-安全绿
+            light: '#F8FAFC', // 浅色背景
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+      /* 在 <style> 中添加以下内容 */
+:root {
+    --bg-color: #DDE1E7; /* 背景基础色 [cite: 52] */
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed; /* 固定定位，贯穿全屏 [cite: 57] */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 关键：确保它在所有内容层之下 */
+    overflow: hidden;
+    filter: blur(120px); /* 柔和模糊效果 [cite: 58] */
+    background-color: var(--bg-color);
+}
+
+/* 动态气泡效果 [cite: 60, 61, 67] */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120px, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+
+  </style>
+</head>
+<!-- 导航栏 -->
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <!-- 桌面端导航 -->
+    <nav class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
+
+      <div class="group relative">
+        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <!-- 行动按钮组：登录 + 免费安全初检 -->
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+      免费安全初检
+      </button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<body>
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+
+<section class="w-full bg-[#0B1120] border-b border-gray-800 py-16">
+  <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-10">
+    
+    <div class="w-full md:w-[45%] flex flex-col justify-center">
+      <div class="flex items-baseline gap-3 mb-8">
+        <span class="text-gray-400 text-lg tracking-wide">累计收录链上安全事件</span>
+        <div class="text-3xl font-bold text-white tracking-tight">
+          <span id="total_count">0</span>
+          <span class="text-sm font-normal text-gray-500 ml-1">起</span>
+        </div>
+      </div>
+      
+      <div class="mb-2">
+        <h2 class="text-gray-400 text-lg tracking-wide">造成的链上经济损失总额评估</h2>
+      </div>
+      
+      <div>
+        <div class="text-5xl md:text-6xl font-bold text-[#F0B90B] tracking-tight font-mono">
+          <span class="text-4xl mr-2 text-[#F0B90B]/80">$</span><span id="total_money">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full md:w-[50%] h-[320px]">
+      <canvas id="attack_pie"></canvas>
+    </div>
+    
+  </div>
+</section>
+
+<!-- ===================== 2. 攻击事件内容展示模块 ===================== -->
+<section class="py-14 px-4 bg-gray-50">
+  <div class="max-w-6xl mx-auto">
+    <!-- 总记录数 -->
+    <div class="mb-8 text-sm text-gray-700">
+        共有 <span id="record_num" class="text-primary font-bold">0</span> 条攻击事件记录
+    </div>
+
+    <!-- 事件卡片列表 -->
+    <div id="event_list" class="space-y-6 mb-12">
+      <div class="text-center text-gray-500 py-10">正在加载数据...</div>
+    </div>
+
+    <!-- 分页控制器 -->
+    <div class="flex items-center justify-center gap-4">
+      <button id="first" class="px-4 py-2 border border-gray-300 rounded hover:bg-primary hover:text-white transition">首页</button>
+      <button id="prev" class="px-4 py-2 border border-gray-300 rounded hover:bg-primary hover:text-white transition">上一页</button>
+      <span id="page_text" class="font-medium">第 0 页，共 0 页</span>
+      <button id="next" class="px-4 py-2 border border-gray-300 rounded hover:bg-primary hover:text-white transition">下一页</button>
+      <button id="last" class="px-4 py-2 border border-gray-300 rounded hover:bg-primary hover:text-white transition">尾页</button>
+    </div>
+  </div>
+</section>
+
+<script>
+// 全局配置
+let dataList = [];
+let totalCount = 0;
+let totalMoney = 0;
+const PAGE_SIZE = 20;
+let currentPage = 1;
+let totalPage = 0;
+
+// 加载Excel数据
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    // 读取表格文件
+    const response = await fetch('./excel/merged_v1.xlsx');
+    const buffer = await response.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: 'array' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    // 过滤表头，获取有效数据
+    dataList = rows.slice(1).filter(row => row && row.length > 0);
+    totalCount = dataList.length;
+
+    // 计算总损失金额（第4列）
+    totalMoney = dataList.reduce((sum, row) => {
+      const num = parseFloat(row[3] || 0);
+      return sum + (isNaN(num) ? 0 : num);
+    }, 0);
+
+    // 渲染所有模块
+    renderTotal();
+    renderPieChart();
+    renderEventCards();
+    renderPagination();
+  } catch (error) {
+    document.getElementById('event_list').innerHTML = 
+      `<div class="text-red-500 text-center py-10">数据加载失败：${error.message}</div>`;
+  }
+});
+
+// 渲染统计数据
+function renderTotal() {
+  document.getElementById('total_count').textContent = totalCount;
+  document.getElementById('total_money').textContent = totalMoney.toLocaleString();
+  document.getElementById('record_num').textContent = totalCount;
+}
+
+// 注册 DataLabels 插件
+Chart.register(ChartDataLabels);
+
+function renderPieChart() {
+  const typeData = {};
+  dataList.forEach(row => {
+    // 处理空值，如果没有则记为未知
+    const type = row[4] || '未知攻击';
+    typeData[type] = (typeData[type] || 0) + 1;
+  });
+
+  // 1. 按数量从大到小排序
+  const sorted = Object.entries(typeData).sort((a, b) => b[1] - a[1]);
+  
+  // 2. 取前8个，第9个及以后的合并为“其他”
+  // 这样图表里一共 8 + 1 = 9 个区块。
+  const top8 = sorted.slice(0, 8);
+  const rest = sorted.slice(8);
+  const otherCount = rest.reduce((sum, item) => sum + item[1], 0);
+
+  const labels = [];
+  const values = [];
+  
+  top8.forEach(([k, v]) => { labels.push(k); values.push(v); });
+  
+  // 强制将“其他”最后推入数组！
+  // 在 Chart.js 顺时针渲染中，这会确保它排在最后渲染，落在圆环的右下或左下方，而不是抢占左上方。
+  if (otherCount > 0) { 
+    labels.push('其他'); 
+    values.push(otherCount); 
+  }
+
+  // 3. 计算总计数值，用于后面计算百分比
+  const total = values.reduce((acc, val) => acc + val, 0);
+
+  // 4. 定义 9 种专业、高对比度且无重叠的图表色彩 (Echarts企业级色板)
+  const colors = [
+    '#3B82F6', // 经典蓝
+    '#10B981', // 翡翠绿
+    '#F59E0B', // 琥珀黄
+    '#EF4444', // 警示红
+    '#8B5CF6', // 优雅紫
+    '#06B6D4', // 青蓝
+    '#F43F5E', // 玫瑰红
+    '#84CC16', // 莱姆绿
+    '#475569'  // 蓝灰（固定分配给“其他”类别，视觉降噪）
+  ];
+
+  const ctx = document.getElementById('attack_pie').getContext('2d');
+  
+  if (window.attackChartInstance) {
+    window.attackChartInstance.destroy();
+  }
+
+  window.attackChartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: colors,
+        borderWidth: 2,
+        borderColor: '#0B1120', // 边框色必须与你的左侧背景色完全一致，制造完美的“切片”留白效果
+        hoverOffset: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%', // 经典的粗细比例
+      layout: {
+        padding: { right: 20 } // 给右侧图例留出一点空间
+      },
+      plugins: {
+        legend: { 
+          position: 'right', // 图例靠右
+          align: 'center',
+          labels: { 
+            color: '#9CA3AF', // 柔和的文字颜色
+            font: { size: 12, family: "sans-serif" },
+            padding: 14,
+            usePointStyle: true,
+            pointStyle: 'circle' // 圆形标记更加现代
+          } 
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          titleColor: '#fff',
+          bodyColor: '#e2e8f0',
+          borderColor: '#334155',
+          borderWidth: 1,
+          padding: 10
+        },
+        // 利用刚刚引入的插件绘制图表内部的百分比
+        datalabels: {
+          color: '#ffffff',
+          font: {
+            weight: 'bold',
+            size: 11
+          },
+          formatter: (value, context) => {
+            // 核心逻辑：只显示前 7 个数据的百分比 (索引 0~6)
+            if (context.dataIndex < 7) {
+              const percentage = ((value / total) * 100).toFixed(1) + '%';
+              return percentage;
+            }
+            // 超过第7个（即第8个和"其他"）不显示任何文字，防止重叠拥挤
+            return null; 
+          },
+          display: function(context) {
+            return context.dataset.data[context.dataIndex] > 0; // 0值不显示
+          }
+        }
+      }
+    }
+  });
+}
+
+// 新增：Excel日期格式化（修复时间不显示）
+function formatExcelDate(dateValue) {
+  if (!dateValue || dateValue === '-') return '-';
+  if (!isNaN(dateValue)) {
+    const date = new Date((dateValue - 25569) * 86400 * 1000);
+    return date.toLocaleDateString();
+  }
+  return dateValue;
+}
+
+// 渲染事件卡片
+function renderEventCards() {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pageData = dataList.slice(start, end);
+  const container = document.getElementById('event_list');
+
+  let html = '';
+  pageData.forEach(row => {
+    // 列对应：0时间 1项目 2描述 3损失 4攻击手法 5链接 6来源
+    const time = formatExcelDate(row[0]);
+    const project = row[1] || '-';
+    const desc = row[2] || '-';
+    const loss = row[3] || '-';
+    const attack = row[4] || '-';
+    const link = row[5] || '#';
+    const source = row[6] || '-';
+
+    html += `
+<div class="bg-white rounded-xl shadow-sm py-3 px-4 border border-gray-100 w-full">
+  <div class="flex justify-between items-center mb-2">
+    <div class="text-base font-semibold text-gray-900">项目名称：${project}</div>
+    <div class="text-s text-gray-500">${time}</div>
+  </div>
+  <div class="border-b border-gray-200 mb-2"></div>
+        <!-- 第二部分：详情 -->
+        <div class="space-y-3 text-sm text-gray-700">
+        <div><b class="text-gray-900">事件描述：</b>${desc}</div>
+<div><b class="text-gray-900">损失金额：</b>$${loss} ｜ <b class="text-gray-900">攻击手法：</b>${attack} ｜ <b class="text-gray-900">数据来源：</b>${source}</div>
+        <div>
+            <a href="${link}" target="_blank" class="text-primary font-medium hover:underline text-xs">
+            查看参考来源
+            </a>
+        </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html || '<div class="text-center text-gray-500 py-6">暂无数据</div>';
+}
+
+// 渲染分页
+function renderPagination() {
+  totalPage = Math.ceil(totalCount / PAGE_SIZE) || 1;
+  document.getElementById('page_text').textContent = `第 ${currentPage} 页，共 ${totalPage} 页`;
+}
+
+// 分页事件
+document.getElementById('first').onclick = () => { currentPage = 1; renderEventCards(); renderPagination(); };
+document.getElementById('prev').onclick = () => { if(currentPage>1) currentPage--; renderEventCards(); renderPagination(); };
+document.getElementById('next').onclick = () => { if(currentPage<totalPage) currentPage++; renderEventCards(); renderPagination(); };
+document.getElementById('last').onclick = () => { currentPage = totalPage; renderEventCards(); renderPagination(); };
+</script>
+
+</body>
+</html>

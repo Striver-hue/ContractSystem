@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>检测工具库</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 统一你的项目配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A', 
+            secondary: '#2563EB', 
+            accent: '#10B981', 
+            light: '#F8FAFC', 
+          },
+          fontFamily: {
+            // 修改这里：指定 Inter 为默认字体
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            // 新增这里：指定等宽字体用于技术数据展示
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+      /* 在 <style> 中添加以下内容 */
+:root {
+    --bg-color: #DDE1E7; /* 背景基础色 [cite: 52] */
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed; /* 固定定位，贯穿全屏 [cite: 57] */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 关键：确保它在所有内容层之下 */
+    overflow: hidden;
+    filter: blur(120px); /* 柔和模糊效果 [cite: 58] */
+    background-color: var(--bg-color);
+}
+
+/* 动态气泡效果 [cite: 60, 61, 67] */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120px, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+
+  </style>
+</head>
+<!-- 导航栏 -->
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <!-- 桌面端导航 -->
+    <nav class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
+
+      <div class="group relative">
+        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <!-- 行动按钮组：登录 + 免费安全初检 -->
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+      免费安全初检
+      </button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<body>
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+
+<!-- Excel解析库 -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+
+<!-- 检测工具板块 - 最终调整版 -->
+<section class="relative py-16 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-slate-900 tracking-tight mb-4">
+        检测工具库
+      </h2>
+      <p class="text-slate-500 w-full mx-auto text-sm leading-relaxed px-2">
+        本工具库整合主流智能合约安全检测工具，涵盖工具基础信息、技术特性、检测范围与官方资源，为合约安全审计提供高效、权威的工具选型与使用参考。
+      </p>
+      
+    </div>
+
+    <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-gray-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr >
+              <th class="px-4 py-4 text-center text-sm font-semibold text-gray-700 w-16">序号</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">工具名称</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">技术类型</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">简要描述</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">版本号</th>
+              <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700 w-24">操作</th>
+            </tr>
+          </thead>
+          <tbody id="tool_table_body" class="divide-y divide-gray-100">
+            <tr>
+              <td colspan="6" class="px-6 py-8 text-center text-gray-400">正在加载Excel数据...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mt-12 text-center flex justify-center items-center gap-3 text-sm">
+  <p id="load_tip" class="text-slate-400 font-mono">正在同步数据...</p>
+  
+  <span class="text-gray-300">|</span> <p class="text-gray-500">
+    工具信息有误？<a href="#" class="text-secondary font-medium hover:underline">反馈更新</a>
+  </p>
+</div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+  const tableBody = document.getElementById('tool_table_body');
+  const loadTip = document.getElementById('load_tip');
+  let toolData = [];
+  let activeRow = null;
+
+  async function loadExcel() {
+    try {
+      // 1. 读取 检测工具.xlsx
+      const res = await fetch('./excel/检测工具.xlsx');
+      if (!res.ok) throw new Error('Excel文件加载失败');
+      
+      const buffer = await res.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
+      
+      // 从第2行开始读取数据
+      toolData = rows.slice(1).filter(row => row && row.length > 0);
+      renderTable();
+
+      // 修改这里：数据加载成功的样式
+    loadTip.textContent = '数据加载完成';
+    // 移除 mt-2（因为现在是并排），改为 text-accent (绿色) 或保持 text-slate-400
+    loadTip.className = 'text-accent font-medium';
+    } catch (err) {
+      tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-red-500">${err.message}</td></tr>`;
+      // 修改这里：加载失败的样式
+    loadTip.textContent = '数据同步失败';
+    loadTip.className = 'text-red-500 font-medium';
+    }
+  }
+
+  function renderTable() {
+    let html = '';
+    toolData.forEach((row, index) => {
+      const isEven = index % 2 === 1;
+
+      const name         = row[1] || '-';
+      const version      = row[4] || '-';
+      const techType     = row[6] || '-';
+      const desc         = row[10] || '-';
+
+      html += `
+<tr class="${isEven ? 'bg-gray-50/50' : ''} hover:bg-secondary/5 transition-colors">
+  <td class="px-4 py-4 text-sm text-gray-800 text-center">${index+1}</td>
+  
+  <td class="px-6 py-4 text-sm font-medium text-gray-800 text-center">${name}</td>
+  
+  <td class="px-6 py-4 text-sm text-gray-600 text-center">
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-mono font-medium bg-secondary/10 text-secondary border border-secondary/20">
+      ${techType}
+    </span>
+  </td>
+  
+  <td class="px-6 py-4 text-sm text-gray-600 text-left pr-8">${desc}</td>
+  
+  <td class="px-6 py-4 text-sm text-gray-600 text-center font-mono">${version}</td>
+  
+  <td class="px-6 py-4 text-center">
+    <button onclick="toggleDetail(${index})" class="text-accent text-sm font-medium hover:text-secondary transition-colors">
+      详情 <i class="fa-solid fa-chevron-down ml-1 text-xs"></i>
+    </button>
+  </td>
+</tr>
+<tr id="detail_${index}" class="hidden">
+  <td colspan="6" class="px-6 py-6 bg-gray-50/80 border-t border-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+      <div><span class="font-semibold">漏洞类型：</span>${row[7] || '-'}</div>
+      <div><span class="font-semibold">检测对象：</span>${row[5] || '-'}</div>
+      <div><span class="font-semibold">发布时间：</span>${row[2] || '-'}</div>
+      <div><span class="font-semibold">最后更新时间：</span>${row[3] || '-'}</div>
+      <div><span class="font-semibold">仓库链接：</span>${makeLink(row[8])}</div>
+      <div><span class="font-semibold">论文链接：</span>${makeLink(row[9])}</div>
+    </div>
+  </td>
+</tr>`;
+    });
+    tableBody.innerHTML = html || `<tr><td colspan="6" class="px-6 py-8 text-center">暂无数据</td></tr>`;
+  }
+
+  function makeLink(url) {
+    if (!url) return '-';
+    return `<a href="${url}" target="_blank" class="text-secondary hover:underline">${url}</a>`;
+  }
+
+  window.toggleDetail = function (index) {
+    const row = document.getElementById(`detail_${index}`);
+    if (activeRow !== null && activeRow !== index) {
+      document.getElementById(`detail_${activeRow}`).classList.add('hidden');
+    }
+    row.classList.toggle('hidden');
+    activeRow = row.classList.contains('hidden') ? null : index;
+  };
+
+  await loadExcel();
+});
+</script>
+
+</body>
+</html>

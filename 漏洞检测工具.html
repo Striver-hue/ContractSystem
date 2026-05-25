@@ -152,7 +152,7 @@
     <label class="block text-xs font-semibold text-slate-700 mb-2">检测工具</label>
     <select id="select_tool" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all relative z-50">
       <option value="slither">Slither</option>
-      <option value="SmartAudit_report">SmartAudit_report</option>
+      <option value="SmartAudit_report">SmartAudit</option>
     </select>
   </div>
 
@@ -161,7 +161,7 @@
     <textarea 
       id="contract_code" 
       class="w-full h-36 px-3 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm resize-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all font-mono"
-      placeholder="粘贴智能合约代码 或 点击右侧上传 reentrance.sol 文件…"></textarea>
+      placeholder="粘贴智能合约代码 或 点击右侧上传 .sol 文件…"></textarea>
     <label for="upload_file" class="absolute right-3 bottom-3 cursor-pointer">
       <div class="w-9 h-9 bg-secondary/10 hover:bg-secondary/20 text-secondary rounded-lg flex items-center justify-center transition-all">
         <i class="fa-solid fa-file-import"></i>
@@ -203,7 +203,7 @@
       <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center border border-gray-100 shadow-inner">
         <i class="fa-solid fa-inbox text-xl text-gray-300"></i>
       </div>
-      <p class="text-sm font-medium">请上传 reentrance.sol 文件并开始检测</p>
+      <p class="text-sm font-medium">请上传 .sol 文件并开始检测</p>
     </div>
   </div>
 
@@ -227,12 +227,33 @@ pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
 
 <script>
 // ======================
-// 本地文件路径配置
+// 工具配置（每种工具对应的文件夹路径）
 // ======================
-const FILE_PATH = {
-  sol: "/text/reentrance.sol",
-  json: "/text/reentrance.json"
+const TOOL_CONFIG = {
+  slither: {
+    solDir: "/text/Slither/input/",
+    jsonDir: "/text/Slither/output/"
+  },
+  SmartAudit_report: {
+    solDir: "/text/SmartAudit/input/",
+    jsonDir: "/text/SmartAudit/output/"
+  }
 };
+
+/**
+ * 获取当前选中工具的配置
+ */
+function getToolCfg() {
+  const tool = toolSelect ? toolSelect.value : "slither";
+  return TOOL_CONFIG[tool] || TOOL_CONFIG.slither;
+}
+
+/**
+ * 判断当前是否选择了 SmartAudit
+ */
+function isSmartAudit() {
+  return toolSelect && toolSelect.value === "SmartAudit_report";
+}
 
 // ======================
 // DOM元素
@@ -266,7 +287,6 @@ function bindEvents() {
   if(!file) return;
   currentFileName = file.name;
   fileNameDisplay.textContent = `已选择文件：${currentFileName}`;
-  // 新增这一行 → 代码框显示文件名
   codeTextarea.value = `已选择文件：${currentFileName}`;
   resetStatus();
 });
@@ -289,14 +309,12 @@ function resetStatus() {
   tabReport.className = "px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed";
 }
 
+// ======================
 // 开始检测
+// ======================
 function startDetect() {
   if(!currentFileName){
     reportContent.innerHTML = '<span class="text-red-500">请先上传文件！</span>';
-    return;
-  }
-  if(currentFileName !== "reentrance.sol"){
-    reportContent.innerHTML = '<span class="text-red-500">当前仅支持 reentrance.sol 检测</span>';
     return;
   }
   if(isDetecting) return;
@@ -316,10 +334,13 @@ function startDetect() {
   fileNameDisplay.textContent = `检测中：${currentFileName} | ${tool}`;
   showContent("code");
 
-  // 10秒模拟检测
+    // 动态模拟检测时间
+  // Slither = 10 秒 | SmartAudit = 10 分钟
+  const detectTime = tool === "SmartAudit_report" ? 60000 : 10000;
+
   detectTimeout = setTimeout(() => {
     detectComplete(tool);
-  }, 10000);
+  }, detectTime);
 }
 
 // 检测完成
@@ -334,79 +355,79 @@ function detectComplete(tool) {
   tabReport.className = "px-3 py-1 rounded text-xs font-medium";
   tabCode.classList.add("tab-active");
 
-  fileNameDisplay.textContent = `检测完成：reentrance.sol | ${tool}`;
+  fileNameDisplay.textContent = `检测完成：${currentFileName} | ${tool}`;
 }
+
 // ======================
-// Fetch 读取本地文件
+// 加载源代码（根据工具动态切换路径）
 // ======================
 async function loadSourceCode() {
   try {
-    const res = await fetch(FILE_PATH.sol);
+    const cfg = getToolCfg();
+    const solPath = cfg.solDir + currentFileName;
+    const res = await fetch(solPath);
     return await res.text();
   } catch (err) {
-    return "加载源代码失败：请检查 text 文件夹是否存在文件";
+    return "加载源代码失败，请确认文件存在";
   }
 }
 
-// 【精准匹配你的审计报告JSON】
+// ======================
+// 加载报告（根据工具类型分支处理）
+// ======================
 async function loadReport() {
-  try {
-    const res = await fetch(FILE_PATH.json);
-    const jsonData = await res.text();
-    return JSON.parse(jsonData);
-  } catch (err) {
-    console.error("解析失败：", err);
-    return { 
-      success: false,
-      error: "审计报告加载/解析失败",
-      results: { detectors: [] }
-    };
+  const cfg = getToolCfg();
+  const jsonName = currentFileName.replace(/\.sol$/i, ".json");
+  const jsonPath = cfg.jsonDir + jsonName;
+
+  if (isSmartAudit()) {
+    // SmartAudit：纯文本/Markdown 格式
+    try {
+      const res = await fetch(jsonPath);
+      return await res.text();
+    } catch (err) {
+      console.error("加载失败：", err);
+      return "审计报告加载失败，请确认文件已通过 SmartAudit 检测";
+    }
+  } else {
+    // Slither：结构化 JSON 格式
+    try {
+      const res = await fetch(jsonPath);
+      const jsonData = await res.text();
+      return JSON.parse(jsonData);
+    } catch (err) {
+      console.error("解析失败：", err);
+      return { 
+        success: false,
+        error: "审计报告加载/解析失败",
+        results: { detectors: [] }
+      };
+    }
   }
 }
 
-// 【核心：审计报告可视化渲染】
-async function showContent(type) {
-  tabCode.classList.remove("tab-active");
-  tabReport.classList.remove("tab-active");
-
-  if (type === "code") {
-    tabCode.classList.add("tab-active");
-    reportContent.innerHTML = "加载源代码中...";
-    const code = await loadSourceCode();
-    reportContent.innerHTML = `<pre class="whitespace-pre-wrap text-sm">${code}</pre>`;
-  } else {
-    tabReport.classList.add("tab-active");
-    reportContent.innerHTML = "加载审计报告中...";
-    const data = await loadReport();
-
-    // 渲染完整审计报告
-    reportContent.innerHTML = `
+// ======================
+// Slither 结构化渲染
+// ======================
+function renderSlitherReport(data) {
+  return `
     <div class="space-y-6 w-full">
-      <!-- 报告顶部状态 -->
-      // 找到这段代码（报告顶部状态）
-<div class="p-4 rounded-lg border ${data.success ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}">
-  <h3 class="text-lg font-bold flex items-center gap-2">
-    ${data.success ? '✅ 审计完成' : '❌ 审计失败'}
-  </h3>
-  ${data.error ? `<p class="text-sm text-red-600 mt-1">${data.error}</p>` : ''}
-  <p class="text-xs text-gray-500 mt-1">检测时间：${new Date().toLocaleString()}</p>
-  
-  <!-- 👇 新增：下载审计报告按钮（仅审计成功显示） -->
-  ${data.success ? `
-  <button onclick="downloadReport()" class="mt-3 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1">
-    <i class="fa-solid fa-download"></i> 下载审计报告
-  </button>
-  ` : ''}
-</div>
-
-      <!-- 漏洞/警告列表 -->
+      <div class="p-4 rounded-lg border ${data.success ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+          ${data.success ? '✅ 审计完成' : '❌ 审计失败'}
+        </h3>
+        ${data.error ? `<p class="text-sm text-red-600 mt-1">${data.error}</p>` : ''}
+        <p class="text-xs text-gray-500 mt-1">检测时间：${new Date().toLocaleString()}</p>
+        ${data.success ? `
+        <button onclick="downloadReport()" class="mt-3 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-download"></i> 下载审计报告
+        </button>
+        ` : ''}
+      </div>
       <div class="space-y-4">
-        <h4 class="font-semibold text-gray-800 text-md">🔍 检测结果（共 ${data.results?.detectors?.length || 0} 项）</h4>
-        
+        <h4 class="font-semibold text-gray-800 text-md">检测结果（共 ${data.results?.detectors?.length || 0} 项）</h4>
         ${data.results?.detectors?.map((item, idx) => `
-        <!-- 单个检测卡片 -->
         <div class="border rounded-lg overflow-hidden bg-white shadow-sm">
-          <!-- 卡片头部：风险等级 + 检测类型 -->
           <div class="px-4 py-3 flex justify-between items-center border-b
             ${item.impact === 'High' ? 'bg-red-50 border-red-100' : 'bg-slate-50 border-slate-100'}">
             <div class="font-medium">
@@ -426,18 +447,12 @@ async function showContent(type) {
               </span>
             </div>
           </div>
-
-          <!-- 核心描述 -->
           <div class="p-4 text-sm text-gray-700 whitespace-pre-line">
             ${item.description}
           </div>
-
-          <!-- 代码位置 -->
           <div class="px-4 pb-2 text-xs text-gray-500">
             定位：${item.first_markdown_element || '全局'}
           </div>
-
-          <!-- 关联代码元素（折叠面板） -->
           ${item.elements.length > 0 ? `
           <div class="px-4 pb-3">
             <button onclick="togglePanel(this)" class="text-xs text-blue-600 flex items-center gap-1">
@@ -459,11 +474,84 @@ async function showContent(type) {
         `).join('')}
       </div>
     </div>
-    `;
+  `;
+}
+
+// ======================
+// SmartAudit Markdown 文本渲染
+// ======================
+function renderSmartAuditReport(rawText) {
+  // 转义HTML特殊字符
+  let safe = rawText
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>');
+
+  // 将 Markdown 语法转为 HTML
+  let html = safe
+    // ### 标题
+    .replace(/### (.+)/g, '<h3 class="text-lg font-bold text-gray-800 mt-6 mb-3 border-b border-gray-200 pb-2">$1</h3>')
+    // ## 标题
+    .replace(/## (.+)/g, '<h2 class="text-xl font-bold text-gray-900 mt-8 mb-4">$1</h2>')
+    // **加粗**
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-800">$1</strong>')
+    // `内联代码`
+    .replace(/`([^`]+)`/g, '<code class="bg-slate-100 text-red-600 px-1.5 py-0.5 rounded text-xs font-mono">$1</code>')
+    // 有序列表：数字. 内容
+    .replace(/^(\d+)\.  (.+)$/gm, '<div class="flex gap-2 mt-2"><span class="text-secondary font-bold min-w-[20px]">$1.</span><span>$2</span></div>')
+    // 无序子项：  - 内容
+    .replace(/^  - (.+)$/gm, '<li class="ml-6 text-sm text-gray-600 list-disc">$1</li>')
+    // 双换行 → 段落间隔
+    .replace(/\n\n/g, '<br/><br/>')
+    // 单换行
+    .replace(/\n/g, '<br/>');
+
+  return `
+    <div class="space-y-2 w-full font-sans">
+      <div class="p-4 rounded-lg border bg-green-50 border-green-200">
+        <h3 class="text-lg font-bold flex items-center gap-2">✅ SmartAudit 审计完成</h3>
+        <p class="text-xs text-gray-500 mt-1">检测时间：${new Date().toLocaleString()}</p>
+        <button onclick="downloadReport()" class="mt-3 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1">
+          <i class="fa-solid fa-download"></i> 下载审计报告
+        </button>
+      </div>
+      <div class="text-sm text-gray-700 leading-relaxed">
+        ${html}
+      </div>
+    </div>
+  `;
+}
+
+// ======================
+// 核心：审计报告可视化渲染
+// ======================
+async function showContent(type) {
+  tabCode.classList.remove("tab-active");
+  tabReport.classList.remove("tab-active");
+
+  if (type === "code") {
+    tabCode.classList.add("tab-active");
+    reportContent.innerHTML = "加载源代码中...";
+    const code = await loadSourceCode();
+    reportContent.innerHTML = `<pre class="whitespace-pre-wrap text-sm">${code}</pre>`;
+  } else {
+    tabReport.classList.add("tab-active");
+    reportContent.innerHTML = "加载审计报告中...";
+    const data = await loadReport();
+
+    if (isSmartAudit()) {
+      // SmartAudit 返回的是纯文本字符串
+      reportContent.innerHTML = renderSmartAuditReport(data);
+    } else {
+      // Slither 返回的是结构化对象
+      reportContent.innerHTML = renderSlitherReport(data);
+    }
   }
 }
 
-// 折叠面板切换功能
+// ======================
+// 工具函数
+// ======================
 function togglePanel(el) {
   const content = el.nextElementSibling;
   const icon = el.querySelector('i');
@@ -474,24 +562,19 @@ function togglePanel(el) {
   el.innerHTML = `${icon.outerHTML} ${content.classList.contains('hidden') ? '查看关联代码元素' : '收起代码元素'}`;
 }
 
-// 下载审计报告（JSON文件）
 async function downloadReport() {
   try {
-    // 1. 获取JSON文件内容
-    const res = await fetch(FILE_PATH.json);
+    const jsonName = currentFileName.replace(/\.sol$/i, ".json");
+    const cfg = getToolCfg();
+    const jsonPath = cfg.jsonDir + jsonName;
+    const res = await fetch(jsonPath);
     const jsonText = await res.text();
-    
-    // 2. 创建Blob对象（JSON格式）
     const blob = new Blob([jsonText], { type: "application/json" });
-    
-    // 3. 创建下载链接
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "reentrance_audit_report.json"; // 下载文件名
+    a.download = jsonName;
     document.body.appendChild(a);
-    
-    // 4. 触发下载并清理
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);

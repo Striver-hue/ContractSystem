@@ -408,99 +408,16 @@
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
-    <!-- 双内容并排布局 -->
-    <div class="flex flex-col md:flex-row gap-8">
-      <!-- 左侧：全栈式区块链安全审计 -->
-      <div class="md:w-1/2">
-        <!-- 1. 合同、钱包和链条的审计 -->
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="rounded-2xl border border-gray-200/80 bg-white/80 p-8 shadow-sm">
         <div class="mb-6">
-          <h4 class="text-lg font-semibold text-gray-800 mb-2">多维度全场景区块链审计</h4>
-          <p class="text-gray-600 text-sm mb-3">
-            覆盖智能合约、数字钱包及跨链基础设施的全栈安全审计，基于对区块链协议的深度理解和全场景覆盖能力，支持以太坊、BSC、Polygon、Arbitrum等主流公链，兼容Solidity、Vyper、Rust等多开发语言。
-          </p>
-          <ul class="space-y-1 text-gray-600 text-sm">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>智能合约审计：覆盖DeFi/NFT/GameFi/DAO全场景，检测100+类漏洞</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>钱包安全审计：冷/热钱包、硬件钱包、多签钱包的私钥管理与交易流程检测</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>跨链基础设施审计：跨链桥、Layer2、侧链的共识机制与资产映射安全验证</span>
-            </li>
-          </ul>
+          <h3 class="text-2xl font-bold text-gray-900">最新攻击事件</h3>
         </div>
 
-        <!-- 2. 多审计员交叉审查 -->
-        <div>
-          <h4 class="text-lg font-semibold text-gray-800 mb-2">多审计员交叉审查 & 可操作修复方案</h4>
-          <p class="text-gray-600 text-sm mb-3">
-            采用"双人独立审计+团队交叉核查"的三级审查机制，确保漏洞零遗漏。专责安全团队通过独立审查和系统化交叉验证，结合快速高效的沟通机制，为客户提供清晰、可落地的漏洞修复指导。
-          </p>
-          <ul class="space-y-1 text-gray-600 text-sm">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>三级审查机制：初级审计员初检、高级审计员复核、安全专家交叉验证</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>定制化修复方案：代码级修复示例、优化建议和安全最佳实践</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>修复验证闭环：漏洞修复后提供免费二次检测，确保修复效果</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- 右侧：深度威胁分析与智能检测 -->
-      <div class="md:w-1/2">
-        <!-- 3. 架构与威胁建模 -->
-        <div class="mb-6">
-          <h4 class="text-lg font-semibold text-gray-800 mb-2">架构设计 & 威胁建模分析</h4>
-          <p class="text-gray-600 text-sm mb-3">
-            从系统架构设计、资产流转路径和信任边界划分出发，构建全面的威胁模型，识别潜在攻击路径，重点关注业务逻辑漏洞、边缘场景异常和发布前的风险消减，从根源降低安全风险。
-          </p>
-          <ul class="space-y-1 text-gray-600 text-sm">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>系统架构分析：梳理核心流程、组件依赖和数据交互逻辑</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>资产流梳理：追踪数字资产的铸造、转移、销毁全流程安全控制点</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>攻击路径建模：基于STRIDE、PASTA等方法论识别现实可行的攻击场景</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 4. 内部工具检测隐藏漏洞 -->
-        <div>
-          <h4 class="text-lg font-semibold text-gray-800 mb-2">自研工具集 & 隐藏漏洞检测</h4>
-          <p class="text-gray-600 text-sm mb-3">
-            基于数百万漏洞悬赏案例验证的自研安全工具集，结合差分测试、定制化模糊检测、符号执行等高级技术，能够发现传统审计工具难以识别的逻辑不一致、边缘故障和深层隐藏漏洞。
-          </p>
-          <ul class="space-y-1 text-gray-600 text-sm">
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>差分测试工具：对比不同编译器/版本的执行结果，发现逻辑不一致</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>定制化模糊检测：针对业务逻辑定制测试用例，覆盖99%+异常输入场景</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fa-solid fa-check-circle text-accent mt-1 text-xs"></i>
-              <span>漏洞特征库：基于数百万真实漏洞案例构建，精准匹配已知漏洞变体</span>
-            </li>
-          </ul>
+        <div id="latest_events" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+          <div class="rounded-xl border border-dashed border-gray-300 bg-white/60 p-6 text-center text-sm text-gray-500">
+            正在加载最新攻击事件...
+          </div>
         </div>
       </div>
     </div>
@@ -508,7 +425,10 @@
     <!-- 不同区块链语言及工具 -->
     <div class="w-full py-14">
       <div class="flex items-center justify-between mb-10">
-        <h3 class="text-2xl font-bold text-gray-900">不同区块链语言及工具</h3>
+        <h3 class="text-2xl font-bold text-gray-900">
+          不同区块链语言及工具
+          <span class="ml-2 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700">TODO</span>
+        </h3>
         <div class="flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
           <span>更多</span>
           <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
@@ -650,11 +570,77 @@ document.addEventListener('DOMContentLoaded', async () => {
     dataList = rows.slice(1).filter(row => row && row.length > 0);
 
     // 【关键】只调用现有的渲染函数，删除了对不存在 DOM 的操作
-    renderPieChart(); 
+    renderPieChart();
+    renderLatestEvents();
   } catch (error) {
     console.error('数据加载或渲染失败：', error);
   }
 });
+
+function parseExcelDate(value) {
+  if (!value || value === '-') return null;
+  if (!isNaN(value)) {
+    const date = new Date((value - 25569) * 86400 * 1000);
+    return isNaN(date.getTime()) ? null : date;
+  }
+  const parsed = new Date(value);
+  return isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatExcelDate(value) {
+  const parsed = parseExcelDate(value);
+  if (!parsed) return value || '-';
+  return parsed.toLocaleDateString('zh-CN');
+}
+
+function renderLatestEvents() {
+  const container = document.getElementById('latest_events');
+  if (!container) return;
+
+  const sorted = [...dataList].sort((a, b) => {
+    const dateA = parseExcelDate(a[0]);
+    const dateB = parseExcelDate(b[0]);
+    return (dateB ? dateB.getTime() : 0) - (dateA ? dateA.getTime() : 0);
+  });
+
+  const latest = sorted.slice(0, 4);
+  if (latest.length === 0) {
+    container.innerHTML = '<div class="rounded-xl border border-dashed border-gray-300 bg-white/60 p-6 text-center text-sm text-gray-500">暂无攻击事件数据</div>';
+    return;
+  }
+
+  container.innerHTML = latest.map((row, index) => {
+    const time = formatExcelDate(row[0]);
+    const project = row[1] || '-';
+    const desc = row[2] || '-';
+    const loss = row[3] || '-';
+    const attack = row[4] || '-';
+    const link = row[5] || '#';
+    const source = row[6] || '-';
+
+    return `
+      <div class="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <span class="inline-flex items-center gap-2 rounded-full bg-gray-100 px-2.5 py-1 text-gray-600">
+            最新 ${index + 1}
+          </span>
+          <span>${time}</span>
+        </div>
+        <h4 class="mt-4 text-lg font-semibold text-gray-900">${project}</h4>
+        <p class="mt-2 text-sm text-gray-600">${desc}</p>
+        <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-gray-500">
+          <span>损失金额：$${loss}</span>
+          <span>攻击手法：${attack}</span>
+        </div>
+        <div class="mt-3 text-xs text-gray-500">数据来源：${source}</div>
+        <a href="${link}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-secondary/80 transition-colors">
+          查看参考来源
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+      </div>
+    `;
+  }).join('');
+}
 
 function renderPieChart() {
   Chart.register(ChartDataLabels);
@@ -753,7 +739,10 @@ function renderPieChart() {
   <div class="container mx-auto px-4">
     <!-- 标题区 -->
     <div class="mb-12 text-center">
-  <h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary">安全监控</h2>
+  <h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary">
+    安全监控
+    <span class="ml-2 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700">TODO</span>
+  </h2>
   <p class="text-gray-600 max-w-2xl mx-auto">全链风险实时感知、异常行为智能预警，覆盖合约、资产、协议全维度安全守护</p>
 </div>
 
@@ -1036,7 +1025,10 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- ===================== 板块三：证书技能（资质认证） ===================== -->
   <section id="certificate" class="scroll-mt-20">
     <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">资质与技术能力</h2>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        资质与技术能力
+        <span class="ml-2 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700">TODO</span>
+      </h2>
       <p class="text-gray-600 max-w-2xl mx-auto">证书 | 专利 | 论文 | 奖项</p>
     <!-- 新增：证书墙预留框（可滚动区域，纯边框占位，调整大小用） -->
       <!-- 边框展示框：宽度100%，高度240px，虚线边框，透明背景 -->

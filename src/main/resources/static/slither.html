@@ -14,9 +14,10 @@
       theme: {
         extend: {
           colors: {
-            primary: '#0F172A',
-            secondary: '#2563EB',
-            accent: '#10B981',
+            primary: '#0F172A', // 主色-深蓝（专业安全）
+            secondary: '#2563EB', // 辅助色-科技蓝
+            accent: '#10B981', // 强调色-安全绿
+            light: '#F8FAFC', // 浅色背景
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -31,10 +32,139 @@
         content-visibility: auto;
       }
     }
+      /* 在 <style> 中添加以下内容 */
+:root {
+    --bg-color: #DDE1E7; /* 背景基础色 [cite: 52] */
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed; /* 固定定位，贯穿全屏 [cite: 57] */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 关键：确保它在所有内容层之下 */
+    overflow: hidden;
+    filter: blur(120px); /* 柔和模糊效果 [cite: 58] */
+    background-color: var(--bg-color);
+}
+
+/* 动态气泡效果 [cite: 60, 61, 67] */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120px, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+
   </style>
 </head>
-<body class="bg-white min-h-screen">
-  <div class="container mx-auto px-6 md:px-12 lg:px-20 max-w-6xl py-12 md:py-16">
+<!-- 导航栏 -->
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <!-- 桌面端导航 -->
+    <nav class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
+
+      <div class="group relative">
+        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <!-- 行动按钮组：登录 + 免费安全初检 -->
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+      免费安全初检
+      </button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<body>
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+ <!-- 首屏 Hero 区（适配虚化背景+文字颜色调整+按钮统一无高亮版） -->
+<section class="relative shadow-lg min-h-[calc(100vh-80px)] flex flex-col justify-between">
+  <!-- 背景图片层（方案一原有虚化效果完全保留） -->
+  <div class="absolute inset-0 z-0 overflow-hidden">
+    <img src="pictures/首屏.png" alt="区块链安全审计平台首屏背景"
+         class="w-full h-full object-cover object-center scale-105 blur-sm">
+    <div class="absolute inset-0 bg-primary/25"></div>
+  </div>
+
+<div class="relative z-10 flex-grow flex-col items-center justify-center mt-12 md:mt-20 min-h-[calc(100vh-80px)] px-4 py-12">
+<!-- 新增 mt-12（移动端） md:mt-20（PC端） -->
     <!-- 页面标题 -->
     <div class="text-center mb-12">
       <h1 class="text-3xl md:text-4xl font-bold text-primary mb-4">Slither 智能合约安全检测</h1>
@@ -42,7 +172,7 @@
     </div>
 
     <!-- 核心内容区（状态切换） -->
-    <div class="bg-white rounded-xl shadow-sm p-8 md:p-10">
+    <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 max-w-6xl mx-auto">
       <!-- 1. 上传文件状态（默认） -->
       <div id="uploadState" class="block">
         <div id="dropArea" class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center cursor-pointer hover:border-secondary transition-colors">
@@ -83,6 +213,12 @@
       </div>
     </div>
   </div>
+</section>
+
+
+<section id="ability" class="scroll-mt-20 min-h-[calc(100vh-80px)] flex flex-col justify-between py-12">
+
+</section>
 
   <script>
     // 获取DOM元素

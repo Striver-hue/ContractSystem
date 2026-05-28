@@ -7,8 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class SlitherService {
@@ -77,6 +80,22 @@ public class SlitherService {
         return jsonResult;
     }
 
+    public static String extractVersion(String contractPath) throws IOException {
+        String content = new String(Files.readAllBytes(Paths.get(contractPath)));
+
+        // 正则匹配 pragma solidity 版本
+        Pattern pattern = Pattern.compile("pragma\\s+solidity\\s+[\\^~]?(\\d+\\.\\d+\\.\\d+)");
+        Matcher matcher = pattern.matcher(content);
+
+        if (matcher.find()) {
+            String version = matcher.group(1);
+            // 提取主版本号.次版本号 (如 0.4.18 -> 0.4.18)
+            return version;
+        }
+
+        // 如果没有找到，返回默认版本
+        return "0.8.34";
+    }
     public String runSlither(MultipartFile file) throws Exception {
 
         // 1️⃣ 保存文件到宿主机
@@ -87,11 +106,15 @@ public class SlitherService {
         // 2️⃣ 输出文件路径
         String outputFile = fileName.replace(".sol", ".json");
 
+
+        String solVersion = extractVersion(filePath.toString());
+        String solcPath = "/root/.solc-select/versions/"+solVersion+"/solc";
         // 3️⃣ docker exec 命令
         ProcessBuilder pb = new ProcessBuilder(
                 "docker", "exec", CONTAINER_NAME,
                 "slither", "/input/" + fileName,
-                "--json", "/output/" + outputFile
+                "--json", "/output/" + outputFile,
+                "--solc", solcPath
         );
 
         pb.redirectErrorStream(true);

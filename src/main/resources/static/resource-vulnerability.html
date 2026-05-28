@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slither 合约安全检测</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 统一你的项目配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A', // 主色-深蓝（专业安全）
+            secondary: '#2563EB', // 辅助色-科技蓝
+            accent: '#10B981', // 强调色-安全绿
+            light: '#F8FAFC', // 浅色背景
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+      /* 在 <style> 中添加以下内容 */
+:root {
+    --bg-color: #DDE1E7; /* 背景基础色 [cite: 52] */
+    --orange-soft: rgba(255, 140, 0, 0.12);
+    --orange-deep: rgba(230, 90, 0, 0.08);
+}
+
+.background-container {
+    position: fixed; /* 固定定位，贯穿全屏 [cite: 57] */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 关键：确保它在所有内容层之下 */
+    overflow: hidden;
+    filter: blur(120px); /* 柔和模糊效果 [cite: 58] */
+    background-color: var(--bg-color);
+}
+
+/* 动态气泡效果 [cite: 60, 61, 67] */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    animation: move 30s infinite alternate ease-in-out;
+}
+.blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+.blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+.blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+@keyframes move {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(120px, 60px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-complex {
+    from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+    to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+}
+
+  </style>
+</head>
+<!-- 导航栏 -->
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm z-50">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <!-- 桌面端导航 -->
+    <nav class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
+
+      <div class="group relative">
+        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <!-- 行动按钮组：登录 + 免费安全初检 -->
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+      免费安全初检
+      </button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<body>
+<div class="background-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<!-- ==========================================
+     漏洞种类核心板块（按钮高亮+图标统一修复版）
+     ========================================== -->
+<!-- 引入SheetJS Excel解析库 -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<section class="relative z-10 py-16 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    
+    <!-- 1. 页面标题与说明区 -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 mb-4">
+        <h2 class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          智能合约漏洞分类库
+        </h2>
+      </div>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        系统性梳理智能合约机器可审计传统漏洞与机器不可审计逻辑漏洞，覆盖主流风险类型与典型场景，为合约开发、安全审计、风险排查提供权威参考与规范依据。
+      </p>
+      <p id="load_tip" class="text-sm text-secondary mt-2">正在加载Excel数据...</p>
+    </div>
+
+    <!-- 2. 漏洞分类标签栏（图标区分+高亮修复） -->
+    <div class="flex flex-wrap justify-center gap-4 mb-10">
+      <button id="tab_mabs" class="px-6 py-2.5 rounded-full font-medium transition-all bg-secondary/10 text-secondary border border-secondary">
+        <i class="fa-solid fa-check-circle mr-2"></i>机器可审计漏洞
+      </button>
+      <button id="tab_mubs" class="px-6 py-2.5 rounded-full font-medium transition-all bg-white/80 text-gray-600 border border-gray-200 hover:bg-gray-50">
+        <i class="fa-solid fa-brain mr-2"></i>机器不可审计漏洞
+      </button>
+    </div>
+
+    <!-- 3. 机器可审计漏洞（MABs）表格模块（初始显示） -->
+    <div id="section_mabs" class="block">
+      <!-- 区域标题（从Excel读取） -->
+      <div class="mb-6">
+        <h3 id="mabs_title" class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <i id="mabs_icon" class="fa-solid fa-check-circle text-accent"></i>
+          正在加载标题...
+        </h3>
+        <p class="text-gray-500 mt-1">机器可审计漏洞 / 传统漏洞</p>
+      </div>
+
+      <!-- 表格（内容从Excel动态渲染） -->
+      <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <!-- 表头（固定） -->
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">序号</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-1/3">Bug Name（漏洞名称）</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Description（漏洞描述）</th>
+              </tr>
+            </thead>
+            <!-- 表体（从Excel动态生成） -->
+            <tbody id="mabs_table_body" class="divide-y divide-gray-100">
+              <tr>
+                <td colspan="2" class="px-6 py-8 text-center text-gray-400">正在加载Excel数据...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 机器不可审计漏洞（MUBs）表格模块（初始隐藏） -->
+    <div id="section_mubs" class="hidden">
+      <!-- 区域标题（从Excel读取） -->
+      <div class="mb-6">
+        <h3 id="mubs_title" class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <i id="mubs_icon" class="fa-solid fa-brain text-orange-deep"></i>
+          正在加载标题...
+        </h3>
+        <p class="text-gray-500 mt-1">机器不可审计漏洞 / 逻辑类漏洞</p>
+      </div>
+
+      <!-- 表格（内容从Excel动态渲染） -->
+      <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <!-- 表头（固定） -->
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">序号</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-1/4">Bug Name（漏洞名称）</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-2/5">Description（漏洞描述）</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Example（示例）</th>
+              </tr>
+            </thead>
+            <!-- 表体（从Excel动态生成） -->
+            <tbody id="mubs_table_body" class="divide-y divide-gray-100">
+              <tr>
+                <td colspan="3" class="px-6 py-8 text-center text-gray-400">正在加载Excel数据...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 反馈区 -->
+    <div class="mt-12 text-center">
+      <p class="text-gray-500">
+        发现漏洞分类错误？
+        <a href="#" class="text-secondary font-medium hover:underline">联系我们</a>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================
+     核心JS逻辑：Excel读取 + 动态渲染 + 点击切换（修复版）
+     ========================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+  // 元素获取
+  const loadTip = document.getElementById('load_tip');
+  const mabsTitle = document.getElementById('mabs_title');
+  const mabsIcon = document.getElementById('mabs_icon');
+  const mabsTableBody = document.getElementById('mabs_table_body');
+  const mubsTitle = document.getElementById('mubs_title');
+  const mubsIcon = document.getElementById('mubs_icon');
+  const mubsTableBody = document.getElementById('mubs_table_body');
+  const tabMabs = document.getElementById('tab_mabs');
+  const tabMubs = document.getElementById('tab_mubs');
+  const sectionMabs = document.getElementById('section_mabs');
+  const sectionMubs = document.getElementById('section_mubs');
+
+  // 全局Excel数据存储
+  let excelData = null;
+
+  // ======================
+  // 1. 读取并解析Excel文件
+  // ======================
+  async function loadExcelFile() {
+    try {
+      // 1.1 请求Excel文件
+      const response = await fetch('./excel/漏洞种类.xlsx');
+      if (!response.ok) {
+        throw new Error(`文件加载失败：${response.status} ${response.statusText}`);
+      }
+
+      // 1.2 解析Excel二进制数据
+      const arrayBuffer = await response.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+      // 1.3 校验工作表是否存在
+      const mabsSheetName = '机器可审计漏洞';
+      const mubsSheetName = '机器不可审计漏洞';
+      if (!workbook.SheetNames.includes(mabsSheetName) || !workbook.SheetNames.includes(mubsSheetName)) {
+        throw new Error('Excel中未找到指定工作表，请确保sheet名称为「机器可审计漏洞」和「机器不可审计漏洞」');
+      }
+
+      // 1.4 解析两个工作表的内容（保留原始行结构）
+      const mabsSheet = workbook.Sheets[mabsSheetName];
+      const mubsSheet = workbook.Sheets[mubsSheetName];
+      const mabsRows = XLSX.utils.sheet_to_json(mabsSheet, { header: 1, raw: false });
+      const mubsRows = XLSX.utils.sheet_to_json(mubsSheet, { header: 1, raw: false });
+
+      // 1.5 校验Excel结构是否符合要求
+      if (mabsRows.length < 2) throw new Error('「机器可审计漏洞」sheet内容不足，至少需要2行（标题+表头）');
+      if (mubsRows.length < 2) throw new Error('「机器不可审计漏洞」sheet内容不足，至少需要2行（标题+表头）');
+
+      // 1.6 存储解析后的数据
+      excelData = {
+        mabs: {
+          title: mabsRows[0][0] || 'Machine-Auditable Bugs (MABs) / Traditional Vulnerabilities',
+          data: mabsRows.slice(2) // 跳过标题行、表头行，从第3行开始取内容
+        },
+        mubs: {
+          title: mubsRows[0][0] || 'Machine-Unauditable Bugs (MUBs) / Logical Vulnerabilities',
+          data: mubsRows.slice(2) // 跳过标题行、表头行，从第3行开始取内容
+        }
+      };
+
+      // 1.7 渲染到页面
+      renderPage();
+      loadTip.innerText = 'Excel数据加载完成';
+      loadTip.className = 'text-sm text-accent mt-2';
+
+    } catch (error) {
+      // 错误处理
+      console.error(error);
+      loadTip.innerText = `加载失败：${error.message}`;
+      loadTip.className = 'text-sm text-red-500 mt-2';
+      mabsTableBody.innerHTML = `<tr><td colspan="2" class="px-6 py-8 text-center text-red-500">${error.message}</td></tr>`;
+      mubsTableBody.innerHTML = `<tr><td colspan="3" class="px-6 py-8 text-center text-red-500">${error.message}</td></tr>`;
+    }
+  }
+
+  // ======================
+  // 2. 渲染页面内容
+  // ======================
+  function renderPage() {
+    if (!excelData) return;
+
+    // 2.1 渲染机器可审计漏洞模块
+    mabsTitle.innerHTML = `<i id="mabs_icon" class="fa-solid fa-check-circle text-accent"></i>${excelData.mabs.title}`;
+    let mabsHtml = '';
+    excelData.mabs.data.forEach((row, index) => {
+      const isEven = index % 2 === 1;
+      mabsHtml += `
+        <tr class="${isEven ? 'bg-gray-50/50' : ''} hover:bg-secondary/5 transition-colors">
+          <td class="px-6 py-4 text-sm text-gray-800">${index+1}</td>
+          <td class="px-6 py-4 text-sm font-medium text-gray-800">${row[0] || '-'}</td>
+          <td class="px-6 py-4 text-sm text-gray-600">${row[2] || '-'}</td>
+        </tr>
+      `;
+    });
+    if (excelData.mabs.data.length === 0) {
+      mabsHtml = `<tr><td colspan="2" class="px-6 py-8 text-center text-gray-400">Excel中无对应数据</td></tr>`;
+    }
+    mabsTableBody.innerHTML = mabsHtml;
+
+    // 2.2 渲染机器不可审计漏洞模块
+    mubsTitle.innerHTML = `<i id="mubs_icon" class="fa-solid fa-check-circle text-accent"></i>${excelData.mubs.title}`;
+
+    let mubsHtml = '';
+    excelData.mubs.data.forEach((row, index) => {
+      const isEven = index % 2 === 1;
+      const exampleContent = row[4] ? `<span class="font-mono bg-gray-50 rounded px-2 py-1">${row[4]}</span>` : '-';
+      mubsHtml += `
+        <tr class="${isEven ? 'bg-gray-50/50' : ''} hover:bg-secondary/5 transition-colors">
+          <td class="px-6 py-4 text-sm text-gray-800">${index+1}</td>
+          <td class="px-6 py-4 text-sm font-medium text-gray-800">${row[0] || '-'}</td>
+          <td class="px-6 py-4 text-sm text-gray-600">${row[2] || '-'}</td>
+          <td class="px-6 py-4 text-sm text-gray-600">${exampleContent}</td>
+        </tr>
+      `;
+    });
+    if (excelData.mubs.data.length === 0) {
+      mubsHtml = `<tr><td colspan="3" class="px-6 py-8 text-center text-gray-400">Excel中无对应数据</td></tr>`;
+    }
+    mubsTableBody.innerHTML = mubsHtml;
+  }
+
+  // ======================
+  // 3. 标签切换交互逻辑（🔥 高亮+图标统一修复）
+  // ======================
+  function switchContent(active) {
+    if (active === 'mabs') {
+      // 显示机器可审计，隐藏机器不可审计
+      // 按钮样式
+      tabMabs.className = 'px-6 py-2.5 rounded-full font-medium transition-all bg-secondary/10 text-secondary border border-secondary';
+      tabMubs.className = 'px-6 py-2.5 rounded-full font-medium transition-all bg-white/80 text-gray-600 border border-gray-200 hover:bg-gray-50';
+      // 按钮图标
+      tabMabs.innerHTML = '<i class="fa-solid fa-check-circle mr-2"></i>机器可审计漏洞';
+      tabMubs.innerHTML = '<i class="fa-solid fa-brain mr-2"></i>机器不可审计漏洞';
+      // 内容显示
+      sectionMabs.classList.remove('hidden');
+      sectionMabs.classList.add('block');
+      sectionMubs.classList.remove('block');
+      sectionMubs.classList.add('hidden');
+    } else {
+      // 显示机器不可审计，隐藏机器可审计
+      // 按钮样式：改成和机器可审计一样的高亮色
+      tabMubs.className = 'px-6 py-2.5 rounded-full font-medium transition-all bg-secondary/10 text-secondary border border-secondary';
+      tabMabs.className = 'px-6 py-2.5 rounded-full font-medium transition-all bg-white/80 text-gray-600 border border-gray-200 hover:bg-gray-50';
+      // 按钮图标：都改成勾
+      tabMabs.innerHTML = '<i class="fa-solid fa-check-circle mr-2"></i>机器可审计漏洞';
+      tabMubs.innerHTML = '<i class="fa-solid fa-check-circle mr-2"></i>机器不可审计漏洞';
+      // 内容显示
+      sectionMubs.classList.remove('hidden');
+      sectionMubs.classList.add('block');
+      sectionMabs.classList.remove('block');
+      sectionMabs.classList.add('hidden');
+    }
+  }
+
+  // 点击标签切换内容
+  tabMabs.addEventListener('click', function() {
+    switchContent('mabs');
+  });
+  tabMubs.addEventListener('click', function() {
+    switchContent('mubs');
+  });
+
+  // ======================
+  // 页面加载完成后执行
+  // ======================
+  await loadExcelFile();
+});
+</script>
+
+
+</body>
+</html>

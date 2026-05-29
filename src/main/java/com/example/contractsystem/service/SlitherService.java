@@ -21,9 +21,9 @@ public class SlitherService {
         this.userRepository = userRepository;
     }
 
-    private static final String HOST_DIR = "D:\\Shi\\dockerData\\Slither\\input";   // 服务器目录
+    private static final String HOST_DIR = "D:\\ContractSystem\\dockerData\\Slither\\input";   // 服务器目录
     private static final String CONTAINER_NAME = "slither-container";
-    private static final String HOST_DIR_OUT = "D:\\Shi\\dockerData\\Slither\\output";   // 服务器目录
+    private static final String HOST_DIR_OUT = "D:\\ContractSystem\\dockerData\\Slither\\output";   // 服务器目录
 
 
 
@@ -106,21 +106,34 @@ public class SlitherService {
         // 2️⃣ 输出文件路径
         String outputFile = fileName.replace(".sol", ".json");
 
-
+        // 3️⃣ 提取合约 Solidity 版本，并选择合适的 solc 编译器
         String solVersion = extractVersion(filePath.toString());
-        String solcPath = "/root/.solc-select/versions/"+solVersion+"/solc";
-        // 3️⃣ docker exec 命令
-        ProcessBuilder pb = new ProcessBuilder(
-                "docker", "exec", CONTAINER_NAME,
-                "slither", "/input/" + fileName,
-                "--json", "/output/" + outputFile,
-                "--solc", solcPath
-        );
+        // 容器中已安装的 solc 版本：全局 0.8.24，solc-select 中 0.4.26
+        // 对于 0.4.x 合约，使用 0.4.26 编译（兼容 ^0.4.18 ~ ^0.4.26）
+        // 对于 0.5.x+ 合约，使用默认全局 solc（0.8.24）
+        String solcArg = "/root/.solc-select/versions/0.4.26/solc";
+        boolean useCustomSolc = solVersion.startsWith("0.4.");
+
+        // 4️⃣ 构建 docker exec 命令
+        List<String> command = new java.util.ArrayList<>();
+        command.add("docker");
+        command.add("exec");
+        command.add(CONTAINER_NAME);
+        command.add("slither");
+        command.add("/input/" + fileName);
+        command.add("--json");
+        command.add("/output/" + outputFile);
+        if (useCustomSolc) {
+            command.add("--solc");
+            command.add(solcArg);
+        }
+
+        ProcessBuilder pb = new ProcessBuilder(command);
 
         pb.redirectErrorStream(true);
         Process process = pb.start();
 
-        // 4️⃣ 打印日志（可选）
+        // 4️⃣ 读取日志（含 stdout + stderr）
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(process.getInputStream())
         );
@@ -131,8 +144,14 @@ public class SlitherService {
         }
         int exitCode = process.waitFor();
 
+        System.out.println("[Slither] exitCode=" + exitCode);
+        System.out.println("[Slither] logs:\n" + logs);
+
         // 5️⃣ 读取 JSON 结果
         Path outputPath = Paths.get(HOST_DIR_OUT, outputFile);
+        if (!Files.exists(outputPath)) {
+            throw new RuntimeException("Slither 执行失败，未生成输出文件。退出码：" + exitCode + "\n日志：" + logs);
+        }
         String jsonResult = Files.readString(outputPath);
         return jsonResult;
     }

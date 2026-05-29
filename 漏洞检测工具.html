@@ -229,24 +229,8 @@ pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
 // ======================
 // 工具配置（每种工具对应的文件夹路径）
 // ======================
-const TOOL_CONFIG = {
-  slither: {
-    solDir: "/text/Slither/input/",
-    jsonDir: "/text/Slither/output/"
-  },
-  SmartAudit_report: {
-    solDir: "/text/SmartAudit/input/",
-    jsonDir: "/text/SmartAudit/output/"
-  }
-};
-
-/**
- * 获取当前选中工具的配置
- */
-function getToolCfg() {
-  const tool = toolSelect ? toolSelect.value : "slither";
-  return TOOL_CONFIG[tool] || TOOL_CONFIG.slither;
-}
+// API 基础地址（后端服务地址）
+const API_BASE = "http://localhost:8080";
 
 /**
  * 判断当前是否选择了 SmartAudit
@@ -320,7 +304,6 @@ function startDetect() {
   if(isDetecting) return;
 
   isDetecting = true;
-  const tool = toolSelect.value;
 
   startBtn.disabled = true;
   startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 检测中...';
@@ -331,16 +314,65 @@ function startDetect() {
   tabCode.className = "px-3 py-1 rounded text-xs font-medium tab-active";
   tabReport.className = "px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed";
 
+  const tool = toolSelect.value;
   fileNameDisplay.textContent = `检测中：${currentFileName} | ${tool}`;
   showContent("code");
 
-    // 动态模拟检测时间
-  // Slither = 10 秒 | SmartAudit = 10 分钟
-  const detectTime = tool === "SmartAudit_report" ? 60000 : 10000;
+  // 调用后端接口进行真实检测
+  callSlitherAPI();
+}
 
-  detectTimeout = setTimeout(() => {
-    detectComplete(tool);
-  }, detectTime);
+/**
+ * 调用后端 Slither 分析接口
+ */
+async function callSlitherAPI() {
+  try {
+    // 获取用户选择的文件对象
+    const file = fileInput.files[0];
+    if (!file) {
+      throw new Error("未找到上传文件");
+    }
+
+    // 构建 FormData
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // 调用后端 /slither/analyze 接口
+    const response = await fetch(API_BASE + "/slither/analyze", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "检测失败（HTTP " + response.status + "）");
+    }
+
+    const resultText = await response.text();
+    let resultData;
+    try {
+      resultData = JSON.parse(resultText);
+    } catch (e) {
+      // 如果返回的不是JSON，当作纯文本报告处理
+      resultData = resultText;
+    }
+
+    // 缓存检测结果以供展示
+    window._slitherResult = resultData;
+    detectComplete("slither");
+
+  } catch (err) {
+    console.error("Slither检测失败：", err);
+    isDetecting = false;
+    startBtn.disabled = false;
+    startBtn.innerHTML = '<i class="fa-solid fa-play"></i> 开始安全检测';
+    startBtn.className = "w-full py-3 rounded-lg bg-secondary text-white text-sm font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20";
+    fileNameDisplay.textContent = `检测失败：${err.message}`;
+    reportContent.innerHTML = `<div class="p-4 rounded-lg border bg-red-50 border-red-200">
+      <h3 class="text-lg font-bold text-red-700">❌ 检测失败</h3>
+      <p class="text-sm text-red-600 mt-1">${err.message}</p>
+    </div>`;
+  }
 }
 
 // 检测完成
@@ -359,50 +391,51 @@ function detectComplete(tool) {
 }
 
 // ======================
-// 加载源代码（根据工具动态切换路径）
+// 加载源代码（从选择的文件读取）
 // ======================
 async function loadSourceCode() {
   try {
-    const cfg = getToolCfg();
-    const solPath = cfg.solDir + currentFileName;
-    const res = await fetch(solPath);
-    return await res.text();
+    const file = fileInput.files[0];
+    if (file) {
+      return await file.text();
+    }
+    return "请先上传 .sol 文件";
   } catch (err) {
     return "加载源代码失败，请确认文件存在";
   }
 }
 
 // ======================
-// 加载报告（根据工具类型分支处理）
+// 加载报告（从后端接口返回的缓存结果读取）
 // ======================
 async function loadReport() {
-  const cfg = getToolCfg();
-  const jsonName = currentFileName.replace(/\.sol$/i, ".json");
-  const jsonPath = cfg.jsonDir + jsonName;
-
   if (isSmartAudit()) {
     // SmartAudit：纯文本/Markdown 格式
-    try {
-      const res = await fetch(jsonPath);
-      return await res.text();
-    } catch (err) {
-      console.error("加载失败：", err);
-      return "审计报告加载失败，请确认文件已通过 SmartAudit 检测";
+    if (window._slitherResult && typeof window._slitherResult === "string") {
+      return window._slitherResult;
     }
+    return "审计报告加载失败，请先执行 SmartAudit 检测";
   } else {
     // Slither：结构化 JSON 格式
-    try {
-      const res = await fetch(jsonPath);
-      const jsonData = await res.text();
-      return JSON.parse(jsonData);
-    } catch (err) {
-      console.error("解析失败：", err);
-      return { 
-        success: false,
-        error: "审计报告加载/解析失败",
-        results: { detectors: [] }
-      };
+    if (window._slitherResult && typeof window._slitherResult === "object") {
+      return window._slitherResult;
     }
+    if (window._slitherResult && typeof window._slitherResult === "string") {
+      try {
+        return JSON.parse(window._slitherResult);
+      } catch (e) {
+        return { 
+          success: false,
+          error: "审计报告解析失败",
+          results: { detectors: [] }
+        };
+      }
+    }
+    return { 
+      success: false,
+      error: "审计报告加载失败，请先执行 Slither 检测",
+      results: { detectors: [] }
+    };
   }
 }
 
@@ -564,12 +597,14 @@ function togglePanel(el) {
 
 async function downloadReport() {
   try {
+    let reportText;
+    if (typeof window._slitherResult === "string") {
+      reportText = window._slitherResult;
+    } else {
+      reportText = JSON.stringify(window._slitherResult, null, 2);
+    }
     const jsonName = currentFileName.replace(/\.sol$/i, ".json");
-    const cfg = getToolCfg();
-    const jsonPath = cfg.jsonDir + jsonName;
-    const res = await fetch(jsonPath);
-    const jsonText = await res.text();
-    const blob = new Blob([jsonText], { type: "application/json" });
+    const blob = new Blob([reportText], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

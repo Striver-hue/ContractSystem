@@ -135,7 +135,7 @@ public class SmartAuditService {
 
     public String getBAList() throws Exception {
         String csvFilePath = "D:\\Shi\\code\\ContractSystem\\data\\GPT4_Labeled_BA_vulnerability_result.csv";
-        return SmartAuditParser.getList(csvFilePath);
+        return SmartAuditParser.getList(csvFilePath).replaceAll("RealWord","RealWorld");
     }
 
     public String getTAList() throws Exception {
@@ -332,13 +332,23 @@ public class SmartAuditService {
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(logFilePath), StandardCharsets.UTF_8))) {
             String line;
+
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-
+                String startMarker = "**task_prompt**:";
+                String endMarker = "**project_name**:";
                 // 检测开始标记
-                if (line.startsWith("**task_prompt**:")) {
+                if (line.startsWith(startMarker)) {
                     isCollecting = true;
-                    continue; // 不包含开始标记本身
+
+                    // 保留 **task_prompt**: 后面的内容
+                    String afterMarker = line.substring(startMarker.length()).trim();
+
+                    if (!afterMarker.isEmpty()) {
+                        sb.append(afterMarker).append("\n");
+                    }
+
+                    continue;
                 }
 
                 // 检测结束标记

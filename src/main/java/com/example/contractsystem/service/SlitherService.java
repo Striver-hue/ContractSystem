@@ -21,9 +21,9 @@ public class SlitherService {
         this.userRepository = userRepository;
     }
 
-    private static final String HOST_DIR = "D:\\ContractSystem\\dockerData\\Slither\\input";   // 服务器目录
-    private static final String CONTAINER_NAME = "slither-container";
-    private static final String HOST_DIR_OUT = "D:\\ContractSystem\\dockerData\\Slither\\output";   // 服务器目录
+private static final String HOST_DIR = "/home/user/Platform-SmartAudit/ContractSystem/docker/slither/input";
+private static final String CONTAINER_NAME = "slither-container";
+private static final String HOST_DIR_OUT = "/home/user/Platform-SmartAudit/ContractSystem/docker/slither/output";    
 
 
 

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>交易行为</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A',
+            secondary: '#2563EB',
+            accent: '#10B981',
+            light: '#F8FAFC',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .hash-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    :root {
+      --bg-color: #DDE1E7;
+      --orange-soft: rgba(255, 140, 0, 0.12);
+      --orange-deep: rgba(230, 90, 0, 0.08);
+    }
+
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+      filter: blur(120px);
+      background-color: var(--bg-color);
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: multiply;
+      animation: move 30s infinite alternate ease-in-out;
+    }
+
+    .blob-1 { width: 700px; height: 700px; top: -150px; left: -100px; background: radial-gradient(circle, var(--orange-soft) 0%, transparent 75%); }
+    .blob-2 { width: 600px; height: 600px; bottom: -100px; right: -50px; background: radial-gradient(circle, var(--orange-deep) 0%, transparent 75%); animation-delay: -7s; }
+    .blob-3 { width: 500px; height: 550px; top: 30%; left: 40%; background: radial-gradient(circle, rgba(255, 180, 0, 0.1) 0%, transparent 70%); animation: move-complex 45s infinite linear; }
+
+    @keyframes move {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(120px, 60px) scale(1.1); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+
+    @keyframes move-complex {
+      from { transform: rotate(0deg) translate(150px) rotate(0deg); }
+      to { transform: rotate(360deg) translate(150px) rotate(-360deg); }
+    }
+  </style>
+</head>
+<body class="font-sans text-primary">
+<div class="background-container">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </div>
+    <nav class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
+
+      <div class="group relative">
+        <a href="index.html#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="漏洞检测工具.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞检测工具</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="index.html#transaction-analysis" class="flex items-center gap-1 text-secondary transition-colors">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-secondary bg-gray-50">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="index.html#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
+          <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
+          <a href="攻击事件展示.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">攻击事件展示</a>
+          <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-secondary bg-gray-50">交易行为</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <a href="index.html#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
+        免费安全初检
+      </button>
+      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="w-full bg-[#0B1120] border-b border-gray-800 py-14">
+  <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+    <div>
+      <div class="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1 text-sm text-blue-200 mb-5">
+        <i class="fa-solid fa-bolt"></i>
+        每小时同步 ETH 恶意交易监测记录
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">交易行为</h1>
+      <p class="max-w-2xl text-gray-400 leading-7">
+        聚合 ETH-Malicious-TX-Monitor 最新 CSV 数据，展示最近捕获的 50 条疑似恶意交易行为。
+      </p>
+    </div>
+    <div class="grid grid-cols-2 gap-3 w-full md:w-auto">
+      <div class="rounded-lg border border-gray-700 bg-white/5 px-5 py-4">
+        <div class="text-gray-400 text-sm">展示记录</div>
+        <div class="text-3xl font-bold text-white mt-1"><span id="recordCount">0</span><span class="text-sm text-gray-500 ml-1">条</span></div>
+      </div>
+      <div class="rounded-lg border border-gray-700 bg-white/5 px-5 py-4">
+        <div class="text-gray-400 text-sm">刷新周期</div>
+        <div class="text-3xl font-bold text-[#F0B90B] mt-1">1<span class="text-sm text-gray-500 ml-1">小时</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="py-10 px-4 bg-gray-50/90 min-h-[calc(100vh-260px)]">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">最新交易记录</h2>
+        <div class="mt-2 text-sm text-gray-600">
+          数据源：<span id="sourcePath" class="font-mono text-gray-800">-</span>
+          <span class="mx-2 text-gray-300">|</span>
+          最近更新：<span id="refreshedAt">-</span>
+        </div>
+      </div>
+      <button id="reloadBtn" class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 transition">
+        <i class="fa-solid fa-rotate-right"></i>
+        刷新
+      </button>
+    </div>
+
+    <div id="statusBanner" class="hidden mb-4 rounded-lg border px-4 py-3 text-sm"></div>
+
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div class="hidden lg:grid grid-cols-[170px_105px_140px_minmax(0,1fr)_minmax(0,1fr)_72px] items-center gap-4 border-b border-gray-200 bg-gray-50 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+        <div>Txn Hash</div>
+        <div>Block</div>
+        <div>Age</div>
+        <div>From</div>
+        <div>To</div>
+        <div class="text-right">Link</div>
+      </div>
+      <div id="recordList" class="divide-y divide-gray-100">
+        <div class="py-12 text-center text-gray-500">正在加载交易记录...</div>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-gray-700">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-circle-info text-secondary"></i>
+        <span>详情请点击 GitHub 对应的原始记录。</span>
+      </div>
+      <a id="detailLink" href="https://github.com/Judgegao/ETH-Malicious-TX-Monitor/tree/main/2026" target="_blank" class="font-medium text-secondary hover:underline">
+        查看详情
+      </a>
+    </div>
+  </div>
+</main>
+
+<script>
+  const recordList = document.getElementById('recordList');
+  const recordCount = document.getElementById('recordCount');
+  const sourcePath = document.getElementById('sourcePath');
+  const refreshedAt = document.getElementById('refreshedAt');
+  const detailLink = document.getElementById('detailLink');
+  const reloadBtn = document.getElementById('reloadBtn');
+  const statusBanner = document.getElementById('statusBanner');
+
+  document.addEventListener('DOMContentLoaded', loadRecords);
+  reloadBtn.addEventListener('click', () => loadRecords(true));
+
+  async function loadRecords(forceRefresh = false) {
+    reloadBtn.disabled = true;
+    reloadBtn.classList.add('opacity-60', 'cursor-not-allowed');
+
+    try {
+      const response = await fetch(forceRefresh ? '/records/refresh' : '/records/latest', {
+        method: forceRefresh ? 'POST' : 'GET',
+        cache: 'no-store',
+      });
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status);
+      }
+
+      const data = await response.json();
+      renderMeta(data);
+      renderRecords(data.records || []);
+
+      if (data.status === 'error') {
+        showBanner('交易记录采集失败：' + (data.message || '未知错误'), 'error');
+      } else if (data.status === 'partial') {
+        showBanner(data.message || '部分CSV采集失败，已展示可用记录', 'warn');
+      } else if (data.status === 'empty') {
+        showBanner(data.message || '未采集到交易记录', 'warn');
+      } else {
+        hideBanner();
+      }
+    } catch (error) {
+      showBanner('交易记录加载失败：' + error.message, 'error');
+      recordList.innerHTML = '<div class="py-12 text-center text-red-500">无法连接交易记录接口</div>';
+    } finally {
+      reloadBtn.disabled = false;
+      reloadBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+    }
+  }
+
+  function renderMeta(data) {
+    recordCount.textContent = data.count || 0;
+    sourcePath.textContent = data.sourcePath || '-';
+    refreshedAt.textContent = formatDateTime(data.refreshedAt);
+    detailLink.href = data.sourceUrl || data.repositoryUrl || 'https://github.com/Judgegao/ETH-Malicious-TX-Monitor/tree/main/2026';
+  }
+
+  function renderRecords(records) {
+    if (!records.length) {
+      recordList.innerHTML = '<div class="py-12 text-center text-gray-500">暂无交易记录</div>';
+      return;
+    }
+
+    recordList.innerHTML = records.map((item) => `
+      <div class="grid grid-cols-1 lg:grid-cols-[170px_105px_140px_minmax(0,1fr)_minmax(0,1fr)_72px] lg:items-center gap-3 lg:gap-4 px-5 py-4 text-sm hover:bg-gray-50 transition">
+        <div class="min-w-0">
+          <div class="lg:hidden text-xs text-gray-500 mb-1">Txn Hash</div>
+          <a href="${escapeAttr(item.txUrl)}" target="_blank" class="font-mono text-secondary hover:underline hash-text block" title="${escapeAttr(item.txHash)}">
+            ${shortHash(item.txHash)}
+          </a>
+        </div>
+        <div>
+          <div class="lg:hidden text-xs text-gray-500 mb-1">Block</div>
+          <a href="https://etherscan.io/block/${escapeAttr(item.blockNum || '')}" target="_blank" class="text-secondary hover:underline">
+            ${escapeHtml(item.blockNum || '-')}
+          </a>
+        </div>
+        <div>
+          <div class="lg:hidden text-xs text-gray-500 mb-1">Age</div>
+          <span class="text-gray-700">${formatAge(item.detectTime)}</span>
+        </div>
+        <div class="min-w-0">
+          <div class="lg:hidden text-xs text-gray-500 mb-1">From</div>
+          ${addressLink(item.from, item.fromUrl)}
+        </div>
+        <div class="min-w-0">
+          <div class="lg:hidden text-xs text-gray-500 mb-1">To</div>
+          ${addressLink(item.to, item.toUrl)}
+        </div>
+        <div class="lg:text-right">
+          <a href="${escapeAttr(item.sourceUrl)}" target="_blank" class="inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 hover:border-secondary hover:text-secondary transition">
+            CSV
+          </a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function showBanner(message, type) {
+    const className = type === 'error'
+      ? 'mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600'
+      : 'mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700';
+    statusBanner.className = className;
+    statusBanner.textContent = message;
+  }
+
+  function hideBanner() {
+    statusBanner.className = 'hidden mb-4 rounded-lg border px-4 py-3 text-sm';
+    statusBanner.textContent = '';
+  }
+
+  function addressLink(address, url) {
+    if (!address) {
+      return '<span class="text-gray-400">-</span>';
+    }
+
+    return `
+      <a href="${escapeAttr(url)}" target="_blank" class="font-mono text-secondary hover:underline hash-text block" title="${escapeAttr(address)}">
+        ${shortAddress(address)}
+      </a>
+    `;
+  }
+
+  function shortHash(value) {
+    if (!value) return '-';
+    return value.length > 20 ? value.slice(0, 10) + '...' + value.slice(-8) : value;
+  }
+
+  function shortAddress(value) {
+    if (!value) return '-';
+    return value.length > 18 ? value.slice(0, 8) + '...' + value.slice(-6) : value;
+  }
+
+  function formatDateTime(value) {
+    if (!value) return '-';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString('zh-CN', { hour12: false });
+  }
+
+  function formatAge(value) {
+    if (!value) return '-';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+
+    const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+    if (seconds < 60) return seconds + ' secs ago';
+    if (seconds < 3600) return Math.floor(seconds / 60) + ' mins ago';
+    if (seconds < 86400) return Math.floor(seconds / 3600) + ' hrs ago';
+    return date.toLocaleString('zh-CN', { hour12: false });
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function escapeAttr(value) {
+    return escapeHtml(value || '');
+  }
+</script>
+</body>
+</html>

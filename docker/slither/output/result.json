@@ -1,0 +1,130 @@
+{
+  "success": true,
+  "error": null,
+  "results": {
+    "detectors": [
+      {
+        "elements": [
+          {
+            "type": "pragma",
+            "name": "^0.8.1",
+            "source_mapping": {
+              "start": 35,
+              "length": 23,
+              "filename_relative": "input/MyContract.sol",
+              "filename_absolute": "/input/MyContract.sol",
+              "filename_short": "input/MyContract.sol",
+              "is_dependency": false,
+              "lines": [
+                2
+              ],
+              "starting_column": 1,
+              "ending_column": 24
+            },
+            "type_specific_fields": {
+              "directive": [
+                "solidity",
+                "^",
+                "0.8",
+                ".1"
+              ]
+            }
+          }
+        ],
+        "description": "Version constraint ^0.8.1 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- FullInlinerNonExpressionSplitArgumentEvaluationOrder\n\t- MissingSideEffectsOnSelectorAccess\n\t- AbiReencodingHeadOverflowWithStaticArrayCleanup\n\t- DirtyBytesArrayToStorage\n\t- DataLocationChangeInInternalOverride\n\t- NestedCalldataArrayAbiReencodingSizeValidation\n\t- SignedImmutables\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching.\nIt is used by:\n\t- ^0.8.1 (input/MyContract.sol#2)\n",
+        "markdown": "Version constraint ^0.8.1 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)\n\t- FullInlinerNonExpressionSplitArgumentEvaluationOrder\n\t- MissingSideEffectsOnSelectorAccess\n\t- AbiReencodingHeadOverflowWithStaticArrayCleanup\n\t- DirtyBytesArrayToStorage\n\t- DataLocationChangeInInternalOverride\n\t- NestedCalldataArrayAbiReencodingSizeValidation\n\t- SignedImmutables\n\t- ABIDecodeTwoDimensionalArrayMemory\n\t- KeccakCaching.\nIt is used by:\n\t- [^0.8.1](input/MyContract.sol#L2)\n",
+        "first_markdown_element": "input/MyContract.sol#L2",
+        "id": "74841113867dd4efc10bfb117e2f5766bf0d8856032c19091af48369a17df77a",
+        "check": "solc-version",
+        "impact": "Informational",
+        "confidence": "High"
+      },
+      {
+        "elements": [
+          {
+            "type": "variable",
+            "name": "_value",
+            "source_mapping": {
+              "start": 161,
+              "length": 14,
+              "filename_relative": "input/MyContract.sol",
+              "filename_absolute": "/input/MyContract.sol",
+              "filename_short": "input/MyContract.sol",
+              "is_dependency": false,
+              "lines": [
+                8
+              ],
+              "starting_column": 23,
+              "ending_column": 37
+            },
+            "type_specific_fields": {
+              "parent": {
+                "type": "function",
+                "name": "setValue",
+                "source_mapping": {
+                  "start": 143,
+                  "length": 74,
+                  "filename_relative": "input/MyContract.sol",
+                  "filename_absolute": "/input/MyContract.sol",
+                  "filename_short": "input/MyContract.sol",
+                  "is_dependency": false,
+                  "lines": [
+                    8,
+                    9,
+                    10
+                  ],
+                  "starting_column": 5,
+                  "ending_column": 6
+                },
+                "type_specific_fields": {
+                  "parent": {
+                    "type": "contract",
+                    "name": "SimpleContract",
+                    "source_mapping": {
+                      "start": 62,
+                      "length": 268,
+                      "filename_relative": "input/MyContract.sol",
+                      "filename_absolute": "/input/MyContract.sol",
+                      "filename_short": "input/MyContract.sol",
+                      "is_dependency": false,
+                      "lines": [
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17
+                      ],
+                      "starting_column": 1,
+                      "ending_column": 0
+                    }
+                  },
+                  "signature": "setValue(uint256)"
+                }
+              }
+            },
+            "additional_fields": {
+              "target": "parameter",
+              "convention": "mixedCase"
+            }
+          }
+        ],
+        "description": "Parameter SimpleContract.setValue(uint256)._value (input/MyContract.sol#8) is not in mixedCase\n",
+        "markdown": "Parameter [SimpleContract.setValue(uint256)._value](input/MyContract.sol#L8) is not in mixedCase\n",
+        "first_markdown_element": "input/MyContract.sol#L8",
+        "id": "29a0f85dca4ef99585b2d169cdcf63e5573e28431a53a351864d76723c1f2d88",
+        "check": "naming-convention",
+        "impact": "Informational",
+        "confidence": "High"
+      }
+    ]
+  }
+}

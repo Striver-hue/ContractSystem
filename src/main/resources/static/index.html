@@ -107,7 +107,7 @@
         </a>
         <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
           <a href="漏洞检测工具.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞检测工具</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="漏洞扫描报告.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
         </div>
@@ -135,7 +135,7 @@
           <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
           <a href="攻击事件展示.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">攻击事件展示</a>
           <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">交易行为</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="论文库.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
         </div>
       </div>
@@ -1028,13 +1028,16 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="text-center mb-12">
       <h2 class="text-3xl md:text-4xl font-bold mb-4">
         资质与技术能力
-        <span class="ml-2 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700">TODO</span>
       </h2>
       <p class="text-gray-600 max-w-2xl mx-auto">证书 | 专利 | 论文 | 奖项</p>
-    <!-- 新增：证书墙预留框（可滚动区域，纯边框占位，调整大小用） -->
-      <!-- 边框展示框：宽度100%，高度240px，虚线边框，透明背景 -->
-      <div class="w-full h-[200px] border-2 border-dashed border-gray-400 rounded-xl flex items-center justify-center bg-white/50 overflow-hidden">
-        <span class="text-gray-500 text-lg">证书墙滚动区域（预留占位框）</span>
+      <div id="paper_preview_wall" class="w-full h-[200px] mt-8 rounded-xl bg-white/60 overflow-hidden">
+        <div class="h-full flex items-center justify-center gap-5 px-4 overflow-x-auto">
+          <iframe title="论文首页预览 1" src="/lunwen/pdf/Towards_Secure_Program_Partitioning_for_Smart_Contracts_With_LLMs_In-Context_Learning.pdf#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH" class="h-[180px] w-[140px] shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"></iframe>
+          <iframe title="论文首页预览 2" src="/lunwen/pdf/Automated_TEE_Adaptation_With_LLMs_Identifying_Transforming_and_Porting_Sensitive_Functions_in_Programs.pdf#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH" class="h-[180px] w-[140px] shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"></iframe>
+          <iframe title="论文首页预览 3" src="/lunwen/pdf/Detecting_Various_DeFi_Price_Manipulations_with_LLM_Reasoning.pdf#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH" class="h-[180px] w-[140px] shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"></iframe>
+          <iframe title="论文首页预览 4" src="/lunwen/pdf/Advanced_Smart_Contract_Vulnerability_Detection_via_LLM-Powered_Multi-Agent_Systems.pdf#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH" class="h-[180px] w-[140px] shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"></iframe>
+          <iframe title="论文首页预览 5" src="/lunwen/pdf/Automated_Invariant_Generation_for_Solidity_Smart_Contracts.pdf#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH" class="h-[180px] w-[140px] shrink-0 rounded-lg border border-gray-200 bg-white shadow-sm"></iframe>
+        </div>
       </div>
     </div>
   </section>

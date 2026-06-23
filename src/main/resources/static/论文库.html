@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>论文库</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0F172A',
+            secondary: '#2563EB',
+            accent: '#10B981',
+            light: '#F8FAFC'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 14% 12%, rgba(37, 99, 235, 0.10), transparent 32%),
+        radial-gradient(circle at 86% 8%, rgba(16, 185, 129, 0.10), transparent 28%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+    }
+
+    .nav-menu {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: all 180ms ease;
+    }
+
+    .nav-group:hover .nav-menu {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .paper-card.is-active {
+      border-color: rgba(37, 99, 235, 0.55);
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body class="font-sans text-slate-900 antialiased">
+<header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl shadow-sm">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+    <a href="index.html" class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-2xl text-secondary"></i>
+      <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
+    </a>
+    <nav class="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
+      <a href="index.html" class="hover:text-secondary">首页</a>
+
+      <div class="nav-group relative">
+        <a href="index.html#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary">
+          合约检测
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="nav-menu absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-slate-100 bg-white p-2 shadow-xl">
+          <a href="漏洞检测工具.html" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">漏洞检测工具</a>
+          <a href="漏洞扫描报告.html" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">字节码风险分析</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">形式化验证服务</a>
+        </div>
+      </div>
+
+      <div class="nav-group relative">
+        <a href="index.html#transaction-analysis" class="flex items-center gap-1 hover:text-secondary">
+          交易分析
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="nav-menu absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-slate-100 bg-white p-2 shadow-xl">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">链上资金流向追踪</a>
+          <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">异常交易预警</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">地址画像分析</a>
+        </div>
+      </div>
+
+      <div class="nav-group relative">
+        <a href="index.html#resources" class="flex items-center gap-1 text-secondary">
+          资源
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="nav-menu absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-slate-100 bg-white p-2 shadow-xl">
+          <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">漏洞知识库</a>
+          <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">集成工具集</a>
+          <a href="攻击事件展示.html" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">攻击事件展示</a>
+          <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">交易行为</a>
+          <a href="论文库.html" class="block rounded-lg bg-slate-50 px-3 py-2 text-sm text-secondary">论文库</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">用户文档</a>
+        </div>
+      </div>
+
+      <div class="nav-group relative">
+        <a href="index.html#about" class="flex items-center gap-1 hover:text-secondary">
+          关于我们
+          <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </a>
+        <div class="nav-menu absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-slate-100 bg-white p-2 shadow-xl">
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">团队介绍</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">合作伙伴</a>
+          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-secondary">联系我们</a>
+        </div>
+      </div>
+    </nav>
+    <div class="hidden items-center gap-3 md:flex">
+      <a href="漏洞检测工具.html" class="rounded-lg bg-secondary px-5 py-2 text-sm font-semibold text-white hover:bg-secondary/90">免费安全初检</a>
+      <button class="rounded-lg border border-secondary px-5 py-2 text-sm font-semibold text-secondary hover:bg-secondary/10">
+        <i class="fa-solid fa-user mr-1"></i> 用户登录
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-4 py-8 lg:py-10">
+  <section class="mb-6 rounded-2xl border border-white/70 bg-white/85 p-6 shadow-sm backdrop-blur md:p-8">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+      <div>
+        <div class="mb-5 flex flex-wrap items-center gap-2">
+          <span class="rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary">Research Library</span>
+          <span class="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-emerald-700">Team Publications</span>
+        </div>
+        <h1 class="max-w-3xl text-3xl font-extrabold tracking-tight text-slate-950 md:text-4xl">
+          智能合约安全研究论文库
+        </h1>
+        <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-600 md:text-base">
+          该论文库集中展示团队在智能合约安全方向的研究成果，支持按发表年份快速筛选，并提供 PDF 预览与阅读入口。
+        </p>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium text-slate-500">论文数量</p>
+          <p id="stat_total" class="mt-1 text-2xl font-bold text-slate-950">-</p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium text-slate-500">最新年份</p>
+          <p id="stat_latest" class="mt-1 text-2xl font-bold text-slate-950">-</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-5 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur">
+    <div class="grid gap-3 lg:grid-cols-[1fr_150px_auto]">
+      <label class="relative block">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input id="search_input" type="search" placeholder="搜索标题、作者、会议"
+               class="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-sm outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/10">
+      </label>
+      <select id="year_filter" class="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/10">
+        <option value="all">全部年份</option>
+      </select>
+      <button id="reset_btn" class="h-11 rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+        <i class="fa-solid fa-rotate-left mr-2"></i>重置
+      </button>
+    </div>
+  </section>
+
+  <section class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px]">
+    <div class="min-h-[520px] rounded-2xl border border-slate-200 bg-white/90 shadow-sm backdrop-blur">
+      <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+        <div>
+          <h2 class="text-base font-bold text-slate-950">论文列表</h2>
+          <p id="result_count" class="mt-1 text-xs text-slate-500">正在加载数据</p>
+        </div>
+        <div class="flex rounded-xl bg-slate-100 p-1 text-xs font-semibold">
+          <button id="sort_newest" class="rounded-lg bg-white px-3 py-2 text-slate-900 shadow-sm">最新</button>
+          <button id="sort_oldest" class="rounded-lg px-3 py-2 text-slate-500">最早</button>
+        </div>
+      </div>
+      <div id="paper_list" class="space-y-3 p-4">
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">正在加载论文数据...</div>
+      </div>
+    </div>
+
+    <aside class="lg:sticky lg:top-24">
+      <div id="detail_panel" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Selected Paper</p>
+          <h2 id="detail_title" class="mt-2 line-clamp-3 text-lg font-bold leading-7 text-slate-950">请选择一篇论文</h2>
+        </div>
+        <div class="p-5">
+          <div id="pdf_preview" class="mb-5 flex aspect-[4/3] items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-400">
+            PDF 预览区
+          </div>
+          <div class="space-y-4 text-sm">
+            <div>
+              <p class="mb-1 text-xs font-semibold text-slate-400">作者</p>
+              <p id="detail_authors" class="leading-6 text-slate-700">-</p>
+            </div>
+            <div>
+              <p class="mb-1 text-xs font-semibold text-slate-400">发表时间</p>
+              <p id="detail_date" class="font-mono text-slate-700">-</p>
+            </div>
+            <div>
+              <p class="mb-1 text-xs font-semibold text-slate-400">会议/期刊</p>
+              <p id="detail_venue" class="leading-6 text-slate-700">-</p>
+            </div>
+          </div>
+          <div class="mt-5 grid grid-cols-2 gap-3">
+            <a id="open_pdf_btn" href="#" target="_blank" class="flex h-11 items-center justify-center rounded-xl bg-secondary text-sm font-semibold text-white hover:bg-secondary/90">
+              <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>打开 PDF
+            </a>
+            <a id="download_pdf_btn" href="#" download class="flex h-11 items-center justify-center rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+              <i class="fa-solid fa-download mr-2"></i>下载
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const state = {
+  papers: [],
+  filtered: [],
+  selectedId: null,
+  sort: 'newest'
+};
+
+const paperList = document.getElementById('paper_list');
+const resultCount = document.getElementById('result_count');
+const searchInput = document.getElementById('search_input');
+const yearFilter = document.getElementById('year_filter');
+const resetBtn = document.getElementById('reset_btn');
+const sortNewest = document.getElementById('sort_newest');
+const sortOldest = document.getElementById('sort_oldest');
+
+function escapeHtml(value) {
+  return String(value || '-')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function normalize(value) {
+  return String(value || '').toLowerCase();
+}
+
+function renderStats(papers) {
+  const latest = papers.reduce((max, paper) => Math.max(max, paper.year || 0), 0);
+  document.getElementById('stat_total').textContent = papers.length;
+  document.getElementById('stat_latest').textContent = latest || '-';
+}
+
+function fillFilters(papers) {
+  const years = [...new Set(papers.map(paper => paper.year).filter(Boolean))].sort((a, b) => b - a);
+
+  yearFilter.innerHTML = '<option value="all">全部年份</option>' + years.map(year =>
+    `<option value="${year}">${year}</option>`
+  ).join('');
+}
+
+function applyFilters() {
+  const keyword = normalize(searchInput.value);
+  const year = yearFilter.value;
+
+  state.filtered = state.papers.filter(paper => {
+    const keywordSource = [
+      paper.title,
+      paper.authors,
+      paper.venue,
+      paper.topic
+    ].map(normalize).join(' ');
+    const matchesKeyword = !keyword || keywordSource.includes(keyword);
+    const matchesYear = year === 'all' || String(paper.year) === year;
+    return matchesKeyword && matchesYear;
+  }).sort((a, b) => {
+    const dateA = new Date(a.publishDate.replace(/\./g, '-')).getTime();
+    const dateB = new Date(b.publishDate.replace(/\./g, '-')).getTime();
+    return state.sort === 'newest' ? dateB - dateA : dateA - dateB;
+  });
+
+  if (!state.filtered.some(paper => paper.id === state.selectedId)) {
+    state.selectedId = state.filtered[0]?.id || null;
+  }
+
+  renderList();
+  renderDetail();
+}
+
+function renderList() {
+  resultCount.textContent = `${state.filtered.length} 篇论文`;
+
+  if (!state.filtered.length) {
+    paperList.innerHTML = `
+      <div class="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+        <i class="fa-regular fa-folder-open text-2xl text-slate-300"></i>
+        <p class="mt-3 text-sm font-medium text-slate-500">没有匹配的论文</p>
+      </div>
+    `;
+    return;
+  }
+
+  paperList.innerHTML = state.filtered.map(paper => {
+    const isActive = paper.id === state.selectedId;
+    return `
+      <article class="paper-card ${isActive ? 'is-active' : ''} cursor-pointer rounded-xl border border-slate-200 bg-white p-4 transition hover:border-secondary/50 hover:shadow-md"
+               data-id="${escapeHtml(paper.id)}">
+        <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div class="min-w-0 flex-1 text-center">
+            <p class="mb-3 text-left font-mono text-xs font-semibold text-secondary">${escapeHtml(paper.publishDate)}</p>
+            <h3 class="text-base font-bold leading-6 text-slate-950">${escapeHtml(paper.title)}</h3>
+            <p class="mx-auto mt-3 max-w-3xl text-sm leading-6 text-slate-600">${escapeHtml(paper.authors)}</p>
+          </div>
+          <a href="${paper.pdfUrl}" target="_blank" class="shrink-0 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50" onclick="event.stopPropagation()">
+            <i class="fa-solid fa-file-pdf mr-1 text-red-500"></i>PDF
+          </a>
+        </div>
+        <p class="mt-3 text-xs leading-5 text-slate-500">${escapeHtml(paper.venue)}</p>
+      </article>
+    `;
+  }).join('');
+
+  document.querySelectorAll('.paper-card').forEach(card => {
+    card.addEventListener('click', () => {
+      state.selectedId = card.dataset.id;
+      renderList();
+      renderDetail();
+    });
+  });
+}
+
+function renderDetail() {
+  const paper = state.papers.find(item => item.id === state.selectedId);
+  const openBtn = document.getElementById('open_pdf_btn');
+  const downloadBtn = document.getElementById('download_pdf_btn');
+
+  if (!paper) {
+    document.getElementById('detail_title').textContent = '请选择一篇论文';
+    document.getElementById('pdf_preview').innerHTML = 'PDF 预览区';
+    document.getElementById('detail_authors').textContent = '-';
+    document.getElementById('detail_date').textContent = '-';
+    document.getElementById('detail_venue').textContent = '-';
+    openBtn.href = '#';
+    downloadBtn.href = '#';
+    return;
+  }
+
+  document.getElementById('detail_title').textContent = paper.title;
+  document.getElementById('detail_authors').textContent = paper.authors;
+  document.getElementById('detail_date').textContent = paper.publishDate;
+  document.getElementById('detail_venue').textContent = paper.venue;
+
+  if (paper.pdfAvailable) {
+    document.getElementById('pdf_preview').innerHTML = `
+      <iframe title="${escapeHtml(paper.title)}" src="${paper.pdfUrl}#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+              class="h-full w-full rounded-xl bg-white"></iframe>
+    `;
+    openBtn.classList.remove('pointer-events-none', 'opacity-50');
+    downloadBtn.classList.remove('pointer-events-none', 'opacity-50');
+  } else {
+    document.getElementById('pdf_preview').innerHTML = `
+      <div class="px-5 text-center">
+        <i class="fa-regular fa-file-excel text-2xl text-slate-300"></i>
+        <p class="mt-3 text-sm text-slate-500">当前 PDF 文件不存在</p>
+      </div>
+    `;
+    openBtn.classList.add('pointer-events-none', 'opacity-50');
+    downloadBtn.classList.add('pointer-events-none', 'opacity-50');
+  }
+
+  openBtn.href = paper.pdfUrl;
+  downloadBtn.href = paper.pdfUrl;
+}
+
+function setSort(nextSort) {
+  state.sort = nextSort;
+  const newestActive = nextSort === 'newest';
+  sortNewest.className = newestActive
+    ? 'rounded-lg bg-white px-3 py-2 text-slate-900 shadow-sm'
+    : 'rounded-lg px-3 py-2 text-slate-500';
+  sortOldest.className = newestActive
+    ? 'rounded-lg px-3 py-2 text-slate-500'
+    : 'rounded-lg bg-white px-3 py-2 text-slate-900 shadow-sm';
+  applyFilters();
+}
+
+async function loadPapers() {
+  try {
+    const response = await fetch('/lunwen/list');
+    if (!response.ok) {
+      throw new Error(`论文数据加载失败：${response.status}`);
+    }
+    state.papers = await response.json();
+    state.selectedId = state.papers[0]?.id || null;
+    renderStats(state.papers);
+    fillFilters(state.papers);
+    applyFilters();
+  } catch (error) {
+    paperList.innerHTML = `
+      <div class="rounded-xl border border-red-100 bg-red-50 p-6 text-center text-sm font-medium text-red-600">
+        ${escapeHtml(error.message)}
+      </div>
+    `;
+    resultCount.textContent = '加载失败';
+  }
+}
+
+searchInput.addEventListener('input', applyFilters);
+yearFilter.addEventListener('change', applyFilters);
+resetBtn.addEventListener('click', () => {
+  searchInput.value = '';
+  yearFilter.value = 'all';
+  setSort('newest');
+});
+sortNewest.addEventListener('click', () => setSort('newest'));
+sortOldest.addEventListener('click', () => setSort('oldest'));
+document.addEventListener('DOMContentLoaded', loadPapers);
+</script>
+</body>
+</html>

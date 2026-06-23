@@ -35,3 +35,4 @@ build/
 ### Local runtime artifacts ###
 app.log
 slither.tar
+smartaudit-container.tar

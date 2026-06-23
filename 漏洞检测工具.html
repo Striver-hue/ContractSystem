@@ -81,40 +81,41 @@
     <nav class="hidden md:flex items-center gap-6">
       <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
       <div class="group relative">
-        <a href="#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
+        <a href="index.html#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
           合约检测 <i class="fa-solid fa-chevron-down text-[10px]"></i>
         </a>
         <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
           <a href="漏洞检测工具.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞检测工具</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
+          <a href="漏洞扫描报告.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
         </div>
       </div>
       <div class="group relative">
-        <a href="#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
+        <a href="index.html#transaction-analysis" class="flex items-center gap-1 hover:text-secondary transition-colors">
           交易分析 <i class="fa-solid fa-chevron-down text-[10px]"></i>
         </a>
         <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
+          <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">异常交易预警</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
         </div>
       </div>
       <div class="group relative">
-        <a href="#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
+        <a href="index.html#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
           资源 <i class="fa-solid fa-chevron-down text-[10px]"></i>
         </a>
         <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
           <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
           <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
           <a href="攻击事件展示.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">攻击事件展示</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
+          <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">交易行为</a>
+          <a href="论文库.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
           <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
         </div>
       </div>
       <div class="group relative">
-        <a href="#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
+        <a href="index.html#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
           关于我们 <i class="fa-solid fa-chevron-down text-[10px]"></i>
         </a>
         <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
@@ -227,19 +228,6 @@ pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
 
 <script>
 // ======================
-// 工具配置（每种工具对应的文件夹路径）
-// ======================
-// API 基础地址（后端服务地址）
-const API_BASE = "http://localhost:8080";
-
-/**
- * 判断当前是否选择了 SmartAudit
- */
-function isSmartAudit() {
-  return toolSelect && toolSelect.value === "SmartAudit_report";
-}
-
-// ======================
 // DOM元素
 // ======================
 const startBtn = document.getElementById("start_detect");
@@ -253,8 +241,18 @@ const toolSelect = document.getElementById("select_tool");
 
 
 let isDetecting = false;
-let detectTimeout = null;
 let currentFileName = "";
+let currentFileObject = null;     // 保存用户选择的文件对象
+let currentFileContent = "";      // 保存文件内容（用于展示源代码）
+let lastSlitherResult = null;     // 保存 Slither 后端返回的 JSON 结果
+let lastSmartAuditResult = null;  // 保存 SmartAudit 后端返回的结果文本
+
+/**
+ * 判断当前是否选择了 SmartAudit
+ */
+function isSmartAudit() {
+  return toolSelect && toolSelect.value === "SmartAudit_report";
+}
 
 // ======================
 // 初始化
@@ -266,22 +264,38 @@ window.addEventListener("load", () => {
 // 绑定事件
 function bindEvents() {
   startBtn.addEventListener("click", startDetect);
-  fileInput.addEventListener("change", function(e){
+  fileInput.addEventListener("change", async function(e){
   const file = e.target.files[0];
   if(!file) return;
   currentFileName = file.name;
+  currentFileObject = file;
   fileNameDisplay.textContent = `已选择文件：${currentFileName}`;
-  codeTextarea.value = `已选择文件：${currentFileName}`;
+
+  // 读取文件内容用于后续展示源代码
+  currentFileContent = await readFileAsText(file);
+  codeTextarea.value = currentFileContent;
   resetStatus();
 });
   tabCode.addEventListener("click", () => showContent("code"));
   tabReport.addEventListener("click", () => showContent("report"));
 }
 
+// 读取文件为文本
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve(e.target.result);
+    reader.onerror = (e) => reject(e);
+    reader.readAsText(file);
+  });
+}
+
 // 重置状态
 function resetStatus() {
   isDetecting = false;
-  clearTimeout(detectTimeout);
+
+  lastSlitherResult = null;
+  lastSmartAuditResult = null;
 
   startBtn.disabled = false;
   startBtn.innerHTML = '<i class="fa-solid fa-play"></i> 开始安全检测';
@@ -294,19 +308,20 @@ function resetStatus() {
 }
 
 // ======================
-// 开始检测
+// 开始检测（调用后端接口）
 // ======================
-function startDetect() {
-  if(!currentFileName){
+async function startDetect() {
+  if(!currentFileName || !currentFileObject){
     reportContent.innerHTML = '<span class="text-red-500">请先上传文件！</span>';
     return;
   }
   if(isDetecting) return;
 
   isDetecting = true;
+  const tool = toolSelect.value;
 
   startBtn.disabled = true;
-  startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 检测中...';
+  startBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 检测中（Docker执行中，请耐心等待）...';
   startBtn.className = "w-full py-3 rounded-lg bg-gray-400 text-white text-sm font-medium flex items-center justify-center gap-2 cursor-not-allowed";
 
   tabCode.disabled = false;
@@ -314,38 +329,42 @@ function startDetect() {
   tabCode.className = "px-3 py-1 rounded text-xs font-medium tab-active";
   tabReport.className = "px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-400 cursor-not-allowed";
 
-  const tool = toolSelect.value;
   fileNameDisplay.textContent = `检测中：${currentFileName} | ${tool}`;
   showContent("code");
 
-  // 调用后端接口进行真实检测
-  callSlitherAPI();
+  if (isSmartAudit()) {
+    await callAnalyzeAPI("/smartaudit/analyze", "SmartAudit");
+  } else {
+    await callAnalyzeAPI("/slither/analyze", "Slither");
+  }
 }
 
-/**
- * 调用后端 Slither 分析接口
- */
-async function callSlitherAPI() {
+async function callAnalyzeAPI(apiPath, toolName) {
   try {
-    // 获取用户选择的文件对象
-    const file = fileInput.files[0];
-    if (!file) {
-      throw new Error("未找到上传文件");
-    }
-
-    // 构建 FormData
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", currentFileObject);
+    const waitHint = toolName === "SmartAudit"
+      ? "SmartAudit 需要调用模型接口，检测可能需要较长时间"
+      : "检测大文件可能需要较长时间，请耐心等待";
 
-    // 调用后端 /slither/analyze 接口
-    const response = await fetch(API_BASE + "/slither/analyze", {
+    reportContent.innerHTML = `
+      <div class="flex flex-col items-center justify-center h-full space-y-4">
+        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-spinner fa-spin text-xl text-blue-500"></i>
+        </div>
+        <p class="text-sm font-medium text-gray-600">正在通过 Docker 执行 ${toolName} 检测...</p>
+        <p class="text-xs text-gray-400">${waitHint}</p>
+      </div>
+    `;
+
+    const response = await fetch(apiPath, {
       method: "POST",
       body: formData
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(errorText || "检测失败（HTTP " + response.status + "）");
+      throw new Error(errorText || "检测失败，HTTP " + response.status);
     }
 
     const resultText = await response.text();
@@ -353,25 +372,35 @@ async function callSlitherAPI() {
     try {
       resultData = JSON.parse(resultText);
     } catch (e) {
-      // 如果返回的不是JSON，当作纯文本报告处理
+      // 如果不是JSON格式，当作纯文本处理
       resultData = resultText;
     }
 
-    // 缓存检测结果以供展示
-    window._slitherResult = resultData;
-    detectComplete("slither");
+    // 保存结果
+    if (isSmartAudit()) {
+      lastSmartAuditResult = typeof resultData === "string" ? resultData : JSON.stringify(resultData, null, 2);
+    } else {
+      lastSlitherResult = resultData;
+    }
 
+    // 检测完成
+    detectComplete(toolName);
+    showContent("report");
   } catch (err) {
-    console.error("Slither检测失败：", err);
     isDetecting = false;
     startBtn.disabled = false;
     startBtn.innerHTML = '<i class="fa-solid fa-play"></i> 开始安全检测';
     startBtn.className = "w-full py-3 rounded-lg bg-secondary text-white text-sm font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20";
-    fileNameDisplay.textContent = `检测失败：${err.message}`;
-    reportContent.innerHTML = `<div class="p-4 rounded-lg border bg-red-50 border-red-200">
-      <h3 class="text-lg font-bold text-red-700">❌ 检测失败</h3>
-      <p class="text-sm text-red-600 mt-1">${err.message}</p>
-    </div>`;
+    fileNameDisplay.textContent = `检测失败：${currentFileName}`;
+    reportContent.innerHTML = `
+      <div class="flex flex-col items-center justify-center h-full space-y-4">
+        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-circle-exclamation text-xl text-red-400"></i>
+        </div>
+        <p class="text-sm font-medium text-red-500">检测失败</p>
+        <p class="text-xs text-red-400 max-w-md text-center">${err.message}</p>
+      </div>
+    `;
   }
 }
 
@@ -391,49 +420,32 @@ function detectComplete(tool) {
 }
 
 // ======================
-// 加载源代码（从选择的文件读取）
+// 加载源代码（直接使用上传时读取的文件内容）
 // ======================
 async function loadSourceCode() {
-  try {
-    const file = fileInput.files[0];
-    if (file) {
-      return await file.text();
-    }
-    return "请先上传 .sol 文件";
-  } catch (err) {
-    return "加载源代码失败，请确认文件存在";
+  if (currentFileContent) {
+    return currentFileContent;
   }
+  return "请先上传合约文件";
 }
 
 // ======================
-// 加载报告（从后端接口返回的缓存结果读取）
+// 加载报告（直接使用后端返回的结果，无需再次请求文件）
 // ======================
 async function loadReport() {
   if (isSmartAudit()) {
-    // SmartAudit：纯文本/Markdown 格式
-    if (window._slitherResult && typeof window._slitherResult === "string") {
-      return window._slitherResult;
+    if (lastSmartAuditResult) {
+      return lastSmartAuditResult;
     }
     return "审计报告加载失败，请先执行 SmartAudit 检测";
   } else {
-    // Slither：结构化 JSON 格式
-    if (window._slitherResult && typeof window._slitherResult === "object") {
-      return window._slitherResult;
+    // Slither：直接使用后端返回的 JSON 数据
+    if (lastSlitherResult) {
+      return lastSlitherResult;
     }
-    if (window._slitherResult && typeof window._slitherResult === "string") {
-      try {
-        return JSON.parse(window._slitherResult);
-      } catch (e) {
-        return { 
-          success: false,
-          error: "审计报告解析失败",
-          results: { detectors: [] }
-        };
-      }
-    }
-    return { 
+    return {
       success: false,
-      error: "审计报告加载失败，请先执行 Slither 检测",
+      error: "未找到检测结果，请先执行检测",
       results: { detectors: [] }
     };
   }
@@ -516,9 +528,9 @@ function renderSlitherReport(data) {
 function renderSmartAuditReport(rawText) {
   // 转义HTML特殊字符
   let safe = rawText
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
   // 将 Markdown 语法转为 HTML
   let html = safe
@@ -597,18 +609,31 @@ function togglePanel(el) {
 
 async function downloadReport() {
   try {
-    let reportText;
-    if (typeof window._slitherResult === "string") {
-      reportText = window._slitherResult;
+    let jsonText = "";
+    const reportName = currentFileName.replace(/\.[^.]+$/i, isSmartAudit() ? ".txt" : ".json");
+
+    if (isSmartAudit()) {
+      if (lastSmartAuditResult) {
+        jsonText = lastSmartAuditResult;
+      } else {
+        alert("没有可下载的 SmartAudit 报告，请先执行检测");
+        return;
+      }
     } else {
-      reportText = JSON.stringify(window._slitherResult, null, 2);
+      // Slither：使用后端返回的数据
+      if (lastSlitherResult) {
+        jsonText = JSON.stringify(lastSlitherResult, null, 2);
+      } else {
+        alert("没有可下载的报告数据，请先执行检测");
+        return;
+      }
     }
-    const jsonName = currentFileName.replace(/\.sol$/i, ".json");
-    const blob = new Blob([reportText], { type: "application/json" });
+
+    const blob = new Blob([jsonText], { type: isSmartAudit() ? "text/plain" : "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = jsonName;
+    a.download = reportName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

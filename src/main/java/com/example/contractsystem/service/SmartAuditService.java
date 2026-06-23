@@ -15,6 +15,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class SmartAuditService {
@@ -25,16 +27,20 @@ public class SmartAuditService {
         this.userRepository = userRepository;
     }
 
-    private static final String HOST_DIR = "D:\\Shi\\dockerData\\SmartAudit\\input";
+    private static final Path SMARTAUDIT_DIR = Paths.get(System.getProperty("user.dir"), "docker", "smartaudit")
+            .toAbsolutePath()
+            .normalize();
+    private static final String HOST_DIR = SMARTAUDIT_DIR.resolve("input").toString();
     private static final String CONTAINER_NAME = "smartaudit-container";
-    private static final String HOST_DIR_OUT = "D:\\Shi\\dockerData\\SmartAudit\\output";   // 服务器目录
+    private static final String IMAGE_NAME = "shixiaolong0523/contractsystem:smartaudit-container";
+    private static final String HOST_DIR_OUT = SMARTAUDIT_DIR.resolve("output").toString();
+    private static final DateTimeFormatter JOB_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     public String runSmartAudit1(MultipartFile file, Map<String, Object> config) throws Exception {
 
-        String username = config.get("username").toString();
+        String username = config.get("username") == null ? null : config.get("username").toString();
         String config_ = config.get("config") == null ? "SmartContractBA" : config.get("config").toString();
         String model = config.get("model") == null ? "GPT_4_O_MINI" : config.get("model").toString();
-        String api_key = config.get("api_key") == null ? "" : config.get("api_key").toString();
 
         if (username == null) {
             throw new RuntimeException("请先登录");
@@ -46,91 +52,135 @@ public class SmartAuditService {
         if (u != null && !"SUPER_ADMIN".equals(u.getRole())) {
             throw new RuntimeException("权限不够");
         }
-        String HOST_DIR_ = HOST_DIR + "\\" + username;
-        String HOST_DIR_OUT_ = HOST_DIR_OUT + "\\" + username;
-        // 1️⃣ 保存文件
-        String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(HOST_DIR_, fileName);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        // 2️⃣ 读取 .sol 文件内容（替代 $(cat xxx.sol)）
-        String fileContent = Files.readString(filePath);
-
-        // 简单处理换行（否则容易炸）
-        fileContent = fileContent.replace("\"", "\\\"");
-
-        // 3️⃣ 构建 docker exec 命令
-        ProcessBuilder pb = new ProcessBuilder(
-                "docker", "exec",
-                CONTAINER_NAME,
-                "python3", "run.py",
-                "--org", "",
-                "--config", config_,
-                "--task", fileContent,
-                "--name", "",
-                "--model", model
-        );
-
-        pb.redirectErrorStream(true);
-        Process process = pb.start();
-
-        // 4️⃣ 读取输出日志（就是分析结果）
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream())
-        );
-
-        StringBuilder logs = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            logs.append(line).append("\n");
-        }
-
-        int exitCode = process.waitFor();
-
-        return "{ \"exitCode\": " + exitCode + ", \"output\": \"" + logs.toString().replace("\"", "\\\"") + "\" }";
+        return runSmartAuditInternal(file, config_, model, username);
     }
 
     public String runSmartAudit(MultipartFile file) throws Exception {
-        // 1️⃣ 保存文件
-        String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(HOST_DIR, fileName);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        return runSmartAuditInternal(file, "SmartContractBA", "GPT_4_O_MINI", null);
+    }
 
-        // 2️⃣ 读取 .sol 文件内容（替代 $(cat xxx.sol)）
-        String fileContent = Files.readString(filePath);
+    private String runSmartAuditInternal(MultipartFile file, String configName, String model, String username) throws Exception {
+        ensureHostDirectories();
+        ensureContainerReady();
 
-        // 简单处理换行（否则容易炸）
-        fileContent = fileContent.replace("\"", "\\\"");
+        String fileName = sanitizeFileName(file.getOriginalFilename());
+        if (!fileName.endsWith(".sol") && !fileName.endsWith(".txt")) {
+            throw new RuntimeException("SmartAudit 仅支持 .sol 或 .txt 文件");
+        }
 
-        // 3️⃣ 构建 docker exec 命令
+        String baseName = fileName.replaceFirst("\\.[^.]+$", "");
+        String jobPrefix = username == null || username.isBlank() ? baseName : username + "_" + baseName;
+        String jobId = sanitizeFileName(jobPrefix) + "_" + LocalDateTime.now().format(JOB_TIME_FORMAT);
+
+        Path inputDir = Paths.get(HOST_DIR, jobId);
+        Path outputDir = Paths.get(HOST_DIR_OUT, jobId);
+        Files.createDirectories(inputDir);
+        Files.createDirectories(outputDir);
+
+        Path inputPath = inputDir.resolve(fileName);
+        Files.copy(file.getInputStream(), inputPath, StandardCopyOption.REPLACE_EXISTING);
+
+        String outputFileName = baseName + ".txt";
+        Path outputPath = outputDir.resolve(outputFileName);
+        String containerInputPath = "/input/" + jobId + "/" + fileName;
+
+        String runner = String.join("\n",
+                "import pathlib, runpy, sys",
+                "input_path = pathlib.Path(sys.argv[1])",
+                "task = input_path.read_text(encoding='utf-8')",
+                "sys.argv = ['run.py', '--org', sys.argv[2], '--config', sys.argv[3], '--task', task, '--name', sys.argv[4], '--model', sys.argv[5]]",
+                "runpy.run_path('run.py', run_name='__main__')"
+        );
+
         ProcessBuilder pb = new ProcessBuilder(
                 "docker", "exec",
                 CONTAINER_NAME,
-                "python3", "run.py",
-                "--org", "",
-                "--config", "SmartContractBA",
-                "--task", fileContent,
-                "--name", "",
-                "--model", "GPT_4_O_MINI"
+                "python3", "-c", runner,
+                containerInputPath,
+                jobId,
+                configName,
+                baseName,
+                model
         );
-
         pb.redirectErrorStream(true);
         Process process = pb.start();
-
-        // 4️⃣ 读取输出日志（就是分析结果）
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream())
-        );
-
-        StringBuilder logs = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            logs.append(line).append("\n");
-        }
-
+        String logs = readProcessOutput(process);
         int exitCode = process.waitFor();
 
-        return "{ \"exitCode\": " + exitCode + ", \"output\": \"" + logs.toString().replace("\"", "\\\"") + "\" }";
+        Files.writeString(outputPath, logs, StandardCharsets.UTF_8);
+
+        System.out.println("[SmartAudit] jobId=" + jobId);
+        System.out.println("[SmartAudit] exitCode=" + exitCode);
+        System.out.println("[SmartAudit] input=" + inputPath);
+        System.out.println("[SmartAudit] output=" + outputPath);
+
+        if (exitCode != 0) {
+            throw new RuntimeException("SmartAudit 执行失败，退出码：" + exitCode + "\n日志：\n" + logs);
+        }
+
+        return Files.readString(outputPath, StandardCharsets.UTF_8);
+    }
+
+    private void ensureHostDirectories() throws IOException {
+        Files.createDirectories(Paths.get(HOST_DIR));
+        Files.createDirectories(Paths.get(HOST_DIR_OUT));
+    }
+
+    private void ensureContainerReady() throws Exception {
+        Process inspect = new ProcessBuilder(
+                "docker", "inspect", "-f", "{{.State.Running}}", CONTAINER_NAME
+        ).redirectErrorStream(true).start();
+        String inspectOutput = readProcessOutput(inspect).trim();
+        int inspectCode = inspect.waitFor();
+
+        if (inspectCode == 0) {
+            if ("true".equalsIgnoreCase(inspectOutput)) {
+                return;
+            }
+            Process start = new ProcessBuilder("docker", "start", CONTAINER_NAME)
+                    .redirectErrorStream(true)
+                    .start();
+            String startOutput = readProcessOutput(start);
+            int startCode = start.waitFor();
+            if (startCode != 0) {
+                throw new RuntimeException("SmartAudit 容器启动失败：\n" + startOutput);
+            }
+            return;
+        }
+
+        Process run = new ProcessBuilder(
+                "docker", "run", "-d",
+                "--name", CONTAINER_NAME,
+                "-v", HOST_DIR + ":/input",
+                "-v", HOST_DIR_OUT + ":/output",
+                IMAGE_NAME,
+                "tail", "-f", "/dev/null"
+        ).redirectErrorStream(true).start();
+        String runOutput = readProcessOutput(run);
+        int runCode = run.waitFor();
+        if (runCode != 0) {
+            throw new RuntimeException("SmartAudit 容器创建失败，请确认镜像已加载："
+                    + IMAGE_NAME + "\n日志：\n" + runOutput);
+        }
+    }
+
+    private String readProcessOutput(Process process) throws IOException {
+        StringBuilder logs = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                logs.append(line).append("\n");
+            }
+        }
+        return logs.toString();
+    }
+
+    private String sanitizeFileName(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            throw new RuntimeException("文件名不能为空");
+        }
+        String name = Paths.get(fileName).getFileName().toString();
+        return name.replaceAll("[^a-zA-Z0-9._-]", "_");
     }
 
     public String getBAList() throws Exception {

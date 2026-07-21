@@ -735,292 +735,305 @@ function renderPieChart() {
   </div>
 </section>
 
-    <!-- ===================== 板块：7×24小时链上实时安全监控 ===================== -->
-<section id="monitoring" class="scroll-mt-20 py-16 ">
+    <!-- ===================== 板块：安全态势总览 ===================== -->
+<section id="monitoring" class="scroll-mt-20 py-16">
   <div class="container mx-auto px-4">
-    <!-- 标题区 -->
-    <div class="mb-12 text-center">
-  <h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary">
-    安全监控
-    <span class="ml-2 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-2.5 py-0.5 text-xs font-semibold text-rose-700">TODO</span>
-  </h2>
-  <p class="text-gray-600 max-w-2xl mx-auto">全链风险实时感知、异常行为智能预警，覆盖合约、资产、协议全维度安全守护</p>
-</div>
-
-    <!-- 模块1：图片框 + 数据卡片 + 按钮 -->
-    <div class="flex flex-col md:flex-row gap-8 mb-12 items-center">
-      <!-- 左侧：图片框（50%宽度，4:3比例） -->
-      <div class="md:w-1/2 w-full">
-        <div class="w-full aspect-[4/3] bg-gray-100 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden">
-          <span class="text-gray-500 text-lg">安全监控可视化展示图</span>
-        </div>
+    <div class="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-primary">安全监控</h2>
+        <p class="text-gray-600 max-w-2xl">聚合恶意交易样本、地址重复命中与攻击事件数据，形成首页安全态势总览。</p>
       </div>
-
-      <!-- 右侧：数据卡片 + 按钮（50%宽度） -->
-      <div class="md:w-1/2 w-full flex flex-col">
-        <!-- 6个数据卡片：2行3列，适配宽度 -->
-        <div class="grid grid-cols-3 gap-4 mb-8">
-          <!-- 数据1：覆盖公链数 -->
-          <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <h3 class="text-xs font-semibold text-gray-700 mb-1">覆盖公链数</h3>
-            <div class="text-2xl font-extrabold text-orange-500">28+</div>
-          </div>
-          <!-- 数据2：监控合约数 -->
-          <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <h3 class="text-xs font-semibold text-gray-700 mb-1">监控合约数</h3>
-            <div class="text-2xl font-extrabold text-orange-500">12,800+</div>
-          </div>
-          <!-- 数据3：今日高危告警 -->
-          <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <h3 class="text-xs font-semibold text-gray-700 mb-1">今日高危告警</h3>
-            <div class="text-2xl font-extrabold text-orange-500">12</div>
-          </div>
-          <!-- 数据4：累计拦截攻击 -->
-          <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <h3 class="text-xs font-semibold text-gray-700 mb-1">累计拦截攻击</h3>
-            <div class="text-2xl font-extrabold text-orange-500">480+</div>
-          </div>
-          <!-- 数据5：响应时长 -->
-          <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <h3 class="text-xs font-semibold text-gray-700 mb-1">响应时长</h3>
-            <div class="text-2xl font-extrabold text-orange-500">&lt;3分钟</div>
-          </div>
-          <!-- 数据6：黑名单地址 -->
-          <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <h3 class="text-xs font-semibold text-gray-700 mb-1">黑名单地址</h3>
-            <div class="text-2xl font-extrabold text-orange-500">200万+</div>
-          </div>
-        </div>
-
-        <!-- 两个按钮：适配宽度，比例协调 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button class="w-full bg-secondary text-white px-4 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-all text-sm sm:text-base">
-            申请免费监控试用
-          </button>
-          <button class="w-full bg-transparent border border-secondary text-secondary px-4 py-3 rounded-lg font-medium hover:bg-secondary/10 transition-all text-sm sm:text-base">
-            定制专属监控方案
-          </button>
-        </div>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href="交易行为2.html" class="inline-flex items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-white hover:bg-secondary/90 transition">
+          <i class="fa-solid fa-radar"></i>
+          查看实时交易风险
+        </a>
+        <a href="交易行为.html" class="inline-flex items-center justify-center gap-2 rounded-lg border border-secondary px-5 py-3 text-sm font-semibold text-secondary hover:bg-secondary/10 transition">
+          <i class="fa-solid fa-table-list"></i>
+          原始交易列表
+        </a>
       </div>
     </div>
 
-    <!-- 模块2：核心监控能力矩阵（4个内容互斥展开/收起 箭头完全修复） -->
-    <div class="grid md:grid-cols-4 gap-6 mb-12">
-      <!-- 能力1：智能合约异常行为监控 -->
-      <div class="monitor-item relative">
-        <div class="flex items-start">
-          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
-          <div class="w-full space-y-4">
-            <div>
-              <h4 class="text-xl font-bold text-gray-900 mb-3">智能合约异常行为监控</h4>
-              <p class="text-gray-600 text-base leading-relaxed">
-                覆盖合约全生命周期异常操作，精准识别已知攻击与0day风险特征
-              </p>
+    <div class="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
+      <div class="rounded-lg border border-slate-800 bg-[#0B1120] p-5 shadow-lg">
+        <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-white">链上风险态势</h3>
+            <p class="mt-1 text-sm text-slate-400">数据源：ETH-Malicious-TX-Monitor / 本地统计</p>
+          </div>
+          <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-sm font-semibold text-emerald-200">
+            <span class="h-2 w-2 rounded-full bg-emerald-300"></span>
+            监控中
+          </div>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="rounded-lg border border-slate-700 bg-white/5 p-4">
+            <div class="text-sm text-slate-400">样本交易</div>
+            <div class="mt-2 text-3xl font-bold text-white" id="monitorTxCount">0</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-white/5 p-4">
+            <div class="text-sm text-slate-400">高危告警</div>
+            <div class="mt-2 text-3xl font-bold text-red-300" id="monitorHighRisk">0</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-white/5 p-4">
+            <div class="text-sm text-slate-400">涉及地址</div>
+            <div class="mt-2 text-3xl font-bold text-cyan-200" id="monitorAddressCount">0</div>
+          </div>
+          <div class="rounded-lg border border-slate-700 bg-white/5 p-4">
+            <div class="text-sm text-slate-400">重复命中</div>
+            <div class="mt-2 text-3xl font-bold text-amber-200" id="monitorRepeatCount">0</div>
+          </div>
+        </div>
+
+        <div class="mt-5 grid gap-5 lg:grid-cols-[1fr_260px]">
+          <div class="rounded-lg border border-slate-700 bg-slate-950/60 p-4">
+            <div class="mb-4 flex items-center justify-between">
+              <span class="text-sm font-semibold text-slate-200">近批次风险热度</span>
+              <span class="text-xs text-slate-500" id="monitorUpdatedAt">等待同步</span>
             </div>
-            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-              <span>更多</span>
-              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-                <!-- 修复：初始箭头为向右，正确SVG路径 -->
-                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
+            <div class="flex h-44 items-end gap-2" id="monitorTrendBars">
+              <div class="h-[38%] flex-1 rounded-t bg-cyan-400/70"></div>
+              <div class="h-[54%] flex-1 rounded-t bg-cyan-400/70"></div>
+              <div class="h-[46%] flex-1 rounded-t bg-cyan-400/70"></div>
+              <div class="h-[72%] flex-1 rounded-t bg-amber-300/80"></div>
+              <div class="h-[60%] flex-1 rounded-t bg-cyan-400/70"></div>
+              <div class="h-[84%] flex-1 rounded-t bg-red-400/80"></div>
+              <div class="h-[66%] flex-1 rounded-t bg-amber-300/80"></div>
+              <div class="h-[92%] flex-1 rounded-t bg-red-400/80"></div>
+            </div>
+          </div>
+
+          <div class="rounded-lg border border-slate-700 bg-slate-950/60 p-4">
+            <div class="mb-4 text-sm font-semibold text-slate-200">风险来源</div>
+            <div class="space-y-4">
+              <div>
+                <div class="mb-1 flex justify-between text-xs text-slate-400"><span>恶意样本命中</span><span id="sampleHitPercent">100%</span></div>
+                <div class="h-2 rounded-full bg-slate-800"><div class="h-2 rounded-full bg-red-400" style="width: 100%"></div></div>
               </div>
-            </button>
-            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
-              <ul class="space-y-2 text-gray-700 text-sm">
-                <li>• 合约权限变更监控</li>
-                <li>• 管理员私钥异常操作</li>
-                <li>• 函数非法调用检测</li>
-                <li>• 重入攻击尝试识别</li>
-                <li>• 闪电贷攻击特征分析</li>
-                <li>• 合约代码升级/自毁操作</li>
-                <li>• 恶意后门检测</li>
-              </ul>
+              <div>
+                <div class="mb-1 flex justify-between text-xs text-slate-400"><span>重复地址行为</span><span id="repeatHitPercent">0%</span></div>
+                <div class="h-2 rounded-full bg-slate-800"><div id="repeatHitBar" class="h-2 rounded-full bg-amber-300" style="width: 0%"></div></div>
+              </div>
+              <div>
+                <div class="mb-1 flex justify-between text-xs text-slate-400"><span>Etherscan 富化</span><span>待接入</span></div>
+                <div class="h-2 rounded-full bg-slate-800"><div class="h-2 rounded-full bg-blue-400" style="width: 32%"></div></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 能力2：链上资产流转风险监控 -->
-      <div class="monitor-item relative">
-        <div class="flex items-start">
-          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
-          <div class="w-full space-y-4">
-            <div>
-              <h4 class="text-xl font-bold text-gray-900 mb-3">链上资产流转风险监控</h4>
-              <p class="text-gray-600 text-base leading-relaxed">
-                实时追踪资产流向，提前识别盗币、洗钱、rug pull等资产风险
-              </p>
+      <div class="space-y-6">
+        <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+          <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-900">处置概览</h3>
+            <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">自动分级</span>
+          </div>
+          <div class="space-y-3 text-sm">
+            <div class="flex items-center justify-between rounded-lg bg-red-50 px-3 py-3">
+              <span class="font-medium text-red-700">严重风险</span>
+              <span class="font-bold text-red-700" id="criticalCount">0</span>
             </div>
-            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-              <span>更多</span>
-              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </div>
-            </button>
-            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
-              <ul class="space-y-2 text-gray-700 text-sm">
-                <li>• 大额异常转账监控</li>
-                <li>• 黑名单地址交互预警</li>
-                <li>• 洗钱路径追踪</li>
-                <li>• 项目方rug pull特征识别</li>
-                <li>• 团队地址解锁异常</li>
-                <li>• 钓鱼合约交互预警</li>
-              </ul>
+            <div class="flex items-center justify-between rounded-lg bg-orange-50 px-3 py-3">
+              <span class="font-medium text-orange-700">高危风险</span>
+              <span class="font-bold text-orange-700" id="highCount">0</span>
+            </div>
+            <div class="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-3">
+              <span class="font-medium text-slate-700">平均识别延迟</span>
+              <span class="font-bold text-slate-900">15分钟</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 能力3：协议健康度实时监控 -->
-      <div class="monitor-item relative">
-        <div class="flex items-start">
-          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
-          <div class="w-full space-y-4">
-            <div>
-              <h4 class="text-xl font-bold text-gray-900 mb-3">协议健康度实时监控</h4>
-              <p class="text-gray-600 text-base leading-relaxed">
-                针对DeFi协议的全维度健康巡检，提前发现系统性风险
-              </p>
+        <div class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+          <h3 class="mb-4 text-lg font-bold text-gray-900">监控能力</h3>
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-lg bg-slate-50 p-3">
+              <i class="fa-solid fa-fingerprint mb-2 text-secondary"></i>
+              <div class="font-semibold text-gray-900">地址画像</div>
+              <div class="mt-1 text-xs text-gray-500">重复交互与黑名单命中</div>
             </div>
-            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-              <span>更多</span>
-              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </div>
-            </button>
-            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
-              <ul class="space-y-2 text-gray-700 text-sm">
-                <li>• TVL异常波动监控</li>
-                <li>• 预言机价格偏离预警</li>
-                <li>• 清算阈值异常检测</li>
-                <li>• 套利攻击特征识别</li>
-                <li>• 池资金异常流出</li>
-                <li>• 治理投票异常监控</li>
-              </ul>
+            <div class="rounded-lg bg-slate-50 p-3">
+              <i class="fa-solid fa-code-branch mb-2 text-secondary"></i>
+              <div class="font-semibold text-gray-900">交易路径</div>
+              <div class="mt-1 text-xs text-gray-500">From / To 关联分析</div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 能力4：底层基础设施安全监控 -->
-      <div class="monitor-item relative">
-        <div class="flex items-start">
-          <div class="w-[1px] bg-gray-300 h-full mr-5"></div>
-          <div class="w-full space-y-4">
-            <div>
-              <h4 class="text-xl font-bold text-gray-900 mb-3">底层基础设施安全监控</h4>
-              <p class="text-gray-600 text-base leading-relaxed">
-                针对公链节点、跨链桥、Layer2的底层风险监控
-              </p>
+            <div class="rounded-lg bg-slate-50 p-3">
+              <i class="fa-solid fa-triangle-exclamation mb-2 text-secondary"></i>
+              <div class="font-semibold text-gray-900">风险解释</div>
+              <div class="mt-1 text-xs text-gray-500">命中原因和置信度</div>
             </div>
-            <button class="monitor-btn flex items-center gap-2 text-sm font-bold text-gray-800 cursor-pointer">
-              <span>更多</span>
-              <div class="w-5 h-5 rounded-full border border-gray-800 flex items-center justify-center">
-                <svg class="monitor-arrow w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </div>
-            </button>
-            <div class="monitor-content hidden mt-4 bg-white rounded-lg p-5 border border-gray-200">
-              <ul class="space-y-2 text-gray-700 text-sm">
-                <li>• 节点出块异常监控</li>
-                <li>• 跨链桥资产映射校验</li>
-                <li>• 共识机制风险检测</li>
-                <li>• 区块重组预警</li>
-                <li>• RPC节点安全防护</li>
-              </ul>
+            <div class="rounded-lg bg-slate-50 p-3">
+              <i class="fa-solid fa-link mb-2 text-secondary"></i>
+              <div class="font-semibold text-gray-900">证据跳转</div>
+              <div class="mt-1 text-xs text-gray-500">Etherscan 原始交易</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 模块3：告警事件处置案例 -->
-    <div class=" p-8 rounded-xl shadow-md">
-      <h3 class="text-xl font-bold mb-6 text-center">告警事件处置案例</h3>
-      <div class="grid md:grid-cols-3 gap-6">
-        <!-- 案例1 -->
-        <div class="bg-gray-50 rounded-lg p-6 h-[280px] flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-bold">高危攻击拦截</span>
-              <p class="text-xs text-gray-500">2026年3月</p>
-            </div>
-            <h4 class="font-bold text-black mb-2">某头部DeFi借贷协议</h4>
-            <p class="text-gray-600 text-sm">
-              平台实时监控到协议管理员地址发起异常权限变更操作，疑似私钥被盗，第一时间触发高危告警。
-            </p>
-          </div>
-          <p class="text-sm font-bold text-orange-500">规避潜在资产损失：$1.2亿美金</p>
+    <div class="mt-6 rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div class="flex flex-col gap-2 border-b border-gray-200 px-5 py-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">最新风险交易队列</h3>
+          <p class="mt-1 text-sm text-gray-500">展示最近捕获的恶意样本，点击哈希可进入链上证据页。</p>
         </div>
-        <!-- 案例2 -->
-        <div class="bg-gray-50 rounded-lg p-6 h-[280px] flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full font-bold">中危风险预警</span>
-              <p class="text-xs text-gray-500">2026年2月</p>
-            </div>
-            <h4 class="font-bold text-black mb-2">某NFT交易平台</h4>
-            <p class="text-gray-600 text-sm">
-              监控系统检测到平台NFT铸造合约存在异常调用，发现逻辑漏洞后立即通知项目方修复。
-            </p>
-          </div>
-          <p class="text-sm font-bold text-orange-500">避免用户资产被盗风险</p>
-        </div>
-        <!-- 案例3 -->
-        <div class="bg-gray-50 rounded-lg p-6 h-[280px] flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-bold">高危攻击拦截</span>
-              <p class="text-xs text-gray-500">2026年1月</p>
-            </div>
-            <h4 class="font-bold text-black mb-2">某跨链桥协议</h4>
-            <p class="text-gray-600 text-sm">
-              实时监控发现跨链桥资产映射模块存在异常验证请求，成功拦截闪电贷攻击尝试。
-            </p>
-          </div>
-          <p class="text-sm font-bold text-orange-500">规避潜在资产损失：$8,500万美金</p>
-        </div>
+        <a href="交易行为2.html" class="text-sm font-semibold text-secondary hover:underline">查看完整队列</a>
+      </div>
+      <div class="hidden grid-cols-[160px_100px_minmax(0,1fr)_minmax(0,1fr)_120px] gap-4 border-b border-gray-100 bg-gray-50 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 lg:grid">
+        <div>Txn Hash</div>
+        <div>Block</div>
+        <div>From</div>
+        <div>To</div>
+        <div>Risk</div>
+      </div>
+      <div id="monitorAlertList" class="divide-y divide-gray-100">
+        <div class="py-10 text-center text-sm text-gray-500">正在加载风险交易...</div>
       </div>
     </div>
   </div>
 </section>
 
 <script>
-// 完全重写的互斥展开/收起逻辑，箭头100%正常
 document.addEventListener('DOMContentLoaded', () => {
-  // 精准获取所有监控项的按钮、内容、箭头
-  const allItems = document.querySelectorAll('.monitor-item');
-  const allBtns = document.querySelectorAll('.monitor-btn');
+  loadSecurityOverview();
+});
 
-  allBtns.forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-      const currentItem = allItems[index];
-      const currentContent = currentItem.querySelector('.monitor-content');
-      const currentArrow = currentItem.querySelector('.monitor-arrow');
-      const isCurrentExpanded = !currentContent.classList.contains('hidden');
+async function loadSecurityOverview() {
+  try {
+    const response = await fetch('/records/latest', { cache: 'no-store' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const data = await response.json();
+    const records = Array.isArray(data.records) ? data.records : [];
+    renderSecurityOverview(records, data);
+  } catch (error) {
+    const alertList = document.getElementById('monitorAlertList');
+    if (alertList) {
+      alertList.innerHTML = '<div class="py-10 text-center text-sm text-red-500">安全态势数据加载失败：' + escapeMonitorHtml(error.message) + '</div>';
+    }
+  }
+}
 
-      // 第一步：先收起所有项，重置所有箭头
-      allItems.forEach(item => {
-        const content = item.querySelector('.monitor-content');
-        const arrow = item.querySelector('.monitor-arrow');
-        content.classList.add('hidden');
-        arrow.classList.remove('rotate-180');
-      });
-
-      // 第二步：如果当前项之前是收起的，就展开；如果之前是展开的，就保持收起（实现再次点击收回）
-      if (!isCurrentExpanded) {
-        currentContent.classList.remove('hidden');
-        currentArrow.classList.add('rotate-180');
-      }
+function renderSecurityOverview(records, data) {
+  const addressFrequency = new Map();
+  records.forEach((item) => {
+    [item.from, item.to].filter(Boolean).forEach((address) => {
+      addressFrequency.set(address, (addressFrequency.get(address) || 0) + 1);
     });
   });
-});
+
+  const repeatedAddresses = [...addressFrequency.values()].filter((count) => count > 1).length;
+  const criticalRecords = records.filter((item) => [item.from, item.to].some((address) => address && addressFrequency.get(address) > 1));
+  const highRecords = Math.max(0, records.length - criticalRecords.length);
+  const repeatPercent = records.length ? Math.round((criticalRecords.length / records.length) * 100) : 0;
+
+  setMonitorText('monitorTxCount', records.length);
+  setMonitorText('monitorHighRisk', records.length);
+  setMonitorText('monitorAddressCount', addressFrequency.size);
+  setMonitorText('monitorRepeatCount', repeatedAddresses);
+  setMonitorText('criticalCount', criticalRecords.length);
+  setMonitorText('highCount', highRecords);
+  setMonitorText('repeatHitPercent', repeatPercent + '%');
+  setMonitorText('monitorUpdatedAt', formatMonitorDate(data.refreshedAt));
+
+  const repeatHitBar = document.getElementById('repeatHitBar');
+  if (repeatHitBar) repeatHitBar.style.width = repeatPercent + '%';
+
+  renderTrendBars(records);
+  renderAlertRows(records.slice(0, 6), addressFrequency);
+}
+
+function renderTrendBars(records) {
+  const trendBars = document.getElementById('monitorTrendBars');
+  if (!trendBars) return;
+  const buckets = new Array(8).fill(0);
+  records.forEach((_, index) => {
+    buckets[index % buckets.length] += 1;
+  });
+  const max = Math.max(...buckets, 1);
+  trendBars.innerHTML = buckets.map((count) => {
+    const height = Math.max(18, Math.round((count / max) * 100));
+    const color = height > 78 ? 'bg-red-400/80' : height > 55 ? 'bg-amber-300/80' : 'bg-cyan-400/70';
+    return '<div class="flex-1 rounded-t ' + color + '" style="height:' + height + '%"></div>';
+  }).join('');
+}
+
+function renderAlertRows(records, addressFrequency) {
+  const alertList = document.getElementById('monitorAlertList');
+  if (!alertList) return;
+  if (!records.length) {
+    alertList.innerHTML = '<div class="py-10 text-center text-sm text-gray-500">暂无风险交易数据</div>';
+    return;
+  }
+
+  alertList.innerHTML = records.map((item) => {
+    const critical = [item.from, item.to].some((address) => address && addressFrequency.get(address) > 1);
+    const riskLabel = critical ? '严重' : '高危';
+    const riskClass = critical ? 'bg-red-100 text-red-700 border-red-200' : 'bg-orange-100 text-orange-700 border-orange-200';
+    return `
+      <div class="grid grid-cols-1 gap-3 px-5 py-4 text-sm hover:bg-gray-50 transition lg:grid-cols-[160px_100px_minmax(0,1fr)_minmax(0,1fr)_120px] lg:items-center lg:gap-4">
+        <div class="min-w-0">
+          <div class="mb-1 text-xs text-gray-500 lg:hidden">Txn Hash</div>
+          <a href="${escapeMonitorAttr(item.txUrl)}" target="_blank" class="block truncate font-mono text-secondary hover:underline" title="${escapeMonitorAttr(item.txHash)}">${shortMonitorHash(item.txHash)}</a>
+        </div>
+        <div>
+          <div class="mb-1 text-xs text-gray-500 lg:hidden">Block</div>
+          <span class="text-gray-700">${escapeMonitorHtml(item.blockNum || '-')}</span>
+        </div>
+        <div class="min-w-0">
+          <div class="mb-1 text-xs text-gray-500 lg:hidden">From</div>
+          <span class="block truncate font-mono text-gray-700" title="${escapeMonitorAttr(item.from)}">${shortMonitorAddress(item.from)}</span>
+        </div>
+        <div class="min-w-0">
+          <div class="mb-1 text-xs text-gray-500 lg:hidden">To</div>
+          <span class="block truncate font-mono text-gray-700" title="${escapeMonitorAttr(item.to)}">${shortMonitorAddress(item.to)}</span>
+        </div>
+        <div>
+          <div class="mb-1 text-xs text-gray-500 lg:hidden">Risk</div>
+          <span class="inline-flex rounded-full border px-2.5 py-1 text-xs font-bold ${riskClass}">${riskLabel}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function setMonitorText(id, value) {
+  const element = document.getElementById(id);
+  if (element) element.textContent = value;
+}
+
+function shortMonitorHash(value) {
+  if (!value) return '-';
+  return value.length > 20 ? value.slice(0, 10) + '...' + value.slice(-8) : value;
+}
+
+function shortMonitorAddress(value) {
+  if (!value) return '-';
+  return value.length > 18 ? value.slice(0, 8) + '...' + value.slice(-6) : value;
+}
+
+function formatMonitorDate(value) {
+  if (!value) return '等待同步';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString('zh-CN', { hour12: false });
+}
+
+function escapeMonitorHtml(value) {
+  return String(value || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function escapeMonitorAttr(value) {
+  return escapeMonitorHtml(value || '');
+}
 </script>
 
     <!-- ===================== 板块三：证书技能（资质认证） ===================== -->

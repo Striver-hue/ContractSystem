@@ -10,6 +10,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,6 +47,14 @@ public class RecordController {
     private static final int DISPLAY_LIMIT = 50;
     private static final int CSV_FETCH_LIMIT = 12;
     private static final Pattern CSV_PATH_PATTERN = Pattern.compile("^\\d{4}/\\d{2}/\\d{2}/(\\d+)-(\\d+)_\\d+\\.csv$");
+    private static final String DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
+    private static final String DEEPSEEK_MODEL = "deepseek-v4-pro";
+    private static final String DEEPSEEK_API_KEY = System.getenv("DEEPSEEK_API_KEY");
+    private static final String ETH_RPC_URL = System.getenv().getOrDefault(
+            "ETH_RPC_URL",
+            "https://ethereum.publicnode.com"
+    );
+    private static final String ERC_TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final HttpClient httpClient = HttpClient.newBuilder()
@@ -81,6 +90,26 @@ public class RecordController {
     public ResponseEntity<?> refreshNow() {
         refreshRecords();
         return ResponseEntity.ok(cache);
+    }
+
+    @PostMapping("/analyze")
+    public ResponseEntity<?> analyzeRecord(@RequestBody AnalyzeRequest request) {
+        try {
+            validateAnalyzeRequest(request);
+            AnalysisContext context = buildAnalysisContext(request);
+            String analysis = analyzeWithDeepSeek(context);
+
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("status", "ok");
+            result.put("model", DEEPSEEK_MODEL);
+            result.put("analysis", analysis);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("status", "error");
+            result.put("message", e.getMessage());
+            return ResponseEntity.internalServerError().body(result);
+        }
     }
 
     private void refreshRecordsSafely() {
@@ -235,6 +264,242 @@ public class RecordController {
         return records;
     }
 
+    private void validateAnalyzeRequest(AnalyzeRequest request) {
+        if (request == null || request.txHash() == null || request.txHash().isBlank()) {
+            throw new IllegalArgumentException("txHash不能为空");
+        }
+    }
+
+    private String analyzeWithDeepSeek(AnalysisContext context) throws Exception {
+        if (DEEPSEEK_API_KEY == null || DEEPSEEK_API_KEY.isBlank()) {
+            throw new IllegalStateException("未配置DEEPSEEK_API_KEY，无法调用DeepSeek分析");
+        }
+
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("model", DEEPSEEK_MODEL);
+        payload.put("temperature", 0.2);
+        payload.put("max_tokens", 1200);
+        payload.put("messages", List.of(
+                Map.of(
+                        "role", "system",
+                        "content", "你是区块链安全分析助手。你只能基于后端采集到的交易详情、交易receipt、样本库命中和地址关联上下文进行分析，不得编造未采集到的地址标签、人工审计结论、资金损失或攻击归因。"
+                ),
+                Map.of(
+                        "role", "user",
+                        "content", buildAnalyzePrompt(context)
+                )
+        ));
+
+        HttpRequest deepSeekRequest = HttpRequest.newBuilder(URI.create(DEEPSEEK_API_URL))
+                .timeout(Duration.ofSeconds(45))
+                .header("Authorization", "Bearer " + DEEPSEEK_API_KEY)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(payload), StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(deepSeekRequest, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new IllegalStateException("DeepSeek分析失败，HTTP " + response.statusCode() + "：" + response.body());
+        }
+
+        JsonNode root = objectMapper.readTree(response.body());
+        String content = root.path("choices").path(0).path("message").path("content").asText("");
+        if (content.isBlank()) {
+            throw new IllegalStateException("DeepSeek未返回分析内容");
+        }
+        return content.trim();
+    }
+
+    private AnalysisContext buildAnalysisContext(AnalyzeRequest request) {
+        RpcEvidence rpcEvidence = collectRpcEvidence(request.txHash());
+        AddressContext addressContext = buildAddressContext(request);
+        return new AnalysisContext(request, rpcEvidence, addressContext);
+    }
+
+    private RpcEvidence collectRpcEvidence(String txHash) {
+        if (ETH_RPC_URL == null || ETH_RPC_URL.isBlank()) {
+            return new RpcEvidence(false, "未配置ETH_RPC_URL，跳过链上RPC富化", Map.of());
+        }
+
+        try {
+            JsonNode transaction = callEthRpc("eth_getTransactionByHash", List.of(txHash));
+            JsonNode receipt = callEthRpc("eth_getTransactionReceipt", List.of(txHash));
+
+            Map<String, Object> evidence = new LinkedHashMap<>();
+            if (transaction != null && !transaction.isNull()) {
+                String input = transaction.path("input").asText("");
+                evidence.put("rpcFrom", transaction.path("from").asText(""));
+                evidence.put("rpcTo", transaction.path("to").asText(""));
+                evidence.put("valueWeiHex", transaction.path("value").asText(""));
+                evidence.put("gasHex", transaction.path("gas").asText(""));
+                evidence.put("gasPriceHex", transaction.path("gasPrice").asText(""));
+                evidence.put("transactionTypeHex", transaction.path("type").asText(""));
+                evidence.put("inputLength", input.length());
+                evidence.put("methodSelector", input.length() >= 10 ? input.substring(0, 10) : "");
+            } else {
+                evidence.put("transaction", "RPC未返回交易详情");
+            }
+
+            if (receipt != null && !receipt.isNull()) {
+                JsonNode logs = receipt.path("logs");
+                evidence.put("statusHex", receipt.path("status").asText(""));
+                evidence.put("gasUsedHex", receipt.path("gasUsed").asText(""));
+                evidence.put("contractAddress", receipt.path("contractAddress").asText(""));
+                evidence.put("logCount", logs.isArray() ? logs.size() : 0);
+                evidence.put("transferLogCount", countTransferLogs(logs));
+            } else {
+                evidence.put("receipt", "RPC未返回交易receipt");
+            }
+
+            return new RpcEvidence(true, "ok", evidence);
+        } catch (Exception e) {
+            return new RpcEvidence(false, e.getMessage(), Map.of());
+        }
+    }
+
+    private JsonNode callEthRpc(String method, List<String> params) throws Exception {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("jsonrpc", "2.0");
+        payload.put("id", 1);
+        payload.put("method", method);
+        payload.put("params", params);
+
+        HttpRequest request = HttpRequest.newBuilder(URI.create(ETH_RPC_URL))
+                .timeout(Duration.ofSeconds(12))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(payload), StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new IllegalStateException("Ethereum RPC请求失败，HTTP " + response.statusCode());
+        }
+
+        JsonNode root = objectMapper.readTree(response.body());
+        if (!root.path("error").isMissingNode()) {
+            throw new IllegalStateException("Ethereum RPC错误：" + root.path("error").toString());
+        }
+        return root.path("result");
+    }
+
+    private int countTransferLogs(JsonNode logs) {
+        if (logs == null || !logs.isArray()) {
+            return 0;
+        }
+
+        int count = 0;
+        for (JsonNode log : logs) {
+            JsonNode topics = log.path("topics");
+            if (topics.isArray() && topics.size() > 0 && ERC_TRANSFER_TOPIC.equalsIgnoreCase(topics.get(0).asText(""))) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private AddressContext buildAddressContext(AnalyzeRequest request) {
+        List<RecordItem> records = currentRecordItems();
+        List<RecordItem> fromRelated = relatedRecords(records, request.from(), request.txHash());
+        List<RecordItem> toRelated = relatedRecords(records, request.to(), request.txHash());
+        return new AddressContext(
+                request.from(),
+                request.to(),
+                fromRelated.size(),
+                toRelated.size(),
+                summarizeRelatedRecords(fromRelated),
+                summarizeRelatedRecords(toRelated)
+        );
+    }
+
+    private List<RecordItem> currentRecordItems() {
+        Object value = cache.get("records");
+        if (!(value instanceof List<?> items)) {
+            return List.of();
+        }
+
+        List<RecordItem> records = new ArrayList<>();
+        for (Object item : items) {
+            if (item instanceof RecordItem record) {
+                records.add(record);
+            }
+        }
+        return records;
+    }
+
+    private List<RecordItem> relatedRecords(List<RecordItem> records, String address, String currentTxHash) {
+        if (address == null || address.isBlank()) {
+            return List.of();
+        }
+
+        return records.stream()
+                .filter(record -> !equalsIgnoreCase(record.txHash(), currentTxHash))
+                .filter(record -> equalsIgnoreCase(record.from(), address) || equalsIgnoreCase(record.to(), address))
+                .limit(8)
+                .toList();
+    }
+
+    private List<Map<String, Object>> summarizeRelatedRecords(List<RecordItem> records) {
+        List<Map<String, Object>> summary = new ArrayList<>();
+        for (RecordItem record : records) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("txHash", record.txHash());
+            item.put("blockNum", record.blockNum());
+            item.put("from", record.from());
+            item.put("to", record.to());
+            item.put("detectTime", record.detectTime());
+            summary.add(item);
+        }
+        return summary;
+    }
+
+    private boolean equalsIgnoreCase(String left, String right) {
+        if (left == null || right == null) {
+            return false;
+        }
+        return left.equalsIgnoreCase(right);
+    }
+
+    private String buildAnalyzePrompt(AnalysisContext context) throws Exception {
+        AnalyzeRequest request = context.request();
+        return """
+                请对以下以太坊交易样本进行安全分析。分析时优先使用后端采集的链上RPC证据和当前样本批次的地址关联上下文。
+
+                基础样本事实：
+                - 交易哈希：%s
+                - 区块号：%s
+                - From：%s
+                - To：%s
+                - 检测时间：%s
+                - 样本来源：ETH-Malicious-TX-Monitor / %s
+                - Etherscan链接：%s
+
+                链上RPC富化结果：
+                %s
+
+                当前批次地址关联上下文：
+                %s
+
+                输出要求：
+                1. 初步判断：给出基于已采集证据的结果总结，不要只复述“命中样本库”。
+                2. 链上证据：说明RPC交易详情、receipt、日志数量、Transfer日志等能支持哪些判断。
+                3. 地址关联分析：如果From或To在当前批次关联多条交易，请汇总这些交易表现出的模式。
+                4. 仍需核验：只列出当前确实没有采集到的信息，例如人工地址标签、第三方威胁情报、完整历史路径等。
+                5. 建议动作：给出下一步核验和处置建议。
+
+                不要编造未知字段，不要声称已经确认资金损失，不要把系统样本命中当作Etherscan人工审计结论。
+                """.formatted(
+                valueOrDash(request.txHash()),
+                request.blockNum() == null ? "-" : request.blockNum().toString(),
+                valueOrDash(request.from()),
+                valueOrDash(request.to()),
+                valueOrDash(request.detectTime()),
+                valueOrDash(request.sourcePath()),
+                valueOrDash(request.txUrl()),
+                objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(context.rpcEvidence()),
+                objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(context.addressContext())
+        );
+    }
+
     private String resolveStatus(List<RecordItem> records, List<String> fetchErrors) {
         if (records.isEmpty() && !fetchErrors.isEmpty()) {
             return "error";
@@ -295,5 +560,44 @@ public class RecordController {
             String sourcePath,
             String sourceUrl
     ) {
+    }
+
+    private record AnalyzeRequest(
+            String txHash,
+            Long blockNum,
+            String from,
+            String to,
+            String detectTime,
+            String sourcePath,
+            String txUrl
+    ) {
+    }
+
+    private record AnalysisContext(
+            AnalyzeRequest request,
+            RpcEvidence rpcEvidence,
+            AddressContext addressContext
+    ) {
+    }
+
+    private record RpcEvidence(
+            boolean available,
+            String message,
+            Map<String, Object> data
+    ) {
+    }
+
+    private record AddressContext(
+            String from,
+            String to,
+            int fromRelatedCount,
+            int toRelatedCount,
+            List<Map<String, Object>> fromRelatedSamples,
+            List<Map<String, Object>> toRelatedSamples
+    ) {
+    }
+
+    private String valueOrDash(String value) {
+        return value == null || value.isBlank() ? "-" : value;
     }
 }

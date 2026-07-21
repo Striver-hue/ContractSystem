@@ -482,11 +482,145 @@ BA/TA 验收：
 
 当前需先修复 Windows 路径，否则 Linux 环境不作为通过标准。
 
-## 9. 交接建议
+## 9. 内网穿透配置（ngrok）
+
+### 9.1 配置说明
+
+本项目后端服务运行在内网 `localhost:7777`，外网无法直接访问。已通过 ngrok 将本地服务暴露到公网。
+
+当前公网访问地址：**https://washable-disaster-recycled.ngrok-free.dev**
+
+> 注意：当前使用 **ngrok 旧实例**（原账号），配置文件为 `~/.config/ngrok/ngrok.yml`。
+
+**⚠️ 重要：ngrok 实例分配**
+- **ContractSystem 项目（端口 7777）**：使用 ngrok **旧实例**（原账号），配置文件 `~/.config/ngrok/ngrok.yml`
+- **deepfake 项目（端口 18081）**：使用 ngrok **新实例**（新账号），配置文件 `~/.config/ngrok/account_b.yml`
+- 两个项目使用不同的 ngrok 账号和配置文件，避免冲突
+- 如需重启 ngrok，注意选择正确的配置文件
+
+### 9.2 技术方案
+
+| 项目 | 说明 |
+|------|------|
+| 工具 | ngrok v3.39.8 |
+| 安装路径 | `/home/user/bin/ngrok` |
+| 配置文件 | `/home/user/.config/ngrok/ngrok.yml` |
+| 穿透端口 | 7777 |
+| 服务类型 | systemd 用户服务 |
+| 服务名称 | `ngrok-tunnel.service` |
+| 账号类型 | 免费版 |
+| 月流量限制 | 1GB |
+
+### 9.3 获取当前公网 URL
+
+方法一：命令行获取
+
+```bash
+curl -s http://127.0.0.1:4040/api/tunnels | python3 -c "import sys,json; print(json.load(sys.stdin)['tunnels'][0]['public_url'])"
+```
+
+方法二：Web 控制台
+
+浏览器打开 http://127.0.0.1:4040 可查看：
+- 当前隧道 URL
+- 请求日志
+- 请求详情
+
+### 9.4 服务管理命令
+
+```bash
+# 查看服务状态
+systemctl --user status ngrok-tunnel.service
+
+# 启动服务
+systemctl --user start ngrok-tunnel.service
+
+# 停止服务
+systemctl --user stop ngrok-tunnel.service
+
+# 重启服务
+systemctl --user restart ngrok-tunnel.service
+
+# 查看服务日志
+journalctl --user -u ngrok-tunnel.service -f
+```
+
+### 9.5 流量消耗说明
+
+| 功能 | 单次消耗 | 说明 |
+|------|----------|------|
+| 页面浏览 | ~50-100KB | CDN 资源不消耗流量 |
+| 上传 .sol 检测 | ~5-50KB | 文件较小 |
+| 下载报告 | ~5-30KB | JSON/TXT 报告 |
+| 下载论文 | ~1.4-3.4MB | ⚠️ 流量消耗较大 |
+
+1GB 流量预计可用：
+- 开发测试：2-3 个月以上
+- 演示展示：1-2 个月
+- 频繁下载论文：1-2 周
+
+### 9.6 故障排查
+
+服务无法启动：
+
+```bash
+# 检查服务状态
+systemctl --user status ngrok-tunnel.service
+
+# 查看详细日志
+journalctl --user -u ngrok-tunnel.service --no-pager -n 50
+
+# 手动测试
+~/bin/ngrok http 7777
+```
+
+URL 变化或连接超时：
+
+```bash
+# 重启服务
+systemctl --user restart ngrok-tunnel.service
+
+# 获取新 URL
+curl -s http://127.0.0.1:4040/api/tunnels | python3 -c "import sys,json; print(json.load(sys.stdin)['tunnels'][0]['public_url'])"
+```
+
+### 9.7 更换 ngrok 账号
+
+如需更换 ngrok 账号：
+
+```bash
+# 更新 authtoken
+~/bin/ngrok config add-authtoken <新token>
+
+# 重启服务
+systemctl --user restart ngrok-tunnel.service
+```
+
+### 9.8 注意事项
+
+1. **公网暴露风险**：服务暴露到公网后，任何人都可访问，需确保应用本身有安全防护
+2. **免费版限制**：并发隧道 1 个，连接数和请求数有限制
+3. **URL 可能变化**：虽然免费版域名相对固定，但重启服务可能会变化
+4. **依赖网络**：ngrok 需要稳定的网络连接，网络中断会导致隧道断开
+5. **开机自启**：已配置 systemd 用户服务，用户登录后自动启动
+
+详细配置文档见同目录 `ngrok-tunnel-setup.md`。
+
+## 10. 交接建议
 
 下一位开发接手时建议先做三件事：
 
 1. 跑 `git status --short`，确认已有改动归属。
 2. 跑通 `./mvnw spring-boot:run`，打开首页和检测页。
 3. 优先修复路径配置化和安全配置，否则后续功能扩展会继续堆叠环境问题。
+
+接手后确认 ngrok 服务：
+
+```bash
+# 检查服务是否正常运行
+systemctl --user status ngrok-tunnel.service
+
+# 确认公网 URL 是否可访问
+curl -s http://127.0.0.1:4040/api/tunnels | python3 -c "import sys,json; print(json.load(sys.stdin)['tunnels'][0]['public_url'])"
+```
 

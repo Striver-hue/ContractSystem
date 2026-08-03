@@ -6,8 +6,6 @@
   <title>交易行为 AI 分析</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked@13.0.2/marked.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -32,147 +30,25 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      .analysis-markdown {
-        overflow-wrap: anywhere;
-      }
-      .analysis-markdown h1,
-      .analysis-markdown h2,
-      .analysis-markdown h3 {
-        margin: 1rem 0 0.45rem;
-        color: #0f172a;
-        font-weight: 800;
-        line-height: 1.35;
-      }
-      .analysis-markdown h1 {
-        font-size: 1.25rem;
-      }
-      .analysis-markdown h2 {
-        font-size: 1.1rem;
-      }
-      .analysis-markdown h3 {
-        font-size: 1rem;
-      }
-      .analysis-markdown p {
-        margin: 0.55rem 0;
-      }
-      .analysis-markdown ul,
-      .analysis-markdown ol {
-        margin: 0.55rem 0 0.75rem 1.25rem;
-      }
-      .analysis-markdown ul {
-        list-style: disc;
-      }
-      .analysis-markdown ol {
-        list-style: decimal;
-      }
-      .analysis-markdown li {
-        margin: 0.25rem 0;
-        padding-left: 0.15rem;
-      }
-      .analysis-markdown code {
-        border-radius: 0.25rem;
-        background: #e2e8f0;
-        padding: 0.1rem 0.28rem;
-        color: #0f172a;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-        font-size: 0.86em;
-      }
-      .analysis-markdown pre {
-        margin: 0.75rem 0;
-        overflow-x: auto;
-        border-radius: 0.5rem;
-        background: #0f172a;
-        padding: 0.75rem;
-        color: #e2e8f0;
-      }
-      .analysis-markdown pre code {
-        background: transparent;
-        padding: 0;
-        color: inherit;
-      }
-      .analysis-markdown strong {
-        color: #0f172a;
-        font-weight: 800;
-      }
-      .analysis-markdown blockquote {
-        margin: 0.75rem 0;
-        border-left: 3px solid #93c5fd;
-        padding-left: 0.75rem;
-        color: #475569;
-      }
     }
   </style>
 </head>
 <body class="bg-slate-50 font-sans text-primary">
-<header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
-  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <i class="fa-solid fa-shield-halved text-secondary text-2xl"></i>
+<header class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+    <a href="index.html" class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-2xl text-secondary"></i>
       <span class="text-xl font-bold">ChainAudit<span class="text-secondary">Pro</span></span>
-    </div>
-    <nav class="hidden md:flex items-center gap-6">
-      <a href="index.html" class="flex items-center gap-1 hover:text-secondary transition-colors">首页</a>
-
-      <div class="group relative">
-        <a href="index.html#smart-contract-audit" class="flex items-center gap-1 hover:text-secondary transition-colors">
-          合约检测
-          <i class="fa-solid fa-chevron-down text-[10px]"></i>
-        </a>
-        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
-          <a href="漏洞检测工具.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞检测工具</a>
-          <a href="漏洞扫描报告.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞扫描报告</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">字节码风险分析</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">形式化验证服务</a>
-        </div>
-      </div>
-
-      <div class="group relative">
-        <a href="index.html#transaction-analysis" class="flex items-center gap-1 text-secondary transition-colors">
-          交易分析
-          <i class="fa-solid fa-chevron-down text-[10px]"></i>
-        </a>
-        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">链上资金流向追踪</a>
-          <a href="交易行为2.html" class="block rounded-lg px-3 py-2 text-sm text-secondary bg-gray-50">异常交易预警</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">地址画像分析</a>
-        </div>
-      </div>
-
-      <div class="group relative">
-        <a href="index.html#resources" class="flex items-center gap-1 hover:text-secondary transition-colors">
-          资源
-          <i class="fa-solid fa-chevron-down text-[10px]"></i>
-        </a>
-        <div class="absolute left-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
-          <a href="resource-vulnerability.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">漏洞知识库</a>
-          <a href="resource-tool.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">集成工具集</a>
-          <a href="攻击事件展示.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">攻击事件展示</a>
-          <a href="交易行为.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">交易行为</a>
-          <a href="论文库.html" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">论文库</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">用户文档</a>
-        </div>
-      </div>
-
-      <div class="group relative">
-        <a href="index.html#about" class="flex items-center gap-1 hover:text-secondary transition-colors">
-          关于我们
-          <i class="fa-solid fa-chevron-down text-[10px]"></i>
-        </a>
-        <div class="absolute right-0 top-full z-40 min-w-[220px] rounded-xl border border-gray-100 bg-white p-2 shadow-xl opacity-0 invisible pointer-events-none translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0">
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">团队介绍</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">合作伙伴</a>
-          <a href="#" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-secondary">联系我们</a>
-        </div>
-      </div>
+    </a>
+    <nav class="hidden items-center gap-6 text-sm font-medium text-slate-600 md:flex">
+      <a href="index.html" class="hover:text-secondary">首页</a>
+      <a href="交易行为.html" class="hover:text-secondary">原交易行为页</a>
+      <a href="交易行为2.html" class="text-secondary">AI 分析视图</a>
     </nav>
-    <div class="flex items-center gap-3">
-      <button class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-all">
-        免费安全初检
-      </button>
-      <button class="border border-secondary text-secondary px-5 py-2 rounded-lg hover:bg-secondary/10 transition-all">
-        <i class="fa-solid fa-user mr-1"></i> 用户登录
-      </button>
-    </div>
+    <a href="index.html#monitoring" class="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+      <i class="fa-solid fa-chart-line"></i>
+      安全态势
+    </a>
   </div>
 </header>
 
@@ -250,21 +126,20 @@
         <i class="fa-solid fa-circle-info"></i>
         按需分析
       </div>
-      <p class="leading-6">点击交易分析列中的 go 后，后端才会调用 deepseek-v4-pro 对该交易样本做初步分析。未点击的行不会消耗大模型 token。</p>
+      <p class="leading-6">点击 ANALYSIS RESULT 列中的 go 后，后端才会调用 deepseek-v4-pro 对该交易样本做初步分析。未点击的行不会消耗大模型 token。</p>
     </div>
   </section>
 
   <div id="statusBanner" class="hidden mb-4 rounded-lg border px-4 py-3 text-sm"></div>
 
   <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-    <div class="hidden grid-cols-[170px_110px_130px_minmax(0,1fr)_minmax(0,1fr)_100px_150px] items-center gap-4 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 xl:grid">
-      <div>交易哈希</div>
-      <div>区块</div>
-      <div>时间</div>
-      <div>来源</div>
-      <div>去向</div>
-      <div>风险等级</div>
-      <div>交易分析</div>
+    <div class="hidden grid-cols-[170px_110px_130px_minmax(0,1fr)_minmax(0,1fr)_150px] items-center gap-4 border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 xl:grid">
+      <div>Txn Hash</div>
+      <div>Block</div>
+      <div>Age</div>
+      <div>From</div>
+      <div>To</div>
+      <div>ANALYSIS RESULT</div>
     </div>
     <div id="recordList" class="divide-y divide-slate-100">
       <div class="py-12 text-center text-slate-500">正在加载交易行为数据...</div>
@@ -282,7 +157,6 @@
   const reloadBtn = document.getElementById('reloadBtn');
   const statusBanner = document.getElementById('statusBanner');
   const searchInput = document.getElementById('searchInput');
-  const ANALYSIS_CACHE_PREFIX = 'contract-system:analysis:v1:';
   let currentRecords = [];
 
   document.addEventListener('DOMContentLoaded', loadRecords);
@@ -293,7 +167,6 @@
     reloadBtn.disabled = true;
     reloadBtn.classList.add('opacity-60', 'cursor-not-allowed');
     try {
-      await clearCacheAfterBackendRestart();
       const response = await fetch(forceRefresh ? '/records/refresh' : '/records/latest', {
         method: forceRefresh ? 'POST' : 'GET',
         cache: 'no-store',
@@ -307,10 +180,7 @@
         fundFlowState: 'idle',
         fundFlowData: null,
         fundFlowMessage: '',
-        fundFlowHidden: false,
-        analysisHidden: false,
       }));
-      restoreAnalysisCache(currentRecords);
       renderMeta(data, currentRecords);
       renderFilteredRecords();
       data.status === 'ok' ? hideBanner() : showBanner(data.message || '数据状态异常', data.status === 'error' ? 'error' : 'warn');
@@ -354,33 +224,29 @@
 
     recordList.innerHTML = records.map((item) => `
       <div class="transaction-row" data-tx-hash="${escapeAttr(item.txHash)}">
-        <div class="grid grid-cols-1 gap-3 px-4 py-4 text-sm transition hover:bg-slate-50 xl:grid-cols-[170px_110px_130px_minmax(0,1fr)_minmax(0,1fr)_100px_150px] xl:items-center xl:gap-4">
+        <div class="grid grid-cols-1 gap-3 px-4 py-4 text-sm transition hover:bg-slate-50 xl:grid-cols-[170px_110px_130px_minmax(0,1fr)_minmax(0,1fr)_150px] xl:items-center xl:gap-4">
           <div class="min-w-0">
-            <div class="mb-1 text-xs text-slate-500 xl:hidden">交易哈希</div>
+            <div class="mb-1 text-xs text-slate-500 xl:hidden">Txn Hash</div>
             <a href="${escapeAttr(item.txUrl)}" target="_blank" class="block font-mono text-secondary hover:underline hash-text" title="${escapeAttr(item.txHash)}">${shortHash(item.txHash)}</a>
           </div>
           <div>
-            <div class="mb-1 text-xs text-slate-500 xl:hidden">区块</div>
+            <div class="mb-1 text-xs text-slate-500 xl:hidden">Block</div>
             <a href="https://etherscan.io/block/${escapeAttr(item.blockNum || '')}" target="_blank" class="text-secondary hover:underline">${escapeHtml(item.blockNum || '-')}</a>
           </div>
           <div>
-            <div class="mb-1 text-xs text-slate-500 xl:hidden">时间</div>
+            <div class="mb-1 text-xs text-slate-500 xl:hidden">Age</div>
             <span class="text-slate-700">${formatAge(item.detectTime)}</span>
           </div>
           <div class="min-w-0">
-            <div class="mb-1 text-xs text-slate-500 xl:hidden">来源</div>
+            <div class="mb-1 text-xs text-slate-500 xl:hidden">From</div>
             ${addressLink(item.from, item.fromUrl)}
           </div>
           <div class="min-w-0">
-            <div class="mb-1 text-xs text-slate-500 xl:hidden">去向</div>
+            <div class="mb-1 text-xs text-slate-500 xl:hidden">To</div>
             ${addressLink(item.to, item.toUrl)}
           </div>
           <div>
-            <div class="mb-1 text-xs text-slate-500 xl:hidden">风险等级</div>
-            ${riskBadge(item)}
-          </div>
-          <div>
-            <div class="mb-1 text-xs text-slate-500 xl:hidden">交易分析</div>
+            <div class="mb-1 text-xs text-slate-500 xl:hidden">ANALYSIS RESULT</div>
             ${analysisControl(item)}
           </div>
         </div>
@@ -395,9 +261,6 @@
   }
 
   function analysisControl(item) {
-    if (item.analysisHidden && item.fundFlowHidden) {
-      return `<button data-analyze-tx="${escapeAttr(item.txHash)}" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:border-secondary hover:text-secondary"><i class="fa-solid fa-circle-play text-secondary"></i>go</button>`;
-    }
     if (item.fundFlowState === 'loading') {
       return `
         <span class="inline-flex items-center gap-2 rounded-lg border border-cyan-200 bg-cyan-50 px-3 py-2 text-xs font-semibold text-cyan-700">
@@ -438,53 +301,26 @@
     `;
   }
 
-  function riskBadge(item) {
-    const addressFrequency = new Map();
-    currentRecords.forEach((record) => {
-      [record.from, record.to].filter(Boolean).forEach((address) => {
-        addressFrequency.set(address, (addressFrequency.get(address) || 0) + 1);
-      });
-    });
-    const critical = [item.from, item.to].some((address) => address && addressFrequency.get(address) > 1);
-    const riskLabel = critical ? '严重' : '高危';
-    const riskClass = critical ? 'bg-red-100 text-red-700 border-red-200' : 'bg-orange-100 text-orange-700 border-orange-200';
-    return `<span class="inline-flex rounded-full border px-2.5 py-1 text-xs font-bold ${riskClass}">${riskLabel}</span>`;
-  }
-
   function analysisPanel(item) {
     if (item.analysisState === 'idle' && item.fundFlowState === 'idle') return '';
     const isError = item.analysisState === 'error';
     const borderClass = isError ? 'border-red-100 bg-red-50 text-red-700' : 'border-blue-100 bg-blue-50 text-slate-700';
     const title = isError ? 'Analysis Failed' : 'AI Analysis Result';
     const analysisContent = item.analysisState === 'loading'
-      ? '<div class="flex items-center gap-2 text-blue-700"><i class="fa-solid fa-spinner animate-spin"></i>正在结合链上证据进行 AI 分析...</div>'
-      : `<div class="analysis-markdown max-h-[460px] overflow-y-auto pr-2">${renderAnalysisMarkdown(item.analysisText)}</div>`;
+      ? '<div class="flex items-center gap-2 text-blue-700"><i class="fa-solid fa-spinner animate-spin"></i>正在结合资金流向与链上证据进行 AI 分析...</div>'
+      : `<div class="max-h-[460px] overflow-y-auto whitespace-pre-wrap pr-2">${escapeHtml(item.analysisText)}</div>`;
     return `
       <div class="border-t border-slate-100 px-4 pb-5">
-        ${item.fundFlowHidden ? hiddenResultBar('资金流向', 'fund-flow', item.txHash) : fundFlowPanel(item)}
-        ${item.analysisHidden ? hiddenResultBar('AI 分析', 'analysis', item.txHash) : `<div class="rounded-lg border ${borderClass} p-4 text-sm leading-6">
+        ${fundFlowPanel(item)}
+        <div class="rounded-lg border ${borderClass} p-4 text-sm leading-6">
           <div class="mb-2 flex items-center gap-2 font-bold">
             <i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-brain'}"></i>
             ${title}
-            <span class="ml-auto flex items-center gap-2">
-              <button type="button" data-result-action="hide-analysis" data-result-tx="${escapeAttr(item.txHash)}" class="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-600 hover:border-slate-400" title="隐藏 AI 分析"><i class="fa-solid fa-eye-slash"></i>隐藏</button>
-              <button type="button" data-result-action="regenerate-analysis" data-result-tx="${escapeAttr(item.txHash)}" class="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-white px-2 py-1 text-xs font-semibold text-blue-600 hover:bg-blue-50" title="重新生成 AI 分析"><i class="fa-solid fa-rotate"></i>重新生成</button>
-            </span>
           </div>
           ${analysisContent}
-        </div>`}
+        </div>
       </div>
     `;
-  }
-
-  function hiddenResultBar(label, type, txHash) {
-    return `<div class="mb-4 flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-      <span class="font-semibold">${label}已隐藏</span>
-      <span class="ml-auto flex items-center gap-2">
-        <button type="button" data-result-action="show-${type}" data-result-tx="${escapeAttr(txHash)}" class="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-600 hover:border-secondary hover:text-secondary"><i class="fa-solid fa-eye"></i>展开</button>
-        <button type="button" data-result-action="regenerate-${type}" data-result-tx="${escapeAttr(txHash)}" class="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-white px-2 py-1 text-xs font-semibold text-blue-600 hover:bg-blue-50"><i class="fa-solid fa-rotate"></i>重新生成</button>
-      </span>
-    </div>`;
   }
 
   function fundFlowPanel(item) {
@@ -506,30 +342,13 @@
         </div>
       `;
     }
-    return renderTransactionFundFlow(item.fundFlowData).replace(
-      '<div class="mb-4 rounded-lg border border-slate-200 bg-slate-50/80 p-3">',
-      `<div class="mb-4 rounded-lg border border-slate-200 bg-slate-50/80 p-3"><div class="mb-2 flex justify-end gap-2"><button type="button" data-result-action="hide-fund-flow" data-result-tx="${escapeAttr(item.txHash)}" class="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-600 hover:border-slate-400"><i class="fa-solid fa-eye-slash"></i>隐藏</button><button type="button" data-result-action="regenerate-fund-flow" data-result-tx="${escapeAttr(item.txHash)}" class="inline-flex items-center gap-1 rounded-md border border-blue-200 bg-white px-2 py-1 text-xs font-semibold text-blue-600 hover:bg-blue-50"><i class="fa-solid fa-rotate"></i>重新生成</button></div>`
-    );
-  }
-
-  function renderAnalysisMarkdown(value) {
-    const text = String(value || '');
-    if (window.marked && window.DOMPurify) {
-      const html = window.marked.parse(text, {
-        breaks: true,
-        gfm: true,
-      });
-      return window.DOMPurify.sanitize(html);
-    }
-    return `<div class="whitespace-pre-wrap break-words">${escapeHtml(text)}</div>`;
+    return renderTransactionFundFlow(item.fundFlowData);
   }
 
   async function analyzeRecord(txHash) {
     const item = currentRecords.find((record) => record.txHash === txHash);
     if (!item) return;
 
-    // A new click explicitly requests a fresh analysis for this transaction.
-    removeAnalysisCache(item.txHash);
     item.analysisState = 'loading';
     item.analysisText = '';
     item.fundFlowState = 'loading';
@@ -555,6 +374,7 @@
           detectTime: item.detectTime,
           sourcePath: item.sourcePath,
           txUrl: item.txUrl,
+          fundFlowData,
         }),
       });
       const data = await response.json();
@@ -563,100 +383,12 @@
       }
       item.analysisState = 'done';
       item.analysisText = data.analysis || '未返回分析内容';
-      saveAnalysisCache(item);
     } catch (error) {
       item.analysisState = 'error';
       item.analysisText = error.message;
     }
 
     renderFilteredRecords();
-  }
-
-  async function regenerateAnalysis(item) {
-    item.analysisState = 'loading';
-    item.analysisText = '';
-    renderFilteredRecords();
-    try {
-      const response = await fetch('/records/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          txHash: item.txHash, blockNum: item.blockNum, from: item.from, to: item.to,
-          detectTime: item.detectTime, sourcePath: item.sourcePath, txUrl: item.txUrl,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok || data.status !== 'ok') throw new Error(data.message || '分析接口调用失败');
-      item.analysisState = 'done';
-      item.analysisText = data.analysis || '未返回分析内容';
-      saveAnalysisCache(item);
-    } catch (error) {
-      item.analysisState = 'error';
-      item.analysisText = error.message;
-    }
-    renderFilteredRecords();
-  }
-
-  async function clearCacheAfterBackendRestart() {
-    const instanceKey = ANALYSIS_CACHE_PREFIX + 'backend-instance';
-    try {
-      const response = await fetch('/records/instance', { cache: 'no-store' });
-      if (!response.ok) return;
-      const data = await response.json();
-      const previousInstance = localStorage.getItem(instanceKey);
-      if (previousInstance && previousInstance !== data.instanceId) {
-        Object.keys(localStorage)
-          .filter((key) => key.startsWith(ANALYSIS_CACHE_PREFIX) && key !== instanceKey)
-          .forEach((key) => localStorage.removeItem(key));
-      }
-      localStorage.setItem(instanceKey, data.instanceId);
-    } catch (error) {
-      // Keep local cache when the instance check is temporarily unavailable.
-    }
-  }
-
-  function analysisCacheKey(txHash) {
-    return ANALYSIS_CACHE_PREFIX + String(txHash || '');
-  }
-
-  function restoreAnalysisCache(records) {
-    records.forEach((item) => {
-      if (!item.txHash) return;
-      try {
-        const cached = JSON.parse(localStorage.getItem(analysisCacheKey(item.txHash)) || 'null');
-        if (!cached || typeof cached.analysisText !== 'string') return;
-        item.analysisState = 'done';
-        item.analysisText = cached.analysisText;
-        if (cached.fundFlowData && typeof cached.fundFlowData === 'object') {
-          item.fundFlowData = cached.fundFlowData;
-          item.fundFlowState = cached.fundFlowData.displayable ? 'done' : 'unavailable';
-          item.fundFlowMessage = cached.fundFlowMessage || '当前hash无法展示资金流向。';
-        }
-      } catch (error) {
-        // Ignore malformed or unavailable browser storage and load normally.
-      }
-    });
-  }
-
-  function saveAnalysisCache(item) {
-    try {
-      localStorage.setItem(analysisCacheKey(item.txHash), JSON.stringify({
-        analysisText: item.analysisText,
-        fundFlowData: item.fundFlowData,
-        fundFlowMessage: item.fundFlowMessage,
-        savedAt: Date.now(),
-      }));
-    } catch (error) {
-      // Storage may be disabled or full; the current page still shows the result.
-    }
-  }
-
-  function removeAnalysisCache(txHash) {
-    try {
-      localStorage.removeItem(analysisCacheKey(txHash));
-    } catch (error) {
-      // Ignore unavailable browser storage.
-    }
   }
 
   async function loadRecordFundFlow(item) {
@@ -682,7 +414,7 @@
 
   function renderTransactionFundFlow(data) {
     const nodesByAddress = new Map((data.nodes || []).map((node) => [String(node.address || '').toLowerCase(), node]));
-    const visibleEdges = (data.edges || []).map((edge, index) => ({
+    const visibleEdges = (data.edges || []).slice(0, 13).map((edge, index) => ({
       ...edge,
       from: String(edge.from || '').toLowerCase(),
       to: String(edge.to || '').toLowerCase(),
@@ -724,7 +456,7 @@
           </span>
           资金流向
         </div>
-        <div class="relative overflow-hidden rounded-xl border border-slate-200 bg-white pr-6" data-fund-flow-graph="${escapeAttr(data.txHash || '')}">
+        <div class="relative overflow-hidden rounded-xl border border-slate-200 bg-white" data-fund-flow-graph="${escapeAttr(data.txHash || '')}">
           <button type="button" data-flow-action="expand" data-flow-tx="${escapeAttr(data.txHash || '')}" class="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-blue-300 hover:text-secondary" title="悬浮展示资金流图" aria-label="悬浮展示资金流图">
             <i class="fa-solid fa-up-right-and-down-left-from-center text-sm"></i>
           </button>
@@ -733,7 +465,7 @@
           </button>
           ${graphSvg}
         </div>
-        ${data.truncated ? '<div class="mt-2 text-xs text-slate-500">资金流向较复杂，已展示当前接口返回的主要资金边。</div>' : ''}
+        ${data.truncated ? '<div class="mt-2 text-xs text-slate-500">仅展示前 13 条资金边。</div>' : ''}
       </div>
     `;
   }
@@ -752,26 +484,6 @@
           : downloadFundFlowImage(graphSvg, txHash);
       });
     });
-    document.querySelectorAll('[data-result-action]').forEach((button) => {
-      button.addEventListener('click', () => handleResultAction(button.dataset.resultAction, button.dataset.resultTx));
-    });
-  }
-
-  async function handleResultAction(action, txHash) {
-    const item = currentRecords.find((record) => record.txHash === txHash);
-    if (!item) return;
-    if (action === 'hide-analysis') item.analysisHidden = true;
-    if (action === 'show-analysis') item.analysisHidden = false;
-    if (action === 'hide-fund-flow') item.fundFlowHidden = true;
-    if (action === 'show-fund-flow') item.fundFlowHidden = false;
-    if (action === 'regenerate-analysis' || action === 'regenerate-fund-flow') {
-      item.analysisHidden = false;
-      item.fundFlowHidden = false;
-      await analyzeRecord(txHash);
-      renderFilteredRecords();
-      return;
-    }
-    renderFilteredRecords();
   }
 
   function layoutBlocksecGraph(edges, nodesByAddress) {
@@ -807,7 +519,6 @@
     columns.forEach((column, index) => {
       placeGraphColumn(positions, column.addresses, nodesByAddress, degree, columnXs[index], verticalGap, column.role);
     });
-    compressGraphColumnsTowardLeft(positions);
     adjustGraphBoundaryColumns(edges, positions, width);
 
     return { width, positions, nodes: [...positions.values()] };
@@ -906,20 +617,6 @@
     addresses.forEach((address, index) => {
       const y = Math.max(46, Math.min(FUND_FLOW_GRAPH_HEIGHT - 46, startY + index * verticalGap));
       positions.set(address, graphNode(address, nodesByAddress, degree, x, y, role));
-    });
-  }
-
-  function compressGraphColumnsTowardLeft(positions) {
-    const nodes = [...positions.values()];
-    if (nodes.length <= 1) return;
-
-    const minX = Math.min(...nodes.map((node) => node.x));
-    const maxX = Math.max(...nodes.map((node) => node.x));
-    const span = maxX - minX;
-    if (!Number.isFinite(span) || span <= 0) return;
-
-    nodes.forEach((node) => {
-      node.x = minX + (node.x - minX) * 0.75;
     });
   }
 

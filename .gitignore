@@ -33,6 +33,7 @@ build/
 .vscode/
 
 ### Local runtime artifacts ###
+.env
 app.log
 app-*.log
 slither.tar

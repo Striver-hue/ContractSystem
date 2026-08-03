@@ -7,6 +7,7 @@ import jakarta.annotation.PreDestroy;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -32,6 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,9 +51,9 @@ public class RecordController {
     private static final int DISPLAY_LIMIT = 50;
     private static final int CSV_FETCH_LIMIT = 12;
     private static final Pattern CSV_PATH_PATTERN = Pattern.compile("^\\d{4}/\\d{2}/\\d{2}/(\\d+)-(\\d+)_\\d+\\.csv$");
-    private static final String DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
-    private static final String DEEPSEEK_MODEL = "deepseek-v4-pro";
-    private static final String DEEPSEEK_API_KEY = System.getenv("DEEPSEEK_API_KEY");
+    private static final String DEFAULT_DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
+    private static final String DEFAULT_DEEPSEEK_MODEL = "deepseek-v4-pro";
+    private static final int DEFAULT_DEEPSEEK_MAX_TOKENS = 4096;
     private static final String ETH_RPC_URL = System.getenv().getOrDefault(
             "ETH_RPC_URL",
             "https://ethereum.publicnode.com"
@@ -57,6 +61,7 @@ public class RecordController {
     private static final String ERC_TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Environment environment;
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(12))
             .followRedirects(HttpClient.Redirect.NORMAL)
@@ -67,8 +72,13 @@ public class RecordController {
         return thread;
     });
     private final AtomicBoolean refreshing = new AtomicBoolean(false);
+    private final String instanceId = UUID.randomUUID().toString();
 
     private volatile Map<String, Object> cache = emptyCache("等待首次采集");
+
+    public RecordController(Environment environment) {
+        this.environment = environment;
+    }
 
     @PostConstruct
     public void startRecordCollector() {
@@ -86,6 +96,11 @@ public class RecordController {
         return ResponseEntity.ok(cache);
     }
 
+    @GetMapping("/instance")
+    public ResponseEntity<?> instance() {
+        return ResponseEntity.ok(Map.of("instanceId", instanceId));
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshNow() {
         refreshRecords();
@@ -101,7 +116,7 @@ public class RecordController {
 
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("status", "ok");
-            result.put("model", DEEPSEEK_MODEL);
+            result.put("model", deepSeekModel());
             result.put("analysis", analysis);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
@@ -271,14 +286,15 @@ public class RecordController {
     }
 
     private String analyzeWithDeepSeek(AnalysisContext context) throws Exception {
-        if (DEEPSEEK_API_KEY == null || DEEPSEEK_API_KEY.isBlank()) {
-            throw new IllegalStateException("未配置DEEPSEEK_API_KEY，无法调用DeepSeek分析");
+        String apiKey = deepSeekApiKey();
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalStateException("未配置DEEPSEEK_API_KEY或ANTHROPIC_API_KEY，无法调用DeepSeek分析");
         }
 
         Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("model", DEEPSEEK_MODEL);
+        payload.put("model", deepSeekModel());
         payload.put("temperature", 0.2);
-        payload.put("max_tokens", 1200);
+        payload.put("max_tokens", deepSeekMaxTokens());
         payload.put("messages", List.of(
                 Map.of(
                         "role", "system",
@@ -290,9 +306,9 @@ public class RecordController {
                 )
         ));
 
-        HttpRequest deepSeekRequest = HttpRequest.newBuilder(URI.create(DEEPSEEK_API_URL))
+        HttpRequest deepSeekRequest = HttpRequest.newBuilder(URI.create(deepSeekApiUrl()))
                 .timeout(Duration.ofSeconds(45))
-                .header("Authorization", "Bearer " + DEEPSEEK_API_KEY)
+                .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(payload), StandardCharsets.UTF_8))
                 .build();
@@ -303,9 +319,14 @@ public class RecordController {
         }
 
         JsonNode root = objectMapper.readTree(response.body());
-        String content = root.path("choices").path(0).path("message").path("content").asText("");
+        JsonNode choice = root.path("choices").path(0);
+        String content = choice.path("message").path("content").asText("");
         if (content.isBlank()) {
             throw new IllegalStateException("DeepSeek未返回分析内容");
+        }
+        String finishReason = choice.path("finish_reason").asText("");
+        if ("length".equalsIgnoreCase(finishReason)) {
+            content += "\n\n提示：模型返回因长度上限中止，当前分析可能仍不完整。可继续提高DEEPSEEK_MAX_TOKENS后重试。";
         }
         return content.trim();
     }
@@ -480,11 +501,13 @@ public class RecordController {
                 %s
 
                 输出要求：
+                - 直接从“1. 初步判断”开始输出，不要写“好的”“我将基于”等开场白。
                 1. 初步判断：给出基于已采集证据的结果总结，不要只复述“命中样本库”。
                 2. 链上证据：说明RPC交易详情、receipt、日志数量、Transfer日志等能支持哪些判断。
                 3. 地址关联分析：如果From或To在当前批次关联多条交易，请汇总这些交易表现出的模式。
-                4. 仍需核验：只列出当前确实没有采集到的信息，例如人工地址标签、第三方威胁情报、完整历史路径等。
-                5. 建议动作：给出下一步核验和处置建议。
+                4. 风险研判：结合交易成功状态、合约交互、日志特征和样本来源，判断可能的风险类型与证据强弱。
+                5. 仍需核验：只列出当前确实没有采集到的信息，例如人工地址标签、第三方威胁情报、完整历史路径等。
+                6. 建议动作：给出下一步核验和处置建议。
 
                 不要编造未知字段，不要声称已经确认资金损失，不要把系统样本命中当作Etherscan人工审计结论。
                 """.formatted(
@@ -597,7 +620,122 @@ public class RecordController {
     ) {
     }
 
+    private String deepSeekApiUrl() {
+        return normalizeChatCompletionUrl(firstNonBlank(
+                configValue("DEEPSEEK_API_URL", "deepseek.api.url", "deepseek.base-url", "deepseek.baseUrl"),
+                configValue("ANTHROPIC_BASE_URL", "anthropic.base-url", "anthropic.baseUrl"),
+                DEFAULT_DEEPSEEK_API_URL
+        ));
+    }
+
+    private String deepSeekModel() {
+        return firstNonBlank(
+                configValue("DEEPSEEK_MODEL", "deepseek.model"),
+                configValue("ANTHROPIC_MODEL", "anthropic.model"),
+                DEFAULT_DEEPSEEK_MODEL
+        );
+    }
+
+    private int deepSeekMaxTokens() {
+        String value = firstNonBlank(configValue("DEEPSEEK_MAX_TOKENS", "deepseek.max-tokens", "deepseek.maxTokens"));
+        if (value.isBlank()) {
+            return DEFAULT_DEEPSEEK_MAX_TOKENS;
+        }
+        try {
+            return Math.max(1024, Math.min(Integer.parseInt(value), 8192));
+        } catch (NumberFormatException ignored) {
+            return DEFAULT_DEEPSEEK_MAX_TOKENS;
+        }
+    }
+
+    private String deepSeekApiKey() {
+        return firstNonBlank(
+                configValue("DEEPSEEK_API_KEY", "deepseek.api-key", "deepseek.api.key"),
+                configValue("ANTHROPIC_API_KEY", "anthropic.api-key", "anthropic.api.key")
+        );
+    }
+
+    private String configValue(String... keys) {
+        Map<String, String> localEnv = localEnvValues();
+        for (String key : keys) {
+            String value = environment.getProperty(key);
+            if (value == null || value.isBlank()) {
+                value = System.getProperty(key);
+            }
+            if (value == null || value.isBlank()) {
+                value = System.getenv(key);
+            }
+            if ((value == null || value.isBlank()) && localEnv.containsKey(key)) {
+                value = localEnv.get(key);
+            }
+            if (value != null && !value.isBlank()) {
+                return value.trim();
+            }
+        }
+        return "";
+    }
+
+    private Map<String, String> localEnvValues() {
+        Path envPath = Path.of(".env");
+        if (!Files.isRegularFile(envPath)) {
+            return Map.of();
+        }
+
+        Map<String, String> values = new LinkedHashMap<>();
+        try {
+            for (String line : Files.readAllLines(envPath, StandardCharsets.UTF_8)) {
+                String trimmed = line.trim();
+                if (trimmed.isBlank() || trimmed.startsWith("#")) {
+                    continue;
+                }
+
+                int separator = trimmed.contains("=") ? trimmed.indexOf('=') : trimmed.indexOf(':');
+                if (separator <= 0) {
+                    continue;
+                }
+
+                String key = cleanConfigToken(trimmed.substring(0, separator));
+                String value = cleanConfigToken(trimmed.substring(separator + 1));
+                if (!key.isBlank() && !value.isBlank()) {
+                    values.put(key, value);
+                }
+            }
+        } catch (Exception ignored) {
+            return Map.of();
+        }
+        return values;
+    }
+
+    private String cleanConfigToken(String value) {
+        String cleaned = value.trim();
+        if (cleaned.endsWith(",")) {
+            cleaned = cleaned.substring(0, cleaned.length() - 1).trim();
+        }
+        if ((cleaned.startsWith("\"") && cleaned.endsWith("\"")) || (cleaned.startsWith("'") && cleaned.endsWith("'"))) {
+            cleaned = cleaned.substring(1, cleaned.length() - 1);
+        }
+        return cleaned.trim();
+    }
+
+    private String normalizeChatCompletionUrl(String value) {
+        String url = firstNonBlank(value, DEFAULT_DEEPSEEK_API_URL);
+        if (url.endsWith("/chat/completions")) {
+            return url;
+        }
+        return url.replaceAll("/+$", "") + "/chat/completions";
+    }
+
+    private String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (value != null && !value.isBlank()) {
+                return value.trim();
+            }
+        }
+        return "";
+    }
+
     private String valueOrDash(String value) {
         return value == null || value.isBlank() ? "-" : value;
     }
+
 }
